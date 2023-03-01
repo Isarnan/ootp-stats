@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+	<div th:fragment="draftpitchingline">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Card</th>
+					<th>OVR</th>
+					<th>IP</th>
+					<th>ERA</th>
+				</tr>
+			</thead>
+			<tbody>
+				<span th:each="hitter : ${hitters}">
+					<tr th:if="${hitter.ovr < lessThan and hitter.ovr >= greaterThan}">
+						<td th:text="${hitter.card}">Card</td>
+						<td th:text="${#numbers.formatDecimal(hitter.ovr,1,0)}">Ovr</td>
+						<td th:text="${#numbers.formatDecimal(hitter.ip,1,0)}">IP</td>
+						<td th:text="${#numbers.formatDecimal(hitter.era,0,3)}">ERA</td>
+					</tr>
+				</span>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

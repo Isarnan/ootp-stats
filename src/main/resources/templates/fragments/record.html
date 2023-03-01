@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+	<div th:fragment="recordheader">
+		<thead>
+			<tr>
+				<th>Timeframe</th>
+				<th>Team</th>
+				<th>Wins</th>
+				<th>Losses</th>
+				<th>Pct</th>
+				<th>RS</th>
+				<th>RA</th>
+			</tr>
+		</thead>
+	</div>
+	<div th:fragment="recordline">
+		<div th:if="${record != null}">
+			<tr>
+				<td th:text="${timeframe}">Card</td>
+				<td th:text="${team}">Ovr</td>
+				<td th:text="${record.wins}">IP</td>
+				<td th:text="${record.losses}">ERA</td>
+				<td th:text="${#numbers.formatDecimal(record.pct,0,3)}">pct</td>
+				<td th:text="${#numbers.formatDecimal(record.runsScoredPerGame(),1,2)}">RS</td>
+				<td th:text="${#numbers.formatDecimal(record.runsAllowedPerGame(),1,2)}">RA</td>
+			</tr>
+		</div>
+	</div>
+	<div th:fragment="toprecordline">
+		<div th:if="${record != null}">
+			<tr>
+				<td><a class="btn btn-primary btn-sm" th:with="baseUrl=('/team/' + ${meta.tier}) + '/pitchers'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="P" />|<a class="btn btn-primary btn-sm" th:with="baseUrl=('/team/' + ${meta.tier}) + '/hitters'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="H" />|<a th:with="baseUrl=('/team/' + ${meta.tier}) + '/hitters'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="${record.team}" /></td>
+				<td th:text="${record.wins}">IP</td>
+				<td th:text="${record.losses}">ERA</td>
+				<td th:text="${#numbers.formatDecimal(record.pct,0,3)}">pct</td>
+				<td th:text="${#numbers.formatDecimal(record.runsScoredPerGame(),1,2)}">RS</td>
+				<td th:text="${#numbers.formatDecimal(record.runsAllowedPerGame(),1,2)}">RA</td>
+			</tr>
+		</div>
+	</div>
+	<div th:fragment="toprecordlist">
+		<div th:if="${recordlist != null}">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Team</th>
+						<th>Wins</th>
+						<th>Losses</th>
+						<th>Pct</th>
+						<th>RS</th>
+						<th>RA</th>
+					</tr>
+				</thead>
+				<tbody>
+					<span th:each="record,stats : ${recordlist}" th:if="${stats.index}<${limit}">
+						<div th:replace="fragments/record :: toprecordline(record=${record})"></div>
+					</span>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

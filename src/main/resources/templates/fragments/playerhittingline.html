@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+	<div th:fragment="playerhittingheader">
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>Team</th>
+				<th>Time</th>
+				<th>Card</th>
+				<th>POS</th>
+				<th>PA</th>
+				<th>PIPA</th>
+				<th>OBP</th>
+				<th>OPS</th>
+				<th>SBp600</th>
+				<th>CSp600</th>
+			</tr>
+		</thead>
+	</div>
+	<div th:fragment="hittingline">
+		<div th:if="${hitter != null and hitter.pa > 0}">
+			<tr>
+				<td th:text="${type}">Type</td>
+				<td th:text="${team}">Team</td>
+				<div th:if="${time}">
+					<td th:text="${time}">Time</td>
+				</div>
+				<div th:unless="${time}">
+					<td>Time</td>
+				</div>
+
+				<td th:text="${hitter.card}">Card</td>
+				<td th:text="${hitter.pos}">POS</td>
+				<td th:text="${hitter.pa}">PA</td>
+				<td th:text="${#numbers.formatDecimal(hitter.pipa,1,3)}">Pipa</td>
+				<td th:text="${#numbers.formatDecimal(hitter.obp,0,3)}">OBP</td>
+				<td th:text="${#numbers.formatDecimal(hitter.ops,0,3)}">OPS</td>
+				<td th:text="${#numbers.formatDecimal(hitter.sbp600,1,0)}">SBp600</td>
+				<td th:text="${#numbers.formatDecimal(hitter.csp600,1,0)}">CSp600</td>
+
+			</tr>
+		</div>
+		<div th:unless="${hitter != null}">
+			<tr>
+				<td th:text="${type}">Type</td>
+				<td th:text="${team}">Team</td>
+			</tr>
+		</div>
+	</div>
+		<div th:fragment="metaplayerhittingheader">
+		<thead>
+			<tr>
+				<th>PA</th>
+				<th>PIPA</th>
+				<th>OBP</th>
+				<th>OPS</th>
+				<th>SBp600</th>
+				<th>CSp600</th>
+			</tr>
+		</thead>
+	</div>
+	<div th:fragment="metahittingline">
+		<div th:if="${hitter != null and hitter.pa > 0}">
+			<tr>
+				<td th:text="${hitter.pa}">PA</td>
+				<td th:text="${#numbers.formatDecimal(hitter.pipa,1,3)}">Pipa</td>
+				<td th:text="${#numbers.formatDecimal(hitter.obp,0,3)}">OBP</td>
+				<td th:text="${#numbers.formatDecimal(hitter.ops,0,3)}">OPS</td>
+				<td th:text="${#numbers.formatDecimal(hitter.sbp600,1,0)}">SBp600</td>
+				<td th:text="${#numbers.formatDecimal(hitter.csp600,1,0)}">CSp600</td>
+
+			</tr>
+		</div>
+		<div th:unless="${hitter != null}">
+			<tr>
+				<td th:text="${type}">Type</td>
+				<td th:text="${team}">Team</td>
+			</tr>
+		</div>
+	</div>
+</body>
+</html>

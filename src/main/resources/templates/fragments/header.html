@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+	<div class="navbar-inner" th:fragment="header">
+		<table class="table table-sm">
+			<tr>
+				<th>Type</th>
+				<th>Iron</th>
+				<th>Bronze</th>
+				<th>Gold</th>
+				<th>Perfect Team</th>
+				<th>Perfect Draft</th>
+			</tr>
+			<tr>
+				<td>Hitters</td>
+				<td><a class="btn btn-primary btn-sm" href="/iron/hitters">Hitters</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/bronze/hitters">Hitters</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/gold/hitters">Gold Hitters</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/perfectteam/hitters">Hitters</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/perfectdraft/hitters">Hitters</a></td>
+			</tr>
+			<tr>
+				<td>Pitchers</td>
+				<td><a class="btn btn-primary btn-sm" href="/iron/pitchers">Pitchers</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/bronze/pitchers">Pitchers</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/gold/pitchers">Gold Pitchers</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/perfectteam/pitchers">Pitchers</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/perfectdraft/pitchers">Pitchers</a></td>
+			</tr>
+			<tr>
+				<td>Hacker Hitters</td>
+				<td><a class="btn btn-primary btn-sm" th:href="@{/team/iron/hitters(team='Dark Web Hackers',time=7Day)}">7Day</a>|<a class="btn btn-primary btn-sm"
+					th:href="@{/team/iron/hitters(team='Dark Web Hackers',time=14Day)}">14Day</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/iron/hitters(team='Dark Web Hackers',time=30Day)}">30Day</a>|
+					<a class="btn btn-primary btn-sm" th:href="@{/team/iron/hitters(team='Dark Web Hackers',time=R1)}">R1</a>| <a class="btn btn-primary btn-sm"
+					th:href="@{/team/iron/hitters(team='Dark Web Hackers',time=R2)}">R2</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/iron/hitters(team='Dark Web Hackers',time=R3)}">R3</a>|<a
+					class="btn btn-primary btn-sm" th:href="@{/team/iron/hitters(team='Dark Web Hackers',time=alltime)}">AllTime</a></td>
+				<td><a class="btn btn-primary btn-sm" th:href="@{/team/bronze/hitters(team='Dark Web Hackers',time=7Day)}">7Day</a>|<a class="btn btn-primary btn-sm"
+					th:href="@{/team/bronze/hitters(team='Dark Web Hackers',time=14Day)}">14Day</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/bronze/hitters(team='Dark Web Hackers',time=30Day)}">30Day</a>|
+					<a class="btn btn-primary btn-sm" th:href="@{/team/bronze/hitters(team='Dark Web Hackers',time=R1)}">R1</a>| <a class="btn btn-primary btn-sm"
+					th:href="@{/team/bronze/hitters(team='Dark Web Hackers',time=R2)}">R2</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/bronze/hitters(team='Dark Web Hackers',time=R3)}">R3</a>|<a
+					class="btn btn-primary btn-sm" th:href="@{/team/bronze/hitters(team='Dark Web Hackers',time=alltime)}">AllTime</a></td>
+				<td><a class="btn btn-primary btn-sm" th:href="@{/team/gold/hitters(team='Dark Web Hackers',time=7Day)}">7Day</a>|<a class="btn btn-primary btn-sm"
+					th:href="@{/team/gold/hitters(team='Dark Web Hackers',time=14Day)}">14Day</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/gold/hitters(team='Dark Web Hackers',time=30Day)}">30Day</a>| <a
+					class="btn btn-primary btn-sm" th:href="@{/team/gold/hitters(team='Dark Web Hackers',time=R1)}">R1</a>| <a class="btn btn-primary btn-sm"
+					th:href="@{/team/gold/hitters(team='Dark Web Hackers',time=R2)}">R2</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/gold/hitters(team='Dark Web Hackers',time=R3)}">R3</a>|<a
+					class="btn btn-primary btn-sm" th:href="@{/team/gold/hitters(team='Dark Web Hackers',time=alltime)}">AllTime</a></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Hacker Pitchers</td>
+				<td><a class="btn btn-primary btn-sm" th:href="@{/team/iron/pitchers(team='Dark Web Hackers',time=7Day)}">7Day</a>|<a class="btn btn-primary btn-sm"
+					th:href="@{/team/iron/pitchers(team='Dark Web Hackers',time=14Day)}">14Day</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/iron/pitchers(team='Dark Web Hackers',time=30Day)}">30Day</a>|
+					<a class="btn btn-primary btn-sm" th:href="@{/team/iron/pitchers(team='Dark Web Hackers',time=R1)}">R1</a>| <a class="btn btn-primary btn-sm"
+					th:href="@{/team/iron/pitchers(team='Dark Web Hackers',time=R2)}">R2</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/iron/pitchers(team='Dark Web Hackers',time=R3)}">R3</a>|<a
+					class="btn btn-primary btn-sm" th:href="@{/team/iron/pitchers(team='Dark Web Hackers',time=alltime)}">AllTime</a></td>
+				<td><a class="btn btn-primary btn-sm" th:href="@{/team/bronze/pitchers(team='Dark Web Hackers',time=7Day)}">7Day</a>|<a class="btn btn-primary btn-sm"
+					th:href="@{/team/bronze/pitchers(team='Dark Web Hackers',time=14Day)}">14Day</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/bronze/pitchers(team='Dark Web Hackers',time=30Day)}">30Day</a>|
+					<a class="btn btn-primary btn-sm" th:href="@{/team/bronze/pitchers(team='Dark Web Hackers',time=R1)}">R1</a>| <a class="btn btn-primary btn-sm"
+					th:href="@{/team/bronze/pitchers(team='Dark Web Hackers',time=R2)}">R2</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/bronze/pitchers(team='Dark Web Hackers',time=R3)}">R3</a>|<a
+					class="btn btn-primary btn-sm" th:href="@{/team/bronze/pitchers(team='Dark Web Hackers',time=alltime)}">AllTime</a></td>
+				<td><a class="btn btn-primary btn-sm" th:href="@{/team/gold/pitchers(team='Dark Web Hackers',time=7Day)}">7Day</a>|<a class="btn btn-primary btn-sm"
+					th:href="@{/team/gold/pitchers(team='Dark Web Hackers',time=14Day)}">14Day</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/gold/pitchers(team='Dark Web Hackers',time=30Day)}">30Day</a>| <a
+					class="btn btn-primary btn-sm" th:href="@{/team/gold/pitchers(team='Dark Web Hackers',time=R1)}">R1</a>| <a class="btn btn-primary btn-sm"
+					th:href="@{/team/gold/pitchers(team='Dark Web Hackers',time=R2)}">R2</a>|<a class="btn btn-primary btn-sm" th:href="@{/team/gold/pitchers(team='Dark Web Hackers',time=R3)}">R3</a>|<a
+					class="btn btn-primary btn-sm" th:href="@{/team/gold/pitchers(team='Dark Web Hackers',time=alltime)}">AllTime</a></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Misc</td>
+				<td><a class="btn btn-primary btn-sm" href="/iron/meta">Meta</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/bronze/meta">Meta</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/gold/meta">Meta</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/perfectteam/meta">Meta</a></td>
+				<td><a class="btn btn-primary btn-sm" href="/perfectdraft/meta">Meta</a></td>
+			</tr>
+
+		</table>
+	</div>
+</body>
+</html>
