@@ -133,7 +133,7 @@ public class HomeController {
 	public String hackerHitters(Model model, @PathVariable String tournamenttype, @RequestParam(required = false) String sort,
 			@RequestParam(required = false) String filter, @RequestParam(required = false) String time, @RequestParam(required = false) String team) {
 		if (tournamenttype.equals("bronze"))
-			tournamenttype = "Bronze32";
+			tournamenttype = "Bronze16";
 		else if (tournamenttype.equals("perfectteam"))
 			tournamenttype = "PerfectTeam";
 		else if (tournamenttype.equals("perfectdraft"))
@@ -143,7 +143,7 @@ public class HomeController {
 		else if (tournamenttype.equals("iron"))
 			tournamenttype = "Iron16";
 
-		if (time == null && (tournamenttype.equals("Gold32") || tournamenttype.equals("Bronze32")))
+		if (time == null && (tournamenttype.equals("Gold32") || tournamenttype.equals("Bronze16")))
 			time = "R2";
 		else if (time == null && (tournamenttype.equals("PerfectTeam") || tournamenttype.equals("PerfectDraft")))
 			time = "alltime";
@@ -185,9 +185,9 @@ public class HomeController {
 			list = list.stream().filter(byPa).collect(Collectors.toList());
 
 		/** Sorting **/
-		if ((sort == null && (tournamenttype.equals("PerfectTeam") || tournamenttype.equals("PerfectDraft"))) || (sort != null && sort.equals("ops")))
+		if ((sort == null && (tournamenttype.equals("Gold32") || tournamenttype.equals("Bronze16") || tournamenttype.equals("PerfectTeam") || tournamenttype.equals("PerfectDraft"))) || (sort != null && sort.equals("ops")))
 			list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getOps).reversed()));
-		else if ((sort == null && (tournamenttype.equals("Gold32") || tournamenttype.equals("Bronze32")|| tournamenttype.equals("Iron16"))) || (sort != null && sort.equals("obp")))
+		else if ((sort == null && ( tournamenttype.equals("Iron16"))) || (sort != null && sort.equals("obp")))
 			list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getObp).reversed()));
 		else if (sort != null && sort.equals("pa"))
 			list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getPa).reversed()));
@@ -205,12 +205,12 @@ public class HomeController {
 
 	@RequestMapping("/{tournamenttype}/hitters")
 	public String bronzeHitter(Model model, @PathVariable String tournamenttype, @RequestParam(required = false) String sort,
-			@RequestParam(required = false) String filter, @RequestParam(required = false) String strPa,
+			@RequestParam(required = false) String filter, @RequestParam(required = false) Integer pa,
 			@RequestParam(required = false) String strPipa, @RequestParam(required = false) String time) {
 		
 
 		if (tournamenttype.equals("bronze"))
-			tournamenttype = "Bronze32";
+			tournamenttype = "Bronze16";
 		else if (tournamenttype.equals("perfectteam"))
 			tournamenttype = "PerfectTeam";
 		else if (tournamenttype.equals("perfectdraft"))
@@ -222,7 +222,7 @@ public class HomeController {
 		Meta meta = new Meta(tournamenttype);
 
 		
-		if (time == null && (tournamenttype.equals("Gold32") || tournamenttype.equals("Bronze32") || tournamenttype.equals("Iron16" )))
+		if (time == null && (tournamenttype.equals("Gold32") || tournamenttype.equals("Bronze16") || tournamenttype.equals("Iron16" )))
 			time = "LAUNCH";
 		else if (time == null && (tournamenttype.equals("PerfectTeam") || tournamenttype.equals("PerfectDraft")))
 			time = "alltime";
@@ -240,18 +240,27 @@ public class HomeController {
 		else
 			list = stats57Repo.getHittersList(tournamenttype, Meta.ENDOFTIME, Meta.LAUNCH);
 
-		long pa = 30;
-		if (strPa != null)
-			pa = (long) Long.parseLong(strPa);
-		Predicate<Hitter> byPa = hitter -> hitter.getPa().intValue() > 30;
-		Predicate<Hitter> byPa100 = hitter -> hitter.getPa().intValue() > 100;
-		Predicate<Hitter> byPipa = hitter -> hitter.getPipa() > 4.3;
-		if (filter != null && filter.equals("pipa"))
-			list = list.stream().filter(byPipa).collect(Collectors.toList());
-		if (filter != null && filter.equals("pa100"))
-			list = list.stream().filter(byPa100).collect(Collectors.toList());
-		else
-			list = list.stream().filter(byPa100).collect(Collectors.toList());
+		if(pa != null){			
+			Predicate<Hitter> byPa = hitter -> hitter.getPa().intValue() > pa.intValue();
+			list = list.stream().filter(byPa).collect(Collectors.toList());
+		} else {
+			Predicate<Hitter> byPa = hitter -> hitter.getPa().intValue() > 100;
+			list = list.stream().filter(byPa).collect(Collectors.toList());
+		}
+		// if (strPa != null)
+		// 	pa = (long) Long.parseLong(strPa);
+		// Predicate<Hitter> byPa = hitter -> hitter.getPa().intValue() > 30;
+		// Predicate<Hitter> byPa100 = hitter -> hitter.getPa().intValue() > 100;
+		// Predicate<Hitter> byPa1000 = hitter -> hitter.getPa().intValue() > 1000;
+		// Predicate<Hitter> byPipa = hitter -> hitter.getPipa() > 4.3;
+		// if (filter != null && filter.equals("pipa"))
+		// 	list = list.stream().filter(byPipa).collect(Collectors.toList());
+		// if (filter != null && filter.equals("pa1000"))
+		// 	list = list.stream().filter(byPa1000).collect(Collectors.toList());
+		// else if (filter != null && filter.equals("pa100"))
+		// 	list = list.stream().filter(byPa100).collect(Collectors.toList());
+		// else
+		// 	list = list.stream().filter(byPa).collect(Collectors.toList());
 
 		if (sort == null || sort.equals("ops"))
 			list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getOps).reversed()));
@@ -271,7 +280,7 @@ public class HomeController {
 	}
 
 	@RequestMapping("/{tournamenttype}/pitchers")
-	public String universalPitchers(Model model, @PathVariable String tournamenttype, @RequestParam(required = false) String strIp,
+	public String universalPitchers(Model model, @PathVariable String tournamenttype, @RequestParam(required = false) Integer ip,
 			@RequestParam(required = false) String filter, @RequestParam(required = false) String time) {
 		
 		Meta meta = new Meta(tournamenttype);
@@ -279,25 +288,35 @@ public class HomeController {
 		if (time == null)
 			time = tournie.getDefaultEra();		
 		Era era = meta.getEraByName(time);
-		log.info("Era: " + time + "Tournament: " + tournamenttype);
+		//log.info("Era: " + time + "Tournament: " + tournamenttype);
 
 
 		List<Hitter> list = stats57Repo.getHittersList(tournie.getDbName(), era.getEnd(), era.getStart());;
 
-		long ip = 30;
-		if (strIp != null)
-			ip = (long) Long.parseLong(strIp);
+		//log.info("ip: " + ip);
+		if(ip != null){			
+			Predicate<Hitter> byIp = hitter -> hitter.getInnings().intValue() > ip.intValue();
+			list = list.stream().filter(byIp).collect(Collectors.toList());
+		} else {
+			Predicate<Hitter> byIp = hitter -> hitter.getInnings().intValue() > 30;
+			list = list.stream().filter(byIp).collect(Collectors.toList());
+		}
 		// Filtering
+		/*
 		Predicate<Hitter> byIp = hitter -> hitter.getInnings().intValue() > 30;
 		Predicate<Hitter> byIp10 = hitter -> hitter.getInnings().intValue() > 10;
 		Predicate<Hitter> byIp100 = hitter -> hitter.getInnings().intValue() > 100;
-		if (filter != null && filter.equals("ip100")) {
+		Predicate<Hitter> byIp200 = hitter -> hitter.getInnings().intValue() > 200;
+		if (filter != null && filter.equals("ip200")) {
+			list = list.stream().filter(byIp200).collect(Collectors.toList());
+		} else if (filter != null && filter.equals("ip100")) {
 			list = list.stream().filter(byIp100).collect(Collectors.toList());
 		} else if (tournamenttype.equals("PerfectDraft")) {
 			list = list.stream().filter(byIp10).collect(Collectors.toList());
 		} else {
 			list = list.stream().filter(byIp).collect(Collectors.toList());
 		}
+		*/
 		// Sorting
 		list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getEra)));
 		// list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getInnings)));
@@ -313,7 +332,7 @@ public class HomeController {
 	@RequestMapping("/{tournamenttype}/meta")
 	public String universalMeta(Model model, @PathVariable String tournamenttype) {
 		if (tournamenttype.equals("bronze"))
-			tournamenttype = "Bronze32";
+			tournamenttype = "Bronze16";
 		else if (tournamenttype.equals("perfectteam"))
 			tournamenttype = "PerfectTeam";
 		else if (tournamenttype.equals("perfectdraft"))
@@ -338,6 +357,7 @@ public class HomeController {
 		 */
 		List<Hitter> metaHitters = new ArrayList<Hitter>();
 		for (Era era : meta.getEras()) {
+			log.info(tournamenttype + "|" + era.getEnd() + "|" + era.getStart());
 			Hitter hitter = stats57Repo.getMetaHitter(tournamenttype, era.getEnd(), era.getStart());
 			if (hitter == null)
 				continue;

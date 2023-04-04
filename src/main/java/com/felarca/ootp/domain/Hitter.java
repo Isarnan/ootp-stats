@@ -19,10 +19,12 @@ import lombok.AccessLevel;
 @Log
 @RequiredArgsConstructor
 public class Hitter {
-	@NonNull
 	@Getter
 	@Setter
 	private int cid;
+	@Getter
+	@Setter
+	private Integer owned;
 	@NonNull
 	@Getter
 	@Setter

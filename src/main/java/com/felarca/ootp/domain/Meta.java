@@ -19,10 +19,10 @@ public class Meta {
 	// public final static Date ENDOFTIME =
 	// DatatypeConverter.parseDateTime("2041-05-31T10:00:00-05:00").getTime();
 	public final static LocalDateTime ENDOFTIME = LocalDateTime.of(2035, Month.JULY, 29, 19, 30, 40);
-	public final static LocalDateTime LAUNCH = LocalDateTime.of(2022, Month.MAY, 3, 19, 30, 40);
-	public final static LocalDateTime RELEASE1 = LocalDateTime.of(2022, Month.JUNE, 6, 10, 10, 10);
-	public final static LocalDateTime RELEASE2 = LocalDateTime.of(2022, Month.JULY, 31, 10, 30, 40);
-	public final static LocalDateTime RELEASE3 = LocalDateTime.of(2022, Month.AUGUST, 28, 12, 30, 40);
+	public final static LocalDateTime LAUNCH = LocalDateTime.of(2023, Month.MARCH, 24, 0, 30, 40);
+	public final static LocalDateTime RELEASE1 = LocalDateTime.of(2023, Month.JUNE, 6, 10, 10, 10);
+	public final static LocalDateTime RELEASE2 = LocalDateTime.of(2023, Month.JULY, 31, 10, 30, 40);
+	public final static LocalDateTime RELEASE3 = LocalDateTime.of(2023, Month.AUGUST, 28, 12, 30, 40);
 
 	// public final static Date LAUNCH =
 	// DatatypeConverter.parseDateTime("1776-06-04T00:00:00-05:00").getTime();
@@ -32,7 +32,7 @@ public class Meta {
 	// DatatypeConverter.parseDateTime("2021-05-31T10:00:00-05:00").getTime();
 
 	public final static String myTeam = "Dark Web Hackers";
-	public final static String defaultEra = "R1";
+	public final static String defaultEra = "Launch";
 	public final static String defaultTournament = "gold";
 
 	@Getter
@@ -93,7 +93,7 @@ public class Meta {
 		this.eras.add(new Era("AllTime", "time", Meta.LAUNCH, Meta.ENDOFTIME));
 
 		this.tournies.add(new Tournament("Iron", "Iron16", "14Day"));
-		this.tournies.add(new Tournament("Bronze", "Bronze32", "14Day"));
+		this.tournies.add(new Tournament("Bronze", "Bronze16", "14Day"));
 		this.tournies.add(new Tournament("Gold", "Gold32", "14Day"));
 		this.tournies.add(new Tournament("PerfectTeam", "PerfectTeam", "Alltime"));
 		this.tournies.add(new Tournament("PerfectDraft", "PerfectDraft", "Alltime"));
@@ -185,7 +185,7 @@ public class Meta {
 			return "gold";
 		else if (this.tournamentType.equals("PerfectDraft"))
 			return "perfectdraft";
-		else if (this.tournamentType.equals("Bronze32"))
+		else if (this.tournamentType.equals("Bronze16"))
 			return "bronze";
 		else if (this.tournamentType.equals("Iron16"))
 			return "iron";

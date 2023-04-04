@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+from sqlalchemy import text,sql
 
 import math
 import pymysql
@@ -9,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from unicodedata import normalize
 from _decimal import Decimal
+from pathlib import Path
 
 sqlEngine       = create_engine('mysql+pymysql://ootp:ootp2222@server/ootp', pool_recycle=3600)
 
@@ -18,14 +20,15 @@ def load(game,file):
   print(f'Now:{now}')
   #tables = pd.read_html('file:///mnt/c/Users/Dan/Documents/Out of the Park Developments/OOTP Baseball 22/saved_games/6071a3e8605bf4054e6d8df1.pt/news/html/temp/2021-04-10-12-13-40.html')
   print(f'File: {file}')
-  tables = pd.read_html('file://'+file)  
+  #tables = pd.read_html('file://'+file)  
+  tables = pd.read_html(file)
   print(f'Total tables: {len(tables)}')
   #print(f'{tables}')
   df = pd.DataFrame(data=tables[1])
   rows = len(df.index);
   columns = len(df.columns);  
   print(f'Rows: {rows}  Columns: {columns}')
-  if columns != 54 and columns != 60 and columns != 57 and columns != 78 and columns != 56:
+  if columns != 54 and columns != 60 and columns != 57 and columns != 78 and columns != 56 and columns != 2:
       print(f"Columns is not 54, returning");
       return 
   #Common renames
@@ -34,6 +37,7 @@ def load(game,file):
       df['b_pitches'] = df['pipa'] * df['PA'] 
       df['innings'] = np.trunc(df['IP']) + (np.modf(df['IP'])[0] * (10/3))
       df.rename(columns = {'Unnamed: 0':'date'}, inplace = True)
+      #df.rename(columns = {'UnnamedC_0':'date'}, inplace = True)
       df['date'] = df['date'].astype('datetime64[ns]')
       df['date'] = now
       df['game'] = game
@@ -65,7 +69,7 @@ def load(game,file):
             df['tournament_type'] = 'PerfectTeam'        
         if 'AD' in df.columns:
             df.rename(columns = {'AD':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Bronze32'
+            df['tournament_type'] = 'Bronze16'
         if 'GRE' in df.columns:
             df.rename(columns = {'GRE':'tournament_type'}, inplace = True)
             df['tournament_type'] = 'Gold32'
@@ -113,14 +117,17 @@ def load(game,file):
   try:    
     tableName = 'stats' + str(columns)
     if columns == 77:
-        frame = df.to_sql(tableName, dbConnection, if_exists='append',index=False);           
+        frame = df.to_sql(tableName, dbConnection, if_exists='append',index=False);
+    elif columns == 2:
+        frame = df.to_sql(tableName, dbConnection, if_exists='replace', schema="ootp");           
     else :   
-        frame = df.to_sql(tableName, dbConnection, if_exists='append');           
+        frame = df.to_sql(tableName, dbConnection, if_exists='append', schema="ootp");           
   except ValueError as vx:
     print(f'vx:{vx}')
   except Exception as ex:   
     print(f'ex:{ex}')
   else:
+    dbConnection.commit()
     print("Table %s created successfully."%tableName);   
   finally:
     dbConnection.close()
@@ -129,7 +136,7 @@ def load(game,file):
 #fileFrame.to_sql('skip', dbConnection, if_exists='append');
 
 # Open a file
-path = "/mnt/c/Users/Dan/Documents/Out of the Park Developments/OOTP Baseball 23/saved_games"
+path = "c:/Users/Dan/Documents/Out of the Park Developments/OOTP Baseball 24/saved_games"
 pattern = "[0-9]*.html"
 
 #dirs = os.listdir( path )
@@ -142,16 +149,20 @@ result = []
 for root, dirs, files in os.walk(path):
   for name in files:
     if fnmatch.fnmatch(name, pattern):
-      fullPath = os.path.join(root, name)
+      fullPath = os.path.join(Path(root).as_posix(), name)
       print(f'FP: {fullPath}')
-      with sqlEngine.connect() as connection:          
-          result = connection.execute("select file from skip where file = '" + fullPath + "'")
+      #fullPath = "c:\\Users\\Dan\\Documents\\Out of the Park Developments\\OOTP Baseball 24\\saved_games\\7ea1000000000000000000c3.pt\\news\\html\\temp\\2023-03-24-21-16-59.html"
+      with sqlEngine.connect() as connection:  
+          query =  "select file from skip where file = '" + fullPath + "'"       
+          result = connection.execute(text(query))
           game = fullPath[85:109]
           if result.rowcount > 0:
               print(f'Found skipping {game}')
           else :
               print('Not found')
-              connection.execute("insert into skip (file) values ('" + fullPath + "')")
+              query = sql.text("insert into skip (file) values ('" + fullPath + "')")
+              connection.execute(query)
+              connection.commit()
               load(game,fullPath)
       
 #print(skipFrame)
