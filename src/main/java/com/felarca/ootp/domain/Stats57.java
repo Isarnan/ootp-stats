@@ -1,12 +1,6 @@
 package com.felarca.ootp.domain;
-
-import java.io.Serializable;
 import javax.persistence.*;
-
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigInteger;
 
 

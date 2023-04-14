@@ -2,6 +2,7 @@ package com.felarca.ootp.Controllers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +33,7 @@ import com.felarca.ootp.Repositories.HittingRepository;
 import com.felarca.ootp.Repositories.PitchingRepository;
 import com.felarca.ootp.Repositories.SkipRepository;
 import com.felarca.ootp.Repositories.Stats57Repository;
+import com.felarca.ootp.Repositories.Stats2Repository;
 import com.felarca.ootp.domain.Era;
 import com.felarca.ootp.domain.Hitter;
 import com.felarca.ootp.domain.Meta;
@@ -67,6 +69,8 @@ public class HomeController {
 	GoldHackerPitchingRepository goldHackerPitchingRepo;
 	@Autowired
 	Stats57Repository stats57Repo;
+	@Autowired
+	Stats2Repository stats2Repo;
 
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -280,7 +284,7 @@ public class HomeController {
 	}
 
 	@RequestMapping("/{tournamenttype}/pitchers")
-	public String universalPitchers(Model model, @PathVariable String tournamenttype, @RequestParam(required = false) Integer ip,
+	public String universalPitchers(Model model, @PathVariable String tournamenttype, @RequestParam(required = false) Integer ip, @RequestParam(required = false) Integer pig,
 			@RequestParam(required = false) String filter, @RequestParam(required = false) String time) {
 		
 		Meta meta = new Meta(tournamenttype);
@@ -300,6 +304,13 @@ public class HomeController {
 		} else {
 			Predicate<Hitter> byIp = hitter -> hitter.getInnings().intValue() > 30;
 			list = list.stream().filter(byIp).collect(Collectors.toList());
+		}
+		if(pig != null){			
+			Predicate<Hitter> byPig = hitter -> Double.valueOf(hitter.getPig()) > pig.intValue();
+			list = list.stream().filter(byPig).collect(Collectors.toList());
+		} else {
+			Predicate<Hitter> byPig = hitter -> Double.valueOf(hitter.getPig()) > 1;
+			list = list.stream().filter(byPig).collect(Collectors.toList());
 		}
 		// Filtering
 		/*
@@ -385,12 +396,18 @@ public class HomeController {
 		
 		LocalDate tomorrow = LocalDate.now().plusDays(1);
 		LocalDateTime now = tomorrow.atTime(0, 0);
+		LocalTime midnight = LocalTime.MIDNIGHT;
+		LocalDate today = LocalDate.now(ZoneId.of("America/Detroit"));
+		LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+		LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
 		List<Record> hackerDaily = new ArrayList<Record>();
 		for (int x = 0; x<21 ; x++) {
-			Record record = stats57Repo.getRecord(tournamenttype, Meta.myTeam, now.minusDays(x-1), now.minusDays(x));
+			//Record record = stats57Repo.getRecord(tournamenttype, Meta.myTeam, now.minusDays(x-1), now.minusDays(x));
+			Record record = stats57Repo.getRecord(tournamenttype, Meta.myTeam, tomorrowMidnight.minusDays(x-1), tomorrowMidnight.minusDays(x));
+			//log.info("Time: "+ tomorrowMidnight.minusDays(x-1) + " Time2: "+ tomorrowMidnight.minusDays(x));
 			if (record == null)
 				continue;
-			record.setEra(new Era(now.minusDays(x-1).toString(), "time", LocalDateTime.now().minusDays(7), Meta.ENDOFTIME));
+			record.setEra(new Era(tomorrowMidnight.minusDays(x-1).toString(), "time", LocalDateTime.now().minusDays(7), Meta.ENDOFTIME));
 			hackerDaily.add(record);
 		}
 		meta.setHackerDaily(hackerDaily);
@@ -461,7 +478,6 @@ public class HomeController {
 			}
 
 		}
-
 		model.addAttribute("player", player);
 		return "player";
 	}

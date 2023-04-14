@@ -11,12 +11,14 @@
 				<th>Card</th>
 				<th>POS</th>
 				<th>IP</th>
+				<th>PPIPA</th>
 				<th>ERA</th>
 				<th>WHIP</th>
 				<th>K</th>
 				<th>BB</th>
 				<th>HR</th>
 				<th>IBB</th>
+				<th>PIG</th>
 				<th>
 			</tr>
 		</thead>
@@ -35,12 +37,15 @@
 				<td th:text="${hitter.card}">Card</td>
 				<td th:text="${hitter.pos}">POS</td>
 				<td th:text="${#numbers.formatDecimal(hitter.ip,1,0)}">IP</td>
+				<td th:text="${#numbers.formatDecimal(hitter.ppipa,0,3)}">PPIPA</td>
 				<td th:text="${#numbers.formatDecimal(hitter.era,1,3)}">ERA</td>
 				<td th:text="${#numbers.formatDecimal(hitter.whip,0,3)}">WHIP</td>
 				<td th:text="${#numbers.formatDecimal(hitter.kp9,0,3)}">WHIP</td>
 				<td th:text="${#numbers.formatDecimal(hitter.bbp9,0,3)}">WHIP</td>
 				<td th:text="${#numbers.formatDecimal(hitter.hrp9,0,3)}">WHIP</td>
 				<td th:text="${#numbers.formatDecimal(hitter.ibbp9,0,3)}">WHIP</td>
+				<td th:text="${#numbers.formatDecimal(hitter.pig,0,3)}">PIG</td>
+
 			</tr>
 		</div>
 		<div th:unless="${hitter != null}">

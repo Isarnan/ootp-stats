@@ -3,28 +3,23 @@ package com.felarca.ootp.domain;
 import java.math.BigInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.hibernate.annotations.Formula;
-
-import ch.qos.logback.classic.Logger;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import lombok.AccessLevel;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.felarca.ootp.Repositories.Stats2Repository;
 
 
 @Log
 @RequiredArgsConstructor
 public class Hitter {
+	
+	@NonNull
 	@Getter
 	@Setter
 	private int cid;
-	@Getter
-	@Setter
-	private Integer owned;
 	@NonNull
 	@Getter
 	@Setter
@@ -148,6 +143,18 @@ public class Hitter {
 	@Getter
 	@Setter
 	private BigInteger p_gamesstarted;
+	@NonNull
+	@Getter
+	@Setter
+	private BigInteger p_pitches;
+	@NonNull
+	@Getter
+	@Setter
+	private BigInteger p_fb;
+	@NonNull
+	@Getter
+	@Setter
+	private BigInteger p_gb;
 	
 	public Double getEra() {
 		if(innings != 0 )return (er.doubleValue()/innings) * 9;
@@ -166,8 +173,16 @@ public class Hitter {
 		return this.pos;
 	}
 	public double getPipa() {
-		this.pipa = this.b_pitches / this.pa.doubleValue();
-		return this.pipa;		
+		//this.pipa = this.b_pitches / this.pa.doubleValue();
+		return this.b_pitches / this.pa.doubleValue();		
+	}
+	public double getPpipa() {
+		//this.ppipa = this.p_pitches / (p_singles.doubleValue() + p_doubles.doubleValue() + p_triples.doubleValue() + p_homeruns.doubleValue() + p_bb.doubleValue() + p_ibb.doubleValue() + p_hp.doubleValue());
+		return this.p_pitches.doubleValue() / (p_singles.doubleValue() + p_doubles.doubleValue() + p_triples.doubleValue() + p_homeruns.doubleValue() + p_bb.doubleValue() + p_ibb.doubleValue() + p_hp.doubleValue() + p_fb.doubleValue() + p_gb.doubleValue() + k.doubleValue());		
+	}
+	public double getPig() {
+		//this.ppipa = this.p_pitches / (p_singles.doubleValue() + p_doubles.doubleValue() + p_triples.doubleValue() + p_homeruns.doubleValue() + p_bb.doubleValue() + p_ibb.doubleValue() + p_hp.doubleValue());
+		return this.p_pitches.doubleValue() / this.p_games.doubleValue();
 	}
 	public double getObp() {
 		this.obp = (this.singles.doubleValue() + this.doubles.doubleValue() + this.triples.doubleValue() + this.hr.doubleValue() + this.bb.doubleValue() + this.ibb.doubleValue() + this.hp.doubleValue()) / this.pa.doubleValue();
@@ -219,4 +234,5 @@ public class Hitter {
 		//return (this.p_singles.doubleValue() + this.p_doubles.doubleValue() + this.p_triples.doubleValue())/(this.p.doubleValue() - this.k.doubleValue() - this.hr.doubleValue());
 		return 0.0;
 	}
+
 }
