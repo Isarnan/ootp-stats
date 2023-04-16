@@ -164,7 +164,32 @@ for root, dirs, files in os.walk(path):
               connection.execute(query)
               connection.commit()
               load(game,fullPath)
-      
+
+cardDBFile = "C:/Users/dan/Documents/Out of the Park Developments/OOTP Baseball 24/online_data/pt_card_list.csv"
+
+if os.path.isfile(cardDBFile):
+      print("File exists")
+      cards = pd.read_csv(cardDBFile)
+      df = pd.DataFrame(data=cards)
+      df.columns = df.columns.str.replace(' ', '')
+      rows = len(df.index)
+      columns = len(df.columns) 
+      print('Rows: '+ str(rows) + ' Column: ' + str(columns))
+      dbConnection = sqlEngine.connect()
+      try:
+        # need to rename cards to Cards, why?    
+        tableName = 'cards'
+        frame = df.to_sql(tableName, dbConnection, if_exists='replace', schema="ootp");           
+      except ValueError as vx:
+         print(f'vx:{vx}')
+      except Exception as ex:   
+         print(f'ex:{ex}')
+      else:
+         dbConnection.commit()
+         print("Card DB created successfully.");   
+      finally:
+         dbConnection.close()
+
 #print(skipFrame)
 #for file in result:
 #           print(file)
