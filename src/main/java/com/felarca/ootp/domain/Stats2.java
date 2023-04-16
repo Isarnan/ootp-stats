@@ -1,18 +1,11 @@
 package com.felarca.ootp.domain;
 
-import java.io.Serializable;
 import javax.persistence.*;
-
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.math.BigInteger;
-
 
 /**
  * The persistent class for the stats2 database table.
- * 
+ * This is a 2 column view of all cards I own.
  */
 @Data
 @Entity

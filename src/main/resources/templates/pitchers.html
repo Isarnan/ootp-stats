@@ -38,7 +38,7 @@
 
 					</div>
 				</td>
-				<td><span th:text="${pitcher.card}">Card</span></td>
+				<td><span th:text="${pitcher.card}" th:classappend="${owned.owned(pitcher.cid)!=null} ? text-success : text-danger">Card</span></td>
 				<td th:text="${#numbers.formatDecimal(pitcher.ovr,1,0)}">OVR</td>
 				<td th:text="${#numbers.formatDecimal(pitcher.innings,1,1)}">IP</td>
 				<td th:text="${#numbers.formatDecimal(pitcher.era,1,3)}">ERA</td>

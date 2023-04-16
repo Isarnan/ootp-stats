@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.felarca.ootp.Repositories.CardsRepository;
 import com.felarca.ootp.Repositories.GoldHackerHittingRepository;
 import com.felarca.ootp.Repositories.GoldHackerPitchingRepository;
 import com.felarca.ootp.Repositories.GoldHittingRepository;
@@ -71,6 +72,9 @@ public class HomeController {
 	Stats57Repository stats57Repo;
 	@Autowired
 	Stats2Repository stats2Repo;
+	@Autowired
+	CardsRepository cardsRepo;
+
 
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -199,7 +203,8 @@ public class HomeController {
 
 		model.addAttribute("metaHitter", metaHitter);
 		model.addAttribute("hitters", list);
-
+		model.addAttribute("owned", stats2Repo);
+		model.addAttribute("cards", cardsRepo);
 		if (tournamenttype.equals("PerfectDraft")) {
 			return "drafthitters";
 		} else {
@@ -273,6 +278,8 @@ public class HomeController {
 
 		model.addAttribute("meta", meta);
 		model.addAttribute("hitters", list);
+		model.addAttribute("owned", stats2Repo);
+		model.addAttribute("cards", cardsRepo);
 		log.info(tournamenttype);
 		log.info("Size: " + list.size());
 		
@@ -333,6 +340,7 @@ public class HomeController {
 		// list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getInnings)));
 		model.addAttribute("meta", meta);
 		model.addAttribute("pitchers", list);
+		model.addAttribute("owned", stats2Repo);
 		if (tournie.getDisplayName().equals("PerfectDraft")) {
 			return "draftpitchers";
 		} else {

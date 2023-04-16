@@ -23,6 +23,7 @@
 			<tr>
 				<th>Id</th>
 				<th>Card</th>
+				<th>Badges</th>
 				<th>POS</th>
 				<th>OVR</th>
 				<th>PA</th>
@@ -41,8 +42,63 @@
 				<div th:unless="${param.team}">
 					<td><a th:href="@{/player/{id}(id=${hitter.cid})}">view</a></td>
 				</div>
-				<td th:text="${hitter.card}">Card</td>
-				<td th:text="${hitter.pos}">POS</td>
+				<td>
+					<span th:text="${hitter.card}" />
+				</td>
+				<td>
+					<span th:text="${cards.bats(hitter.cid)}" class="badge badge-pill badge-dark" />
+					<span th:if="${owned.owned(hitter.cid)!=null}"><span class="badge badge-primary">Owned</span></span>
+				</td>
+				<td>
+					<span th:if="${cards.playsc(hitter.cid) > 0}">
+					  <span class="badge badge-primary">
+						C <span class="badge badge-light"><span th:text="${cards.playsc(hitter.cid)}" /></span>
+						<span class="sr-only">unread messages</span>
+					  </span>
+					</span>
+					<span th:if="${cards.plays1b(hitter.cid) > 0}">
+						<span class="badge badge-primary">
+						  1B <span class="badge badge-light"><span th:text="${cards.plays1b(hitter.cid)}" /></span>
+						  <span class="sr-only">unread messages</span>
+						</span>
+					</span>					
+					<span th:if="${cards.plays2b(hitter.cid) > 0}">
+						<span class="badge badge-primary">
+						  2B <span class="badge badge-light"><span th:text="${cards.plays2b(hitter.cid)}" /></span>
+						  <span class="sr-only">unread messages</span>
+						</span>
+					</span>
+					<span th:if="${cards.plays3b(hitter.cid) > 0}">
+						<span class="badge badge-primary">
+						  3B <span class="badge badge-light"><span th:text="${cards.plays3b(hitter.cid)}" /></span>
+						  <span class="sr-only">unread messages</span>
+						</span>
+					  </span>
+					  <span th:if="${cards.playsss(hitter.cid) > 0}">
+						  <span class="badge badge-primary">
+							SS <span class="badge badge-light"><span th:text="${cards.playsss(hitter.cid)}" /></span>
+							<span class="sr-only">unread messages</span>
+						  </span>
+					  </span>					
+					  <span th:if="${cards.playslf(hitter.cid) > 0}">
+						  <span class="badge badge-primary">
+							LF <span class="badge badge-light"><span th:text="${cards.playslf(hitter.cid)}" /></span>
+							<span class="sr-only">unread messages</span>
+						  </span>
+					  </span>
+					  <span th:if="${cards.playscf(hitter.cid) > 0}">
+						<span class="badge badge-primary">
+						  CF <span class="badge badge-light"><span th:text="${cards.playscf(hitter.cid)}" /></span>
+						  <span class="sr-only">unread messages</span>
+						</span>
+					  </span>
+					  <span th:if="${cards.playsrf(hitter.cid) > 0}">
+						  <span class="badge badge-primary">
+							RF <span class="badge badge-light"><span th:text="${cards.playsrf(hitter.cid)}" /></span>
+							<span class="sr-only">unread messages</span>
+						  </span>
+					  </span>					
+				</td>
 				<td th:text="${#numbers.formatDecimal(hitter.ovr,1,0)}">Ovr</td>
 				<td th:text="${hitter.pa}">PA</td>
 				<td th:text="${#numbers.formatDecimal(hitter.pipa,1,3)}">Pipa</td>

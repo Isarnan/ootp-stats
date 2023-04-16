@@ -8,6 +8,6 @@ import com.felarca.ootp.domain.Stats2;
 
 public interface Stats2Repository extends JpaRepository<Stats2, Integer> {
 	
-	@Query(value="select count(*) from stats2 s where cid = :cid", nativeQuery=true)
+	@Query(value="select cid from stats2 s where cid = :cid", nativeQuery=true)
 	public Integer owned(@Param("cid") int cid);
 }
