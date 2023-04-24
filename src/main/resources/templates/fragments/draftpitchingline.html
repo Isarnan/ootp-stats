@@ -10,6 +10,7 @@
 					<th>OVR</th>
 					<th>IP</th>
 					<th>ERA</th>
+					<th>BABIP:HR</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -19,6 +20,8 @@
 						<td th:text="${#numbers.formatDecimal(hitter.ovr,1,0)}">Ovr</td>
 						<td th:text="${#numbers.formatDecimal(hitter.ip,1,0)}">IP</td>
 						<td th:text="${#numbers.formatDecimal(hitter.era,0,3)}">ERA</td>
+						<td><span th:text="${cards.pbabip(hitter.cid)}" />:
+						<span th:text="${cards.phr(hitter.cid)}" /></td>
 					</tr>
 				</span>
 			</tbody>

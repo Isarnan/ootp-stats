@@ -134,6 +134,8 @@ public class HomeController {
 		list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getEra)));
 		model.addAttribute("meta", meta);
 		model.addAttribute("pitchers", list);
+		model.addAttribute("owned", stats2Repo);
+		model.addAttribute("cards", cardsRepo);
 		return "pitchers";
 	}
 
@@ -341,6 +343,7 @@ public class HomeController {
 		model.addAttribute("meta", meta);
 		model.addAttribute("pitchers", list);
 		model.addAttribute("owned", stats2Repo);
+		model.addAttribute("cards", cardsRepo);
 		if (tournie.getDisplayName().equals("PerfectDraft")) {
 			return "draftpitchers";
 		} else {

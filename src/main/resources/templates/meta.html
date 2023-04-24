@@ -5,10 +5,10 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
 
-<title>Home</title>
+<title th:text="${meta.tournamentType} + ' Meta'"></title>
 </head>
 <body>
-	<h2 th:text="${meta.tournamentType}">App Title</h2>
+	<h2 th:text="${meta.tournamentType} + ' Meta'">App Title</h2>
 	<div th:replace="fragments/header :: header">Default Text</div>
 	<table>
 		<tr>
@@ -36,6 +36,7 @@
 							<th>OPS</th>
 							<th>SB</th>
 							<th>IP</th>
+							<th>R/G</th>
 							<th>ERA</th>
 							<th>WHIP</th>
 						</tr>
@@ -50,6 +51,7 @@
 							<td><span th:text="${#numbers.formatDecimal(hitter.getNetSbP600(),2,2)}" th:classappend="${hitter.getNetSbP600 > 10 } ? text-success : text-muted"></span>(<span
 								th:text="${#numbers.formatDecimal(hitter.getSbPercent(),2,2)}" th:classappend="${hitter.getSbPercent > 74 } ? text-success : text-danger"></span>)</td>
 							<td th:text="${#numbers.formatDecimal(hitter.innings,1,1)}">IP</td>
+							<td th:text="${#numbers.formatDecimal(hitter.getRunsPerGame,1,3)}">R/G</td>
 							<td th:text="${#numbers.formatDecimal(hitter.era,1,3)}">ERA</td>
 							<td th:text="${#numbers.formatDecimal(hitter.whip,1,3)}">WHIP</td>
 						</tr>

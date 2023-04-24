@@ -155,6 +155,10 @@ public class Hitter {
 	@Getter
 	@Setter
 	private BigInteger p_gb;
+	@NonNull
+	@Getter
+	@Setter
+	private BigInteger p_runs;
 	
 	public Double getEra() {
 		if(innings != 0 )return (er.doubleValue()/innings) * 9;
@@ -233,6 +237,22 @@ public class Hitter {
 		//MIssing SF from denominator, need pa or ab for pitchers		
 		//return (this.p_singles.doubleValue() + this.p_doubles.doubleValue() + this.p_triples.doubleValue())/(this.p.doubleValue() - this.k.doubleValue() - this.hr.doubleValue());
 		return 0.0;
+	}
+	public double getRunsPerGame(){
+		// log.info("Runs: " + this.p_runs + "GS: " + this.p_gamesstarted + "ER: " + this.er);
+		log.info("R/PA: " + this.p_runs.doubleValue() / this.pa.doubleValue());
+		return this.p_runs.doubleValue() / this.p_gamesstarted.doubleValue();
+	}
+	public double getWoba(){
+		// (unintentional BB factor x unintentional BB + HBP factor x HBP + 1B factor x 1B + 2B factor x 2B + 3B factor x 3B + HR factor x HR)/(AB + unintentional BB + SF + HBP)
+		double numerator = (LinearWeights.ubbFactor * this.bb.doubleValue()) 
+			+ (LinearWeights.hbpFactor * this.hp.intValue()) 
+			+ (LinearWeights.singleFactor * this.singles.intValue()) 
+			+ (LinearWeights.doubleFactor * this.doubles.intValue()) 
+			+ (LinearWeights.tripleFactor * this.triples.intValue()) 
+			+ (LinearWeights.hrFactor * this.hr.intValue());
+		int denominator = this.pa.intValue();
+		return numerator / denominator;
 	}
 
 }
