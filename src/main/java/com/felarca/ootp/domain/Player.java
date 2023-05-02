@@ -50,6 +50,10 @@ public class Player {
 	
 	@Setter
 	@Getter
+	private Integer pitchingSplits;
+
+	@Setter
+	@Getter
 	private List<StatsLine> stats = new ArrayList<StatsLine>();
 	
 	@Getter	

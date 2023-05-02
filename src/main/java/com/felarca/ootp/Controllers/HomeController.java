@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,7 @@ import com.felarca.ootp.Repositories.PitchingRepository;
 import com.felarca.ootp.Repositories.SkipRepository;
 import com.felarca.ootp.Repositories.Stats57Repository;
 import com.felarca.ootp.Repositories.Stats2Repository;
+import com.felarca.ootp.domain.Card;
 import com.felarca.ootp.domain.Era;
 import com.felarca.ootp.domain.Hitter;
 import com.felarca.ootp.domain.Meta;
@@ -136,7 +139,12 @@ public class HomeController {
 		model.addAttribute("pitchers", list);
 		model.addAttribute("owned", stats2Repo);
 		model.addAttribute("cards", cardsRepo);
-		return "pitchers";
+		if (tournie.getDisplayName().equals("PerfectDraft")) {
+			return "draftpitchers";
+		} else {
+			return "pitchers";
+		}
+		//return "pitchers";
 	}
 
 	@RequestMapping("/team/{tournamenttype}/hitters")
@@ -454,6 +462,21 @@ public class HomeController {
 		if (hitter != null)
 			player.addStats("PerfectDraft", "Overall", "AllTime", hitter);
 
+		Object[][] startData = {{1,2},{3,4},{7,8}};
+
+		Hitter starter = stats57Repo.getStarter(cid, "Bronze16", Meta.ENDOFTIME, Meta.LAUNCH);
+		player.addStats("Bronze16", "Starter", "AllTime", starter);
+		//log.info("Started: " + starter.getP_gamesstarted());
+
+		Hitter reliever = stats57Repo.getReliever(cid, "Bronze16", Meta.ENDOFTIME, Meta.LAUNCH);
+		player.addStats("Bronze16", "Reliever", "AllTime", reliever);
+		//log.info("Started: " + reliever.getP_gamesstarted());
+
+		player.setPitchingSplits(cardsRepo.pitcherSplits(cid));
+		Card card = cardsRepo.getCard(cid);
+		
+		model.addAttribute("card", card);
+		model.addAttribute("startData", startData);
 		model.addAttribute("player", player);
 		return "player";
 	}
@@ -465,6 +488,7 @@ public class HomeController {
 		Meta meta = new Meta("TEST");
 		Tournament tournie = meta.getTournamentByName(type);
 		Hitter hitter;
+		/*
 		List<Integer> slices = new ArrayList<Integer>() {
 			{
 				add(1);
@@ -489,6 +513,28 @@ public class HomeController {
 			}
 
 		}
+		*/
+		LocalTime midnight = LocalTime.MIDNIGHT;
+		LocalDate today = LocalDate.now(ZoneId.of("America/Detroit"));
+		LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+
+		for (int i = 0; i < 20; i++) {
+			
+			LocalDateTime end = todayMidnight.minusDays(i);
+			LocalDateTime start = todayMidnight.minusDays(i-1);
+			log.info("tournie: " + tournie.getDbName() + " : " + start.toString() + " : " + end.toString());
+			hitter = stats57Repo.getTeamHitter(cid, tournie.getDbName(), Meta.myTeam, start, end );
+			log.info("HItter: " + hitter);
+			if (hitter != null)
+				player.addStats(type, Meta.myTeam, end.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")), hitter);
+
+			if (team != null && !team.equals(Meta.myTeam)) {
+				hitter = stats57Repo.getTeamHitter(cid, tournie.getDbName(), team, Meta.ENDOFTIME, start);
+				if (hitter != null)
+					player.addStats(type, team, end.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")), hitter);
+			}		
+		}
+
 		model.addAttribute("player", player);
 		return "player";
 	}
@@ -516,7 +562,11 @@ public class HomeController {
 		}
 		
 		player.setCard(stats57Repo.getCard(cid));
+		Card card = cardsRepo.getCard(cid);
+		
+		model.addAttribute("card", card);
 		model.addAttribute("player", player);
 		return "player";
+
 	}
 }

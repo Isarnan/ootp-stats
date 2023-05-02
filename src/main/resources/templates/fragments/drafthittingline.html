@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head></head>
+
 <body>
 	<div th:fragment="drafthittingline">
 		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th>Card</th>
+					<th>Badges</th>
 					<th>OVR</th>
 					<th>PA</th>
 					<th>OBP</th>
@@ -16,16 +19,156 @@
 			<tbody>
 				<span th:each="hitter : ${hitters}">
 					<tr th:if="${hitter.ovr < lessThan and hitter.ovr >= greaterThan}">
-						<td th:text="${hitter.card}">Card</td>
-						<td th:text="${#numbers.formatDecimal(hitter.ovr,1,0)}">Ovr</td>
-						<td th:text="${hitter.pa}">PA</td>
-						<td th:text="${#numbers.formatDecimal(hitter.obp,0,3)}">OBP</td>
-						<td th:text="${#numbers.formatDecimal(hitter.ops,0,3)}">OPS</td>
+						<div th:with="card=${cards.getCard(hitter.cid)}">
+							<td>
+								<span th:text="${card.fn}" />&nbsp<span th:text="${card.ln}" />
+								<br />
+								<span th:if="${card.ratingC > 0}">
+									<span class="badge badge-primary">
+										C <span class="badge badge-light"><span
+												th:text="${card.ratingC}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.rating1B > 0}">
+									<span class="badge badge-primary">
+										1B <span class="badge badge-light"><span
+												th:text="${card.rating1B}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.rating2B > 0}">
+									<span class="badge badge-primary">
+										2B <span class="badge badge-light"><span
+												th:text="${card.rating2B}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.rating3B > 0}">
+									<span class="badge badge-primary">
+										3B <span class="badge badge-light"><span
+												th:text="${card.rating3B}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.ratingSS > 0}">
+									<span class="badge badge-primary">
+										SS <span class="badge badge-light"><span
+												th:text="${card.ratingSS}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.ratingLF > 0}">
+									<span class="badge badge-primary">
+										LF <span class="badge badge-light"><span
+												th:text="${card.ratingLF}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.ratingCF > 0}">
+									<span class="badge badge-primary">
+										CF <span class="badge badge-light"><span
+												th:text="${card.ratingCF}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.ratingRF > 0}">
+									<span class="badge badge-primary">
+										RF <span class="badge badge-light"><span
+												th:text="${card.ratingRF}" /></span>
+									</span>
+								</span>
+							</td>
+							<!-- Hitting Ratings -->
+							<td>
+								<span th:if="${card.vlp <= 100 }">
+									<span class="badge badge-danger">
+										vLp <span class="badge badge-light"><span th:text="${card.vlp}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vlp >= 175 }">
+									<span class="badge badge-success">
+										vLp <span class="badge badge-light"><span th:text="${card.vlp}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vlp > 100 and card.vlp < 175}">
+									<span class="badge badge-secondary">
+										vLp <span class="badge badge-light"><span th:text="${card.vlp}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vla <= 100 }">
+									<span class="badge badge-danger">
+										vLa <span class="badge badge-light"><span th:text="${card.vla}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vla >= 175 }">
+									<span class="badge badge-success">
+										vLa <span class="badge badge-light"><span th:text="${card.vla}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vla > 100 and card.vla < 175}">
+									<span class="badge badge-secondary">
+										vLa <span class="badge badge-light"><span th:text="${card.vla}" /></span>
+									</span>
+								</span>
 
+								<span th:if="${card.ifr <= T(com.felarca.ootp.domain.Meta).BRONZE_IFR_FINE }">
+									<span class="badge badge-danger">
+										IFr <span class="badge badge-light"><span th:text="${card.ifr}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.ifr >= T(com.felarca.ootp.domain.Meta).BRONZE_IFR_GOODNESS }">
+									<span class="badge badge-success">
+										IFr <span class="badge badge-light"><span th:text="${card.ifr}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.ifr > T(com.felarca.ootp.domain.Meta).BRONZE_IFR_FINE and card.ifr < T(com.felarca.ootp.domain.Meta).BRONZE_IFR_GOODNESS}">
+									<span class="badge badge-secondary">
+										Ifr <span class="badge badge-light"><span th:text="${card.ifr}" /></span>
+									</span>
+								</span>
+								<br /><!-- Now for vR-->
+								<span th:if="${card.vrp <= 100 }">
+									<span class="badge badge-danger">
+										vRp <span class="badge badge-light"><span th:text="${card.vrp}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vrp >= 175 }">
+									<span class="badge badge-success">
+										vRp <span class="badge badge-light"><span th:text="${card.vrp}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vrp > 100 and card.vrp < 175}">
+									<span class="badge badge-secondary">
+										vRp <span class="badge badge-light"><span th:text="${card.vrp}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vra <= 100 }">
+									<span class="badge badge-danger">
+										vRa <span class="badge badge-light"><span th:text="${card.vra}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vra >= 175 }">
+									<span class="badge badge-success">
+										vRa <span class="badge badge-light"><span th:text="${card.vra}" /></span>
+									</span>
+								</span>
+								<span th:if="${card.vra > 100 and card.vra < 175}">
+									<span class="badge badge-secondary">
+										vRa <span class="badge badge-light"><span th:text="${card.vra}" /></span>
+									</span>
+								</span>
+								<span th:if="${cards.ofrange(hitter.cid) > 0}">
+									<span class="badge badge-primary">
+										OFr <span class="badge badge-light"><span
+												th:text="${cards.ofrange(hitter.cid)}" /></span>
+										<span class="sr-only">unread messages</span>
+									</span>
+								</span>
+							</td>
+							<td th:text="${#numbers.formatDecimal(hitter.ovr,1,0)}">Ovr</td>
+							<td th:text="${hitter.pa}">PA</td>
+							<td th:text="${#numbers.formatDecimal(hitter.obp,0,3)}">OBP</td>
+							<td th:text="${#numbers.formatDecimal(hitter.ops,0,3)}">OPS</td>
+						</div>
 					</tr>
 				</span>
 			</tbody>
 		</table>
 	</div>
 </body>
+
 </html>

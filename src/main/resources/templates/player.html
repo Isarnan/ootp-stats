@@ -1,56 +1,91 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="utf-8" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
-<title>Home</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+	<title th:text="${card.fn + ' ' + card.ln}" />
 </head>
+
 <body>
-	<h2><span th:text="${player.card}"></span></h2>
+	<h2><span th:text="${card.fn}"></span>&nbsp<span th:text="${card.ln}" /></span></h2>
 	<div th:replace="fragments/header :: header">Default Text</div>
+	<script type="text/javascript" th:inline="javascript">
+		google.charts.load('current', { 'packages': ['corechart'] });
+		google.charts.setOnLoadCallback(drawChart);
 
+		function drawChart() {
+			//var start_data = google.visualization.arrayToDataTable(d);
+			var data = google.visualization.arrayToDataTable([
+				['Age', 'Weight'],
+				[8, 12],
+				[4, 5.5],
+				[11, 14],
+				[4, 5],
+				[3, 3.5],
+				[6.5, 7]
+			]);
+
+			var options = {
+				title: 'Age vs. Weight comparison',
+				hAxis: { title: 'Age', minValue: 0, maxValue: 15 },
+				vAxis: { title: 'Weight', minValue: 0, maxValue: 15 },
+				legend: 'none'
+			};
+
+			var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+
+			chart.draw(data, options);
+		}
+	</script>
+	<div th:replace="fragments/cards :: cardpitching(card=${card})">
+	</div>
+	<div id="chart_div" style="width: 900px; height: 500px;"></div>
 	<h2 th:text="Hitting">App Title</h2>
-
 	<table class="table table-hover">
-		<div th:replace="fragments/playerhittingline :: playerhittingheader(hitter=${player.perfectDraft},type=PerfectDraft,team=Overall)"></div>
+		<div
+			th:replace="fragments/playerhittingline :: playerhittingheader(hitter=${player.perfectDraft},type=PerfectDraft,team=Overall)">
+		</div>
 		<tbody>
-			<!--
-			<div th:replace="fragments/playerhittingline :: hittingline(hitter=${player.bronzeHackerHitting},type=Bronze,team=Hacker)"></div>
-			<div th:replace="fragments/playerhittingline :: hittingline(hitter=${player.bronzeHitting},type=Bronze,team=Overall)"></div>
-			<div th:replace="fragments/playerhittingline :: hittingline(hitter=${player.goldHackerHitting},type=Gold32,team=Hacker)"></div>
-			<div th:replace="fragments/playerhittingline :: hittingline(hitter=${player.goldHitting},type=Gold32,team=Overall)"></div>
-			<div th:replace="fragments/playerhittingline :: hittingline(hitter=${player.perfectDraft},type=PerfectDraft,team=Overall)"></div>
-			<div th:replace="fragments/playerhittingline :: hittingline(hitter=${player.perfectTeam},type=PerfectTeam,team=Overall)"></div>
-			-->
+
 			<span th:each="line,stats : ${player.stats}">
-				<div th:replace="fragments/playerhittingline :: hittingline(hitter=${line.stats},type=${line.type},team=${line.team},time=${line.time})"></div>
+				<div
+					th:replace="fragments/playerhittingline :: hittingline(hitter=${line.stats},type=${line.type},team=${line.team},time=${line.time})">
+				</div>
 			</span>
+		</tbody>
 	</table>
 	<h2 th:text="Pitching">App Title</h2>
 	<table class="table table-hover">
-		<div th:replace="fragments/playerpitchingline :: playerpitchingheader(hitter=${player.perfectDraft},type=PerfectDraft,team=Overall)"></div>
+		<div
+			th:replace="fragments/playerpitchingline :: playerpitchingheader(hitter=${player.perfectDraft},type=PerfectDraft,team=Overall)">
+		</div>
 		<tbody>
-			<!-- 
-			<div th:replace="fragments/playerpitchingline :: playerpitchingline(hitter=${player.bronzeHackerPitching},type=Bronze,team=Hacker)"></div>
-			<div th:replace="fragments/playerpitchingline :: playerpitchingline(hitter=${player.bronzePitching},type=Bronze,team=Overall)"></div>
-			<div th:replace="fragments/playerpitchingline :: playerpitchingline(hitter=${player.goldHackerPitching},type=Gold32,team=Hacker)"></div>
-			<div th:replace="fragments/playerpitchingline :: playerpitchingline(hitter=${player.goldPitching},type=Gold32,team=Overall)"></div>
-			<div th:replace="fragments/playerpitchingline :: playerpitchingline(hitter=${player.perfectDraft},type=PerfectDraft,team=Overall)"></div>
-			<div th:replace="fragments/playerpitchingline :: playerpitchingline(hitter=${player.perfectTeam},type=PerfectTeam,team=Overall)"></div>
-			-->
+
 			<span th:each="line,stats : ${player.stats}">
-				<div th:replace="fragments/playerpitchingline :: playerpitchingline(hitter=${line.stats},type=${line.type},team=${line.team},time=${line.time})"></div>
+				<div
+					th:replace="fragments/playerpitchingline :: playerpitchingline(hitter=${line.stats},type=${line.type},team=${line.team},time=${line.time})">
+				</div>
 			</span>
 		</tbody>
 	</table>
 
 	<div th:replace="fragments/footer :: footer">Default Text</div>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
 	<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 </body>
+
 </html>

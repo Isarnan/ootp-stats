@@ -12,7 +12,7 @@ from unicodedata import normalize
 from _decimal import Decimal
 from pathlib import Path
 
-sqlEngine       = create_engine('mysql+pymysql://ootp:ootp2222@server/ootp', pool_recycle=3600)
+sqlEngine = create_engine("mysql+pymysql://ootp:ootp2222@server/ootp", pool_recycle=3600)
 
 def load(game,file):
   tableName = 'stats'
@@ -172,13 +172,29 @@ if os.path.isfile(cardDBFile):
       cards = pd.read_csv(cardDBFile)
       df = pd.DataFrame(data=cards)
       df.columns = df.columns.str.replace(' ', '')
+      df.rename(columns = {'//CardTitle':'CardTitle'}, inplace = True)
+      df.rename(columns = {'Unnamed:111':'Unnamed111'}, inplace = True)
+      df.rename(columns = {'InfieldRange':'ifr'}, inplace = True)
+      df.rename(columns = {'FirstName':'fn'}, inplace = True)
+      df.rename(columns = {'LastName':'ln'}, inplace = True)
+      df.rename(columns = {'PosRatingC':'ratingC'}, inplace = True)
+      df.rename(columns = {'PosRating1B':'rating1B'}, inplace = True)
+      df.rename(columns = {'PosRating2B':'rating2B'}, inplace = True)
+      df.rename(columns = {'PosRating3B':'rating3B'}, inplace = True)
+      df.rename(columns = {'PosRatingSS':'ratingSS'}, inplace = True)
+      df.rename(columns = {'PosRatingLF':'ratingLF'}, inplace = True)
+      df.rename(columns = {'PosRatingCF':'ratingCF'}, inplace = True)
+      df.rename(columns = {'PosRatingRF':'ratingRF'}, inplace = True)
+      df.rename(columns = {'AvoidKvL':'KsvL'}, inplace = True)
+
       rows = len(df.index)
       columns = len(df.columns) 
       print('Rows: '+ str(rows) + ' Column: ' + str(columns))
       dbConnection = sqlEngine.connect()
       try:
         # need to rename cards to Cards, why?    
-        tableName = 'cards'
+        # rename table cards to Cards;
+        tableName = "cards"        
         frame = df.to_sql(tableName, dbConnection, if_exists='replace', schema="ootp");           
       except ValueError as vx:
          print(f'vx:{vx}')

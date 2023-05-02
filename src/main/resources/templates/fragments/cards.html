@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head></head>
+
+<body>
+	<div th:fragment="cardpitching">
+		<div th:if="${card != null}">
+			<table>
+				<tr>
+					<td>
+						<span th:if="${card.stamina <= 50 }">
+							<span class="badge rounded-pill bg-primary text-light">
+								Stam
+								<span class="badge badge-light">
+									<span th:text="${card.stamina}" />
+								</span>
+							</span>
+						</span>
+
+
+						<span th:text="${card.handed}" class="badge badge-pill badge-dark" />
+					</td>
+					<td>
+						<span th:if="${card.splits <= 20 and card.splits >= -20}">
+							<span class="badge rounded-pill bg-success text-light">N</span>
+						</span>
+						<span th:if="${card.splits > 20 and card.handed == 'LHP'}">
+							<span class="badge badge-primary">L
+								<span class="badge badge-light">
+									<span th:text="${card.splits}" />
+								</span></span>
+						</span>
+						<span th:if="${card.splits &lt; -20 and card.handed == 'RHP'}">
+							<span class="badge badge-primary">R
+								<span class="badge badge-light">
+									<span th:text="${T(java.lang.Math).abs(card.splits)}" />
+								</span></span>
+						</span>
+						<span th:if="${card.splits > 20 and card.handed == 'RHP'}">
+							<span class="badge rounded-pill bg-danger text-light">
+								R
+								<span class="badge badge-light">
+									<span th:text="${card.splits}" />
+								</span>
+							</span>
+						</span>
+						<span th:if="${card.splits &lt; -20 and card.handed == 'LHP'}">
+							<span class="badge rounded-pill bg-danger text-light">R</span>
+						</span>
+
+
+					</td>
+					<td>
+						vL
+						<!-- Stuff vL -->
+						<span th:if="${card.stuffvl <= 50 }">
+							<span class="badge badge-danger">
+								Stu <span class="badge badge-light"><span th:text="${card.stuffvl}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.stuffvl >= 100 }">
+							<span class="badge badge-success">
+								Stu <span class="badge badge-light"><span th:text="${card.stuffvl}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.stuffvl > 50 and card.stuffvl < 100}">
+							<span class="badge badge-secondary">
+								Stu <span class="badge badge-light"><span th:text="${card.stuffvl}" /></span>
+							</span>
+						</span>
+						<!-- Babip vL -->
+						<span th:if="${card.pbabipvl <= 50 }">
+							<span class="badge badge-danger">
+								Bab <span class="badge badge-light"><span th:text="${card.pbabipvl}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.pbabipvl >= 80 }">
+							<span class="badge badge-success">
+								Bab <span class="badge badge-light"><span th:text="${card.pbabipvl}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.pbabipvl > 50 and card.pbabipvl < 80}">
+							<span class="badge badge-secondary">
+								Bab <span class="badge badge-light"><span th:text="${card.pbabipvl}" /></span>
+							</span>
+						</span>
+						<!-- HR vL -->
+						<span th:if="${card.phrvl <= 50 }">
+							<span class="badge badge-danger">
+								HR <span class="badge badge-light"><span th:text="${card.phrvl}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.phrvl >= 80 }">
+							<span class="badge badge-success">
+								HR <span class="badge badge-light"><span th:text="${card.phrvl}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.phrvl > 50 and card.phrvl < 80}">
+							<span class="badge badge-secondary">
+								HR <span class="badge badge-light"><span th:text="${card.phrvl}" /></span>
+							</span>
+						</span>
+						<!-- Contact vL -->
+						<span th:if="${card.controlvl <= 50 }">
+							<span class="badge badge-danger">
+								Con <span class="badge badge-light"><span th:text="${card.controlvl}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.controlvl >= 80 }">
+							<span class="badge badge-success">
+								Con <span class="badge badge-light"><span th:text="${card.controlvl}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.controlvl > 50 and card.controlvl < 80}">
+							<span class="badge badge-secondary">
+								Con <span class="badge badge-light"><span th:text="${card.controlvl}" /></span>
+							</span>
+						</span>
+						<br />
+						vR
+						<!-- Stuff vR -->
+						<span th:if="${card.stuffvr <= 50 }">
+							<span class="badge badge-danger">
+								Stu <span class="badge badge-light"><span th:text="${card.stuffvr}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.stuffvr >= 100 }">
+							<span class="badge badge-success">
+								Stu <span class="badge badge-light"><span th:text="${card.stuffvr}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.stuffvr > 50 and card.stuffvr < 100}">
+							<span class="badge badge-secondary">
+								Stu <span class="badge badge-light"><span th:text="${card.stuffvr}" /></span>
+							</span>
+						</span>
+						<!-- Babip vR -->
+						<span th:if="${card.pbabipvr <= 50 }">
+							<span class="badge badge-danger">
+								Bab <span class="badge badge-light"><span th:text="${card.pbabipvr}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.pbabipvr >= 80 }">
+							<span class="badge badge-success">
+								Bab <span class="badge badge-light"><span th:text="${card.pbabipvr}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.pbabipvr > 50 and card.pbabipvr < 80}">
+							<span class="badge badge-secondary">
+								Bab <span class="badge badge-light"><span th:text="${card.pbabipvr}" /></span>
+							</span>
+						</span>
+						<!-- HR vR -->
+						<span th:if="${card.phrvr <= 50 }">
+							<span class="badge badge-danger">
+								HR <span class="badge badge-light"><span th:text="${card.phrvr}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.phrvr >= 80 }">
+							<span class="badge badge-success">
+								HR <span class="badge badge-light"><span th:text="${card.phrvr}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.phrvr > 50 and card.phrvr < 80}">
+							<span class="badge badge-secondary">
+								HR <span class="badge badge-light"><span th:text="${card.phrvr}" /></span>
+							</span>
+						</span>
+						<!-- Contact vR -->
+						<span th:if="${card.controlvr <= 50 }">
+							<span class="badge badge-danger">
+								Con <span class="badge badge-light"><span th:text="${card.controlvr}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.controlvr >= 80 }">
+							<span class="badge badge-success">
+								Con <span class="badge badge-light"><span th:text="${card.controlvr}" /></span>
+							</span>
+						</span>
+						<span th:if="${card.controlvr > 50 and card.controlvr < 80}">
+							<span class="badge badge-secondary">
+								Con <span class="badge badge-light"><span th:text="${card.controlvr}" /></span>
+							</span>
+						</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>

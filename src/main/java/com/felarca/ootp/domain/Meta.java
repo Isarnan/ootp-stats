@@ -20,7 +20,7 @@ public class Meta {
 	// DatatypeConverter.parseDateTime("2041-05-31T10:00:00-05:00").getTime();
 	public final static LocalDateTime ENDOFTIME = LocalDateTime.of(2035, Month.JULY, 29, 19, 30, 40);
 	public final static LocalDateTime LAUNCH = LocalDateTime.of(2023, Month.MARCH, 24, 0, 30, 40);
-	public final static LocalDateTime RELEASE1 = LocalDateTime.of(2023, Month.JUNE, 6, 10, 10, 10);
+	public final static LocalDateTime RELEASE1 = LocalDateTime.of(2023, Month.MAY, 1, 10, 10, 10);
 	public final static LocalDateTime RELEASE2 = LocalDateTime.of(2023, Month.JULY, 31, 10, 30, 40);
 	public final static LocalDateTime RELEASE3 = LocalDateTime.of(2023, Month.AUGUST, 28, 12, 30, 40);
 
@@ -34,10 +34,20 @@ public class Meta {
 	public final static String myTeam = "Dark Web Hackers";
 	public final static String defaultEra = "Launch";
 	public final static String defaultTournament = "gold";
+	public final static String[] CardTier = {"Iron", "Bronze", "Silver", "Gold", "Diamond", "Perfect"};
+	
+	public final static int BRONZE_IFR_GREATNESS = 90;
+	public final static int BRONZE_IFR_GOODNESS = 70;
+	public final static int BRONZE_IFR_FINE = 50;
+
 
 	@Getter
 	@Setter
 	private String tournamentType;
+
+	@Getter
+	@Setter
+	private String round;
 
 	@Getter
 	@Setter
@@ -195,7 +205,7 @@ public class Meta {
 
 	public Era getEraByName(String name) {
 		for (Era temp : this.eras) {
-			log.info("name: " + name + " temp: " + temp.getName());
+			//log.info("name: " + name + " temp: " + temp.getName());
 			if (temp.getName().equals(name) || temp.getName().toLowerCase().equals(name.toLowerCase())) {
 				return temp;
 			}
