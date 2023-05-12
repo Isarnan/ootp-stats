@@ -36,6 +36,7 @@ import com.felarca.ootp.Repositories.HittingRepository;
 import com.felarca.ootp.Repositories.PitchingRepository;
 import com.felarca.ootp.Repositories.SkipRepository;
 import com.felarca.ootp.Repositories.Stats57Repository;
+import com.felarca.ootp.Repositories.Stats72Repository;
 import com.felarca.ootp.Repositories.Stats2Repository;
 import com.felarca.ootp.domain.Card;
 import com.felarca.ootp.domain.Era;
@@ -46,6 +47,7 @@ import com.felarca.ootp.domain.Record;
 import com.felarca.ootp.domain.Skip;
 import com.felarca.ootp.domain.Stats57;
 import com.felarca.ootp.domain.Tournament;
+import com.felarca.ootp.domain.results.CardTournamentResult;
 
 import lombok.extern.java.Log;
 
@@ -73,6 +75,8 @@ public class HomeController {
 	GoldHackerPitchingRepository goldHackerPitchingRepo;
 	@Autowired
 	Stats57Repository stats57Repo;
+	@Autowired
+	Stats72Repository stats72Repo;
 	@Autowired
 	Stats2Repository stats2Repo;
 	@Autowired
@@ -227,7 +231,7 @@ public class HomeController {
 			@RequestParam(required = false) String filter, @RequestParam(required = false) Integer pa,
 			@RequestParam(required = false) String strPipa, @RequestParam(required = false) String time) {
 		
-
+/* 
 		if (tournamenttype.equals("bronze"))
 			tournamenttype = "Bronze16";
 		else if (tournamenttype.equals("perfectteam"))
@@ -238,26 +242,30 @@ public class HomeController {
 			tournamenttype = "Gold32";
 		else if (tournamenttype.equals("iron"))
 			tournamenttype = "Iron16";
+*/
 		Meta meta = new Meta(tournamenttype);
+		String dbType = meta.getDBTypeByURL(tournamenttype);
 
 		
-		if (time == null && (tournamenttype.equals("Gold32") || tournamenttype.equals("Bronze16") || tournamenttype.equals("Iron16" )))
+		if (time == null && (dbType.equals("Gold32") || dbType.equals("Bronze16") || dbType.equals("Iron16") || dbType.equals("DailyLiveGold" )))
 			time = "LAUNCH";
-		else if (time == null && (tournamenttype.equals("PerfectTeam") || tournamenttype.equals("PerfectDraft")))
+		else if (time == null && (dbType.equals("PerfectTeam") || dbType.equals("PerfectDraft")))
+			time = "alltime";
+		else 
 			time = "alltime";
 
 		List<Hitter> list;
 
 		if (time != null && time.equals("R2"))
-			list = stats57Repo.getHittersList(tournamenttype, Meta.ENDOFTIME, Meta.RELEASE2);
+			list = stats57Repo.getHittersList(dbType, Meta.ENDOFTIME, Meta.RELEASE2);
 		else if (time.equals("R1"))
-			list = stats57Repo.getHittersList(tournamenttype, Meta.RELEASE2, Meta.RELEASE1);
+			list = stats57Repo.getHittersList(dbType, Meta.RELEASE2, Meta.RELEASE1);
 		else if (time.equals("14Day"))
-			list = stats57Repo.getHittersList(tournamenttype, Meta.ENDOFTIME, LocalDateTime.now().minusDays(14));
+			list = stats57Repo.getHittersList(dbType, Meta.ENDOFTIME, LocalDateTime.now().minusDays(14));
 		else if (time.equals("30Day"))
-			list = stats57Repo.getHittersList(tournamenttype, Meta.ENDOFTIME, LocalDateTime.now().minusDays(30));
+			list = stats57Repo.getHittersList(dbType, Meta.ENDOFTIME, LocalDateTime.now().minusDays(30));
 		else
-			list = stats57Repo.getHittersList(tournamenttype, Meta.ENDOFTIME, Meta.LAUNCH);
+			list = stats57Repo.getHittersList(dbType, Meta.ENDOFTIME, Meta.LAUNCH);
 
 		if(pa != null){			
 			Predicate<Hitter> byPa = hitter -> hitter.getPa().intValue() > pa.intValue();
@@ -266,20 +274,6 @@ public class HomeController {
 			Predicate<Hitter> byPa = hitter -> hitter.getPa().intValue() > 100;
 			list = list.stream().filter(byPa).collect(Collectors.toList());
 		}
-		// if (strPa != null)
-		// 	pa = (long) Long.parseLong(strPa);
-		// Predicate<Hitter> byPa = hitter -> hitter.getPa().intValue() > 30;
-		// Predicate<Hitter> byPa100 = hitter -> hitter.getPa().intValue() > 100;
-		// Predicate<Hitter> byPa1000 = hitter -> hitter.getPa().intValue() > 1000;
-		// Predicate<Hitter> byPipa = hitter -> hitter.getPipa() > 4.3;
-		// if (filter != null && filter.equals("pipa"))
-		// 	list = list.stream().filter(byPipa).collect(Collectors.toList());
-		// if (filter != null && filter.equals("pa1000"))
-		// 	list = list.stream().filter(byPa1000).collect(Collectors.toList());
-		// else if (filter != null && filter.equals("pa100"))
-		// 	list = list.stream().filter(byPa100).collect(Collectors.toList());
-		// else
-		// 	list = list.stream().filter(byPa).collect(Collectors.toList());
 
 		if (sort == null || sort.equals("ops"))
 			list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getOps).reversed()));
@@ -305,14 +299,14 @@ public class HomeController {
 			@RequestParam(required = false) String filter, @RequestParam(required = false) String time) {
 		
 		Meta meta = new Meta(tournamenttype);
-		Tournament tournie = meta.getTournamentByName(tournamenttype);
 		if (time == null)
-			time = tournie.getDefaultEra();		
+			time = meta.getDefaultTime();		
 		Era era = meta.getEraByName(time);
+		String dbType = meta.getDBTypeByURL(tournamenttype);
 		//log.info("Era: " + time + "Tournament: " + tournamenttype);
 
 
-		List<Hitter> list = stats57Repo.getHittersList(tournie.getDbName(), era.getEnd(), era.getStart());;
+		List<Hitter> list = stats57Repo.getHittersList(dbType, era.getEnd(), era.getStart());;
 
 		//log.info("ip: " + ip);
 		if(ip != null){			
@@ -352,7 +346,7 @@ public class HomeController {
 		model.addAttribute("pitchers", list);
 		model.addAttribute("owned", stats2Repo);
 		model.addAttribute("cards", cardsRepo);
-		if (tournie.getDisplayName().equals("PerfectDraft")) {
+		if (dbType.equals("PerfectDraft")) {
 			return "draftpitchers";
 		} else {
 			return "pitchers";
@@ -361,51 +355,30 @@ public class HomeController {
 
 	@RequestMapping("/{tournamenttype}/meta")
 	public String universalMeta(Model model, @PathVariable String tournamenttype) {
-		if (tournamenttype.equals("bronze"))
-			tournamenttype = "Bronze16";
-		else if (tournamenttype.equals("perfectteam"))
-			tournamenttype = "PerfectTeam";
-		else if (tournamenttype.equals("perfectdraft"))
-			tournamenttype = "PerfectDraft";
-		else if (tournamenttype.equals("gold"))
-			tournamenttype = "Gold32";
-		else if (tournamenttype.equals("iron"))
-			tournamenttype = "Iron16";
-
 		Meta meta = new Meta(tournamenttype);
-		/*
-		 * meta.setHackerRecordOverall(stats57Repo.getRecord(tournamenttype,
-		 * "Dark Web Hackers", Meta.ENDOFTIME, Meta.LAUNCH));
-		 * meta.setHackerRecord14Day(stats57Repo.getRecord(tournamenttype,
-		 * "Dark Web Hackers", Meta.ENDOFTIME, LocalDateTime.now().minusDays(14)));
-		 * meta.setHackerRecord30Day(stats57Repo.getRecord(tournamenttype,
-		 * "Dark Web Hackers", Meta.ENDOFTIME, LocalDateTime.now().minusDays(30)));
-		 * meta.setHackerRecordR1(stats57Repo.getRecord(tournamenttype,
-		 * "Dark Web Hackers", Meta.RELEASE2, Meta.RELEASE1));
-		 * meta.setHackerRecordR2(stats57Repo.getRecord(tournamenttype,
-		 * "Dark Web Hackers", Meta.ENDOFTIME, Meta.RELEASE2));
-		 */
-		List<Hitter> metaHitters = new ArrayList<Hitter>();
+		String dbType = meta.getDBTypeByURL(tournamenttype);
+
+		List<CardTournamentResult> metaResults = new ArrayList<CardTournamentResult>();
 		for (Era era : meta.getEras()) {
 			log.info(tournamenttype + "|" + era.getEnd() + "|" + era.getStart());
-			Hitter hitter = stats57Repo.getMetaHitter(tournamenttype, era.getEnd(), era.getStart());
-			if (hitter == null)
+			CardTournamentResult result = stats72Repo.getMetaResult(dbType, era.getEnd(), era.getStart());
+			if (result == null)
 				continue;
-			hitter.setPos(era.getName());
-			metaHitters.add(hitter);
+			result.setPos(era.getName());
+			metaResults.add(result);
 		}
 
-		meta.setMetaHitters(metaHitters);
+		meta.setMetaResults(metaResults);
 
-		meta.setRecordOverall(stats57Repo.getTopTeams(tournamenttype, Meta.ENDOFTIME, Meta.LAUNCH));
-		meta.setRecordR3(stats57Repo.getTopTeams(tournamenttype, Meta.ENDOFTIME, Meta.RELEASE3));
-		meta.setRecordR2(stats57Repo.getTopTeams(tournamenttype, Meta.RELEASE3, Meta.RELEASE2));
-		meta.setRecordR1(stats57Repo.getTopTeams(tournamenttype, Meta.RELEASE2, Meta.RELEASE1));
-		meta.setRecordLaunch(stats57Repo.getTopTeams(tournamenttype, Meta.RELEASE1, Meta.LAUNCH));
+		meta.setRecordOverall(stats72Repo.getTopTeams(dbType, Meta.ENDOFTIME, Meta.LAUNCH));
+		meta.setRecordR3(stats72Repo.getTopTeams(dbType, Meta.ENDOFTIME, Meta.RELEASE3));
+		meta.setRecordR2(stats72Repo.getTopTeams(dbType, Meta.RELEASE3, Meta.RELEASE2));
+		meta.setRecordR1(stats72Repo.getTopTeams(dbType, Meta.RELEASE2, Meta.RELEASE1));
+		meta.setRecordLaunch(stats72Repo.getTopTeams(dbType, Meta.RELEASE1, Meta.LAUNCH));
 
 		List<Record> hackerRecords = new ArrayList<Record>();
 		for (Era era : meta.getEras()) {
-			Record record = stats57Repo.getRecord(tournamenttype, Meta.myTeam, era.getEnd(), era.getStart());
+			Record record = stats72Repo.getRecord(dbType, Meta.myTeam, era.getEnd(), era.getStart());
 			if (record == null)
 				continue;
 			record.setEra(era);
@@ -422,7 +395,7 @@ public class HomeController {
 		List<Record> hackerDaily = new ArrayList<Record>();
 		for (int x = 0; x<21 ; x++) {
 			//Record record = stats57Repo.getRecord(tournamenttype, Meta.myTeam, now.minusDays(x-1), now.minusDays(x));
-			Record record = stats57Repo.getRecord(tournamenttype, Meta.myTeam, tomorrowMidnight.minusDays(x-1), tomorrowMidnight.minusDays(x));
+			Record record = stats72Repo.getRecord(dbType, Meta.myTeam, tomorrowMidnight.minusDays(x-1), tomorrowMidnight.minusDays(x));
 			//log.info("Time: "+ tomorrowMidnight.minusDays(x-1) + " Time2: "+ tomorrowMidnight.minusDays(x));
 			if (record == null)
 				continue;
@@ -433,7 +406,64 @@ public class HomeController {
 		
 		model.addAttribute("meta", meta);
 		return "meta";
-	}
+	} 
+
+
+	
+/* 	@RequestMapping("/{tournamenttype}/meta")
+	public String universalMeta(Model model, @PathVariable String tournamenttype) {
+		Meta meta = new Meta(tournamenttype);
+		String dbType = meta.getDBTypeByURL(tournamenttype);
+
+		List<Hitter> metaHitters = new ArrayList<Hitter>();
+		for (Era era : meta.getEras()) {
+			log.info(tournamenttype + "|" + era.getEnd() + "|" + era.getStart());
+			Hitter hitter = stats57Repo.getMetaHitter(dbType, era.getEnd(), era.getStart());
+			if (hitter == null)
+				continue;
+			hitter.setPos(era.getName());
+			metaHitters.add(hitter);
+		}
+
+		meta.setMetaHitters(metaHitters);
+
+		meta.setRecordOverall(stats57Repo.getTopTeams(dbType, Meta.ENDOFTIME, Meta.LAUNCH));
+		meta.setRecordR3(stats57Repo.getTopTeams(dbType, Meta.ENDOFTIME, Meta.RELEASE3));
+		meta.setRecordR2(stats57Repo.getTopTeams(dbType, Meta.RELEASE3, Meta.RELEASE2));
+		meta.setRecordR1(stats57Repo.getTopTeams(dbType, Meta.RELEASE2, Meta.RELEASE1));
+		meta.setRecordLaunch(stats57Repo.getTopTeams(dbType, Meta.RELEASE1, Meta.LAUNCH));
+
+		List<Record> hackerRecords = new ArrayList<Record>();
+		for (Era era : meta.getEras()) {
+			Record record = stats57Repo.getRecord(dbType, Meta.myTeam, era.getEnd(), era.getStart());
+			if (record == null)
+				continue;
+			record.setEra(era);
+			hackerRecords.add(record);
+		}
+		meta.setHackerRecords(hackerRecords);
+		
+		LocalDate tomorrow = LocalDate.now().plusDays(1);
+		LocalDateTime now = tomorrow.atTime(0, 0);
+		LocalTime midnight = LocalTime.MIDNIGHT;
+		LocalDate today = LocalDate.now(ZoneId.of("America/Detroit"));
+		LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+		LocalDateTime tomorrowMidnight = todayMidnight.plusDays(1);
+		List<Record> hackerDaily = new ArrayList<Record>();
+		for (int x = 0; x<21 ; x++) {
+			//Record record = stats57Repo.getRecord(tournamenttype, Meta.myTeam, now.minusDays(x-1), now.minusDays(x));
+			Record record = stats57Repo.getRecord(dbType, Meta.myTeam, tomorrowMidnight.minusDays(x-1), tomorrowMidnight.minusDays(x));
+			//log.info("Time: "+ tomorrowMidnight.minusDays(x-1) + " Time2: "+ tomorrowMidnight.minusDays(x));
+			if (record == null)
+				continue;
+			record.setEra(new Era(tomorrowMidnight.minusDays(x-1).toString(), "time", LocalDateTime.now().minusDays(7), Meta.ENDOFTIME));
+			hackerDaily.add(record);
+		}
+		meta.setHackerDaily(hackerDaily);
+		
+		model.addAttribute("meta", meta);
+		return "meta";
+	} */
 
 	@RequestMapping("/player/{cid}")
 	public String player(Model model, @PathVariable int cid, @RequestParam(required = false) String team) {
@@ -534,7 +564,10 @@ public class HomeController {
 					player.addStats(type, team, end.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")), hitter);
 			}		
 		}
-
+		
+		Card card = cardsRepo.getCard(cid);
+		
+		model.addAttribute("card", card);
 		model.addAttribute("player", player);
 		return "player";
 	}

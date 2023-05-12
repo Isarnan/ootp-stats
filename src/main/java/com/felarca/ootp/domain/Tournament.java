@@ -19,4 +19,8 @@ public class Tournament {
 	@Setter
 	@Getter
 	private String defaultEra;
+
+	@Setter
+	@Getter
+	private String urlSegment;
 }

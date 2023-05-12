@@ -31,7 +31,7 @@
 	<div th:fragment="toprecordline">
 		<div th:if="${record != null}">
 			<tr>
-				<td><a class="btn btn-primary btn-sm" th:with="baseUrl=('/team/' + ${meta.tier}) + '/pitchers'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="P" />|<a class="btn btn-primary btn-sm" th:with="baseUrl=('/team/' + ${meta.tier}) + '/hitters'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="H" />|<a th:with="baseUrl=('/team/' + ${meta.tier}) + '/hitters'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="${record.team}" /></td>
+				<td><a class="btn btn-primary btn-sm" th:with="baseUrl=('/team/' + ${meta.urlSegment}) + '/pitchers'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="P" />|<a class="btn btn-primary btn-sm" th:with="baseUrl=('/team/' + ${meta.urlSegment}) + '/hitters'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="H" />|<a th:with="baseUrl=('/team/' + ${meta.urlSegment}) + '/hitters'" th:href="@{${baseUrl}(team=${record.team},time=${time})}" th:text="${record.team}" /></td>
 				<td th:text="${record.wins}">IP</td>
 				<td th:text="${record.losses}">ERA</td>
 				<td th:text="${#numbers.formatDecimal(record.pct,0,3)}">pct</td>

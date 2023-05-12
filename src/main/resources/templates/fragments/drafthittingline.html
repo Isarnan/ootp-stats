@@ -18,57 +18,49 @@
 			</thead>
 			<tbody>
 				<span th:each="hitter : ${hitters}">
-					<tr th:if="${hitter.ovr < lessThan and hitter.ovr >= greaterThan}">
-						<div th:with="card=${cards.getCard(hitter.cid)}">
+					<div th:with="card=${cards.getCard(hitter.cid)}">
+						<tr th:if="${card.overall < lessThan and card.overall >= greaterThan}">
 							<td>
 								<span th:text="${card.fn}" />&nbsp<span th:text="${card.ln}" />
 								<br />
 								<span th:if="${card.ratingC > 0}">
 									<span class="badge badge-primary">
-										C <span class="badge badge-light"><span
-												th:text="${card.ratingC}" /></span>
+										C <span class="badge badge-light"><span th:text="${card.ratingC}" /></span>
 									</span>
 								</span>
 								<span th:if="${card.rating1B > 0}">
 									<span class="badge badge-primary">
-										1B <span class="badge badge-light"><span
-												th:text="${card.rating1B}" /></span>
+										1B <span class="badge badge-light"><span th:text="${card.rating1B}" /></span>
 									</span>
 								</span>
 								<span th:if="${card.rating2B > 0}">
 									<span class="badge badge-primary">
-										2B <span class="badge badge-light"><span
-												th:text="${card.rating2B}" /></span>
+										2B <span class="badge badge-light"><span th:text="${card.rating2B}" /></span>
 									</span>
 								</span>
 								<span th:if="${card.rating3B > 0}">
 									<span class="badge badge-primary">
-										3B <span class="badge badge-light"><span
-												th:text="${card.rating3B}" /></span>
+										3B <span class="badge badge-light"><span th:text="${card.rating3B}" /></span>
 									</span>
 								</span>
 								<span th:if="${card.ratingSS > 0}">
 									<span class="badge badge-primary">
-										SS <span class="badge badge-light"><span
-												th:text="${card.ratingSS}" /></span>
+										SS <span class="badge badge-light"><span th:text="${card.ratingSS}" /></span>
 									</span>
 								</span>
 								<span th:if="${card.ratingLF > 0}">
 									<span class="badge badge-primary">
-										LF <span class="badge badge-light"><span
-												th:text="${card.ratingLF}" /></span>
+										LF <span class="badge badge-light"><span th:text="${card.ratingLF}" /></span>
 									</span>
 								</span>
 								<span th:if="${card.ratingCF > 0}">
 									<span class="badge badge-primary">
-										CF <span class="badge badge-light"><span
-												th:text="${card.ratingCF}" /></span>
+										CF <span class="badge badge-light"><span th:text="${card.ratingCF}" /></span>
 									</span>
 								</span>
 								<span th:if="${card.ratingRF > 0}">
 									<span class="badge badge-primary">
-										RF <span class="badge badge-light"><span
-												th:text="${card.ratingRF}" /></span>
+										RF <span class="badge badge-light"><span th:text="${card.ratingRF}" /></span>
 									</span>
 								</span>
 							</td>
@@ -115,7 +107,8 @@
 										IFr <span class="badge badge-light"><span th:text="${card.ifr}" /></span>
 									</span>
 								</span>
-								<span th:if="${card.ifr > T(com.felarca.ootp.domain.Meta).BRONZE_IFR_FINE and card.ifr < T(com.felarca.ootp.domain.Meta).BRONZE_IFR_GOODNESS}">
+								<span
+									th:if="${card.ifr > T(com.felarca.ootp.domain.Meta).BRONZE_IFR_FINE and card.ifr < T(com.felarca.ootp.domain.Meta).BRONZE_IFR_GOODNESS}">
 									<span class="badge badge-secondary">
 										Ifr <span class="badge badge-light"><span th:text="${card.ifr}" /></span>
 									</span>
@@ -159,12 +152,13 @@
 									</span>
 								</span>
 							</td>
-							<td th:text="${#numbers.formatDecimal(hitter.ovr,1,0)}">Ovr</td>
+							<td th:text="${#numbers.formatDecimal(card.overall,1,0)}">Ovr</td>
 							<td th:text="${hitter.pa}">PA</td>
 							<td th:text="${#numbers.formatDecimal(hitter.obp,0,3)}">OBP</td>
 							<td th:text="${#numbers.formatDecimal(hitter.ops,0,3)}">OPS</td>
-						</div>
-					</tr>
+						</tr>
+					</div>
+
 				</span>
 			</tbody>
 		</table>

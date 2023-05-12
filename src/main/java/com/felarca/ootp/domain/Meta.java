@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
+import com.felarca.ootp.domain.results.CardTournamentResult;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
@@ -89,6 +91,10 @@ public class Meta {
 	@Setter
 	private List<Hitter> metaHitters;
 
+	@Getter
+	@Setter
+	private List<CardTournamentResult> metaResults;
+
 	public Meta(String tournamentType) {
 		super();
 		this.tournamentType = tournamentType;
@@ -102,11 +108,15 @@ public class Meta {
 		this.eras.add(new Era("Launch", "content", Meta.LAUNCH, Meta.RELEASE1));
 		this.eras.add(new Era("AllTime", "time", Meta.LAUNCH, Meta.ENDOFTIME));
 
-		this.tournies.add(new Tournament("Iron", "Iron16", "14Day"));
-		this.tournies.add(new Tournament("Bronze", "Bronze16", "14Day"));
-		this.tournies.add(new Tournament("Gold", "Gold32", "14Day"));
-		this.tournies.add(new Tournament("PerfectTeam", "PerfectTeam", "Alltime"));
-		this.tournies.add(new Tournament("PerfectDraft", "PerfectDraft", "Alltime"));
+		this.tournies.add(new Tournament("Iron", "Iron16", "14Day","iron"));
+		this.tournies.add(new Tournament("Bronze", "Bronze16", "14Day","bronze"));
+		this.tournies.add(new Tournament("Gold", "Gold32", "14Day", "gold"));
+		this.tournies.add(new Tournament("PerfectTeam", "PerfectTeam", "Alltime","perfectteam"));
+		this.tournies.add(new Tournament("PerfectDraft", "PerfectDraft", "Alltime","perfectdraft"));
+		this.tournies.add(new Tournament("Daily Live", "DailyLive", "Alltime", "dailylive"));
+		this.tournies.add(new Tournament("Daily Live Gold", "DailyLiveGold", "Alltime", "dailylivegold"));
+		this.tournies.add(new Tournament("Daily Bronze Floor Cap", "DailyBronzeFloorCap", "Alltime", "dailybronzefloorcap"));
+
 	}
 
 	@Getter
@@ -189,7 +199,7 @@ public class Meta {
 		}
 		return returnList;
 	}
-
+/*
 	public String getTier() {
 		if (this.tournamentType.equals("Gold32"))
 			return "gold";
@@ -202,7 +212,10 @@ public class Meta {
 		else
 			return "bronze";
 	}
-
+*/
+	public String getUrlSegment(){
+		return this.tournamentType;
+	}
 	public Era getEraByName(String name) {
 		for (Era temp : this.eras) {
 			//log.info("name: " + name + " temp: " + temp.getName());
@@ -219,6 +232,24 @@ public class Meta {
 			log.finest("name: " + name + " temp: " + temp.getDisplayName());
 			if (temp.getDisplayName().equals(name) || temp.getDisplayName().toLowerCase().equals(name)) {
 				return temp;
+			}
+		}
+		return null;
+	}
+
+	public String getDBTypeByURL(String urlSegment) {
+		for (Tournament temp : this.tournies) {
+			if (temp.getUrlSegment().equals(urlSegment)) {
+				return temp.getDbName();
+			}
+		}
+		return null;
+	}
+	public String getDefaultTime() {
+		String urlSegment = this.tournamentType;
+		for (Tournament temp : this.tournies) {
+			if (temp.getUrlSegment().equals(urlSegment)) {
+				return temp.getDefaultEra();
 			}
 		}
 		return null;

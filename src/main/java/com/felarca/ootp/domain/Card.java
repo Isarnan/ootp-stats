@@ -118,6 +118,10 @@ public class Card {
 	@Getter
 	@Setter
 	private long BABIPvR;
+	@Getter
+	@Setter
+	private long overall;
+
 
 	// End of DB Columns
 	public Integer getVra(){

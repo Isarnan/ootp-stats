@@ -18,8 +18,8 @@
 			</thead>
 			<tbody>
 				<span th:each="hitter : ${hitters}">
-					<tr th:if="${hitter.ovr < lessThan and hitter.ovr >= greaterThan}">
-						<div th:with="card=${cards.getCard(hitter.cid)}">
+					<div th:with="card=${cards.getCard(hitter.cid)}">
+						<tr th:if="${card.overall < lessThan and card.overall >= greaterThan}">
 							<td>
 								<span th:text="${card.fn}" />&nbsp<span th:text="${card.ln}" />
 								<br />
@@ -205,14 +205,14 @@
 									</span>
 								</span>
 							</td>
-							<td th:text="${#numbers.formatDecimal(hitter.ovr,1,0)}">Ovr</td>
+							<td th:text="${#numbers.formatDecimal(card.overall,1,0)}">Ovr</td>
 							<td th:text="${#numbers.formatDecimal(hitter.ip,1,0)}">IP</td>
 							<td th:text="${#numbers.formatDecimal(hitter.era,0,3)}">ERA</td>
 							<td><span th:text="${cards.pbabip(hitter.cid)}" />:
 								<span th:text="${cards.phr(hitter.cid)}" />
 							</td>
-						</div>
-					</tr>
+						</tr>
+					</div>
 				</span>
 			</tbody>
 		</table>

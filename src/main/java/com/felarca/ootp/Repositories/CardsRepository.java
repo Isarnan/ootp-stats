@@ -12,7 +12,7 @@ import com.felarca.ootp.domain.TierPosition;
 
 public interface CardsRepository extends JpaRepository<Cards, Integer> {
 	//Base Card
-	@Query("select new com.felarca.ootp.domain.Card(CardID, fn, ln, Stamina, StuffvL, ControlvL, pHRvL, pBABIPvL, StuffvR, ControlvR, pHRvR, pBABIPvR, Throws, ifr, OFRange, ratingC, rating1B,rating2B,rating3B,ratingSS,ratingRF,ratingCF,ratingLF,ContactvL,GapvL,PowervL,EyevL,KsvL,BABIPvL, ContactvR,GapvR,PowervR,EyevR,KsvR,BABIPvR ) from com.felarca.ootp.domain.Cards c where CardID = :cid")
+	@Query("select new com.felarca.ootp.domain.Card(CardID, fn, ln, Stamina, StuffvL, ControlvL, pHRvL, pBABIPvL, StuffvR, ControlvR, pHRvR, pBABIPvR, Throws, ifr, OFRange, ratingC, rating1B,rating2B,rating3B,ratingSS,ratingRF,ratingCF,ratingLF,ContactvL,GapvL,PowervL,EyevL,KsvL,BABIPvL, ContactvR,GapvR,PowervR,EyevR,KsvR,BABIPvR, Overall ) from com.felarca.ootp.domain.Cards c where CardID = :cid")
 	public Card getCard(@Param("cid") long cid);
 
 	//Card Type

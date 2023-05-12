@@ -28,11 +28,15 @@ def load(game,file):
   rows = len(df.index);
   columns = len(df.columns);  
   print(f'Rows: {rows}  Columns: {columns}')
-  if columns != 54 and columns != 60 and columns != 57 and columns != 78 and columns != 56 and columns != 2:
+  #Removed 57 to make sure I use the new format
+  # 2 is my collection
+  # XX is the card DB
+
+  if columns != 72 and columns != 54 and columns != 60 and columns != 78 and columns != 56 and columns != 2:
       print(f"Columns is not 54, returning");
       return 
   #Common renames
-  if columns == 54 or columns == 60 or columns == 57 and columns != 56:      
+  if columns == 54 or columns == 60 or columns == 57 or columns == 72 and columns != 56:      
       df.rename(columns = {'PI/PA':'pipa'}, inplace = True)  
       df['b_pitches'] = df['pipa'] * df['PA'] 
       df['innings'] = np.trunc(df['IP']) + (np.modf(df['IP'])[0] * (10/3))
@@ -41,7 +45,66 @@ def load(game,file):
       df['date'] = df['date'].astype('datetime64[ns]')
       df['date'] = now
       df['game'] = game
-  
+
+  if columns == 72:
+        df.rename(columns = {'1B':'singles'}, inplace = True)
+        df.rename(columns = {'2B':'doubles'}, inplace = True)
+        df.rename(columns = {'3B':'triples'}, inplace = True)
+        df.rename(columns = {'G.1':'p_games'}, inplace = True)
+        df.rename(columns = {'GS.1':'p_gamesstarted'}, inplace = True)
+        df.rename(columns = {'AB.1':'p_ab'}, inplace = True)
+        df.rename(columns = {'1B.1':'p_singles'}, inplace = True)
+        df.rename(columns = {'2B.1':'p_doubles'}, inplace = True)
+        df.rename(columns = {'3B.1':'p_triples'}, inplace = True)
+        df.rename(columns = {'HR.1':'p_homeruns'}, inplace = True)
+        df.rename(columns = {'R.1':'p_runs'}, inplace = True)
+        df.rename(columns = {'BB.1':'p_bb'}, inplace = True)
+        df.rename(columns = {'IBB.1':'p_ibb'}, inplace = True)
+        df.rename(columns = {'HP.1':'p_hp'}, inplace = True)
+        df.rename(columns = {'SB.1':'p_sb'}, inplace = True)
+        df.rename(columns = {'CS.1':'p_cs'}, inplace = True)
+        df.rename(columns = {'SF.1':'p_sf'}, inplace = True)
+        df.rename(columns = {'SH.1':'p_sh'}, inplace = True)
+        df.rename(columns = {'ORG':'TM'}, inplace = True)
+
+        if 'LEA' in df.columns:
+            df.rename(columns = {'LEA':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'PerfectDraft'
+        if 'LOY' in df.columns:
+            df.rename(columns = {'LOY':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'PerfectTeam'        
+        if 'AD' in df.columns:
+            df.rename(columns = {'AD':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'Bronze16'
+        if 'GRE' in df.columns:
+            df.rename(columns = {'GRE':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'Gold32'
+        # Daily Open Live
+        if 'WE' in df.columns:
+            df.rename(columns = {'WE':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'DailyLive'
+        # Daily live Gold
+        if 'INT' in df.columns:
+            df.rename(columns = {'INT':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'DailyLiveGold'
+        # Daily Live Silver
+        if 'Type' in df.columns:
+            df.rename(columns = {'Type':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'DailyLiveSilver'
+        # Sunday Live Cap
+        if 'Chem' in df.columns:
+            df.rename(columns = {'Chem':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'SundayLiveCap'
+                # Sunday Live Cap
+        if 'Perf' in df.columns:
+            df.rename(columns = {'Perf':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'Silver'
+        if 'Role' in df.columns:
+            df.rename(columns = {'Role':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'DailyBronzeFloorCap'
+
+
+
   if columns == 57:
         df.rename(columns = {'1B':'singles'}, inplace = True)
         df.rename(columns = {'2B':'doubles'}, inplace = True)
@@ -73,9 +136,30 @@ def load(game,file):
         if 'GRE' in df.columns:
             df.rename(columns = {'GRE':'tournament_type'}, inplace = True)
             df['tournament_type'] = 'Gold32'
+        # Daily Open Live
         if 'WE' in df.columns:
             df.rename(columns = {'WE':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Iron16'
+            df['tournament_type'] = 'DailyLive'
+        # Daily live Gold
+        if 'INT' in df.columns:
+            df.rename(columns = {'INT':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'DailyLiveGold'
+        # Daily Live Silver
+        if 'Type' in df.columns:
+            df.rename(columns = {'Type':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'DailyLiveSilver'
+        # Sunday Live Cap
+        if 'Chem' in df.columns:
+            df.rename(columns = {'Chem':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'SundayLiveCap'
+                # Sunday Live Cap
+        if 'Perf' in df.columns:
+            df.rename(columns = {'Perf':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'Silver'
+        if 'Role' in df.columns:
+            df.rename(columns = {'Role':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'DailyBronzeFloorCap'
+
 
   if columns == 78:
         del df['ID']
@@ -136,7 +220,9 @@ def load(game,file):
 #fileFrame.to_sql('skip', dbConnection, if_exists='append');
 
 # Open a file
-path = "c:/Users/Dan/Documents/Out of the Park Developments/OOTP Baseball 24/saved_games"
+#path = "c:/Users/dan/Documents/Out of the Park Developments/OOTP Baseball 24/saved_games"
+#path = "c:\\Users\\Dan\\Documents\\Out of the Park Developments\\OOTP Baseball 24\\saved_games"
+path = "C:/OOTP/saved_games"
 pattern = "[0-9]*.html"
 
 #dirs = os.listdir( path )
@@ -144,7 +230,9 @@ pattern = "[0-9]*.html"
 # This would print all the files and directories
 #for file in dirs:
 #       print(file)
+print(Path.cwd())
 
+print(f'path: {path}')
 result = []
 for root, dirs, files in os.walk(path):
   for name in files:
@@ -165,7 +253,7 @@ for root, dirs, files in os.walk(path):
               connection.commit()
               load(game,fullPath)
 
-cardDBFile = "C:/Users/dan/Documents/Out of the Park Developments/OOTP Baseball 24/online_data/pt_card_list.csv"
+cardDBFile = "C:/OOTP/online_data/pt_card_list.csv"
 
 if os.path.isfile(cardDBFile):
       print("File exists")
@@ -186,7 +274,7 @@ if os.path.isfile(cardDBFile):
       df.rename(columns = {'PosRatingCF':'ratingCF'}, inplace = True)
       df.rename(columns = {'PosRatingRF':'ratingRF'}, inplace = True)
       df.rename(columns = {'AvoidKvL':'KsvL'}, inplace = True)
-
+      df.rename(columns = {'CardValue':'Overall'}, inplace = True)
       rows = len(df.index)
       columns = len(df.columns) 
       print('Rows: '+ str(rows) + ' Column: ' + str(columns))

@@ -33,7 +33,7 @@ public class Cards {
 
 	@Id
 	private long CardID;
-	private long CardValue;
+	private long Overall;
 	private long CardType;
 	private long CardSubType;
 	private String Peak;
