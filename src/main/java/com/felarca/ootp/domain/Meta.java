@@ -1,14 +1,9 @@
 package com.felarca.ootp.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-
-import javax.xml.bind.DatatypeConverter;
 
 import com.felarca.ootp.domain.results.CardTournamentResult;
 
@@ -142,6 +137,9 @@ public class Meta {
 	public boolean getDisplayR1() {
 		return true;
 	}
+	public boolean getDisplayLaunch() {
+		return false;
+	}
 
 
 	@Getter
@@ -199,20 +197,6 @@ public class Meta {
 		}
 		return returnList;
 	}
-/*
-	public String getTier() {
-		if (this.tournamentType.equals("Gold32"))
-			return "gold";
-		else if (this.tournamentType.equals("PerfectDraft"))
-			return "perfectdraft";
-		else if (this.tournamentType.equals("Bronze16"))
-			return "bronze";
-		else if (this.tournamentType.equals("Iron16"))
-			return "iron";
-		else
-			return "bronze";
-	}
-*/
 	public String getUrlSegment(){
 		return this.tournamentType;
 	}
@@ -245,7 +229,7 @@ public class Meta {
 		}
 		return null;
 	}
-	public String getDefaultTime() {
+	public Era getDefaultTime() {
 		String urlSegment = this.tournamentType;
 		for (Tournament temp : this.tournies) {
 			if (temp.getUrlSegment().equals(urlSegment)) {

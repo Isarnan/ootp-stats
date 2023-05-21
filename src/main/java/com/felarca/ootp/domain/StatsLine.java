@@ -1,10 +1,9 @@
 package com.felarca.ootp.domain;
 
-import java.math.BigInteger;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+@Deprecated
 
 @AllArgsConstructor
 public class StatsLine {

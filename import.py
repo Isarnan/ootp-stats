@@ -17,12 +17,12 @@ sqlEngine = create_engine("mysql+pymysql://ootp:ootp2222@server/ootp", pool_recy
 def load(game,file):
   tableName = 'stats'
   now = str(datetime.datetime.now())
-  print(f'Now:{now}')
+  #print(f'Now:{now}')
   #tables = pd.read_html('file:///mnt/c/Users/Dan/Documents/Out of the Park Developments/OOTP Baseball 22/saved_games/6071a3e8605bf4054e6d8df1.pt/news/html/temp/2021-04-10-12-13-40.html')
   print(f'File: {file}')
   #tables = pd.read_html('file://'+file)  
   tables = pd.read_html(file)
-  print(f'Total tables: {len(tables)}')
+  #print(f'Total tables: {len(tables)}')
   #print(f'{tables}')
   df = pd.DataFrame(data=tables[1])
   rows = len(df.index);
@@ -102,7 +102,9 @@ def load(game,file):
         if 'Role' in df.columns:
             df.rename(columns = {'Role':'tournament_type'}, inplace = True)
             df['tournament_type'] = 'DailyBronzeFloorCap'
-
+        if 'Loc. Pop.' in df.columns:
+            df.rename(columns = {'Loc. Pop.':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'DeadballToBoomCap'
 
 
   if columns == 57:
@@ -212,7 +214,7 @@ def load(game,file):
     print(f'ex:{ex}')
   else:
     dbConnection.commit()
-    print("Table %s created successfully."%tableName);   
+    print("Table %s updates."%tableName);   
   finally:
     dbConnection.close()
 
@@ -238,16 +240,16 @@ for root, dirs, files in os.walk(path):
   for name in files:
     if fnmatch.fnmatch(name, pattern):
       fullPath = os.path.join(Path(root).as_posix(), name)
-      print(f'FP: {fullPath}')
+      #print(f'FP: {fullPath}')
       #fullPath = "c:\\Users\\Dan\\Documents\\Out of the Park Developments\\OOTP Baseball 24\\saved_games\\7ea1000000000000000000c3.pt\\news\\html\\temp\\2023-03-24-21-16-59.html"
       with sqlEngine.connect() as connection:  
           query =  "select file from skip where file = '" + fullPath + "'"       
           result = connection.execute(text(query))
           game = fullPath[85:109]
           if result.rowcount > 0:
-              print(f'Found skipping {game}')
+              print(f'Found skipping {fullPath}')
           else :
-              print('Not found')
+              #print('Not found')
               query = sql.text("insert into skip (file) values ('" + fullPath + "')")
               connection.execute(query)
               connection.commit()

@@ -14,6 +14,42 @@
 	<div th:replace="fragments/header :: header">Default Text</div>
 	</table>
 
+	<table class="table table-hover">
+		<tr>
+			<th>Handed</th>
+			<th>Stuff</th>
+			<th>pHR</th>
+			<th>pBabip</th>
+			<th>Control</th>
+			<th>AVK</th>
+			<th>Power</th>
+			<th>Babip</th>
+			<th>Eye</th>			
+		</tr>
+		<tr>
+			<td>vL</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).LEFT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).STUFF),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).LEFT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).PHR),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).LEFT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).PBABIP),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).LEFT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).CONTROL),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).LEFT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).AVK),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).LEFT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).POWER),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).LEFT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).BABIP),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).LEFT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).EYE),1,2)}">WHIP</td>
+		</tr>
+		<tr>
+			<td>vR</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).RIGHT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).STUFF),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).RIGHT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).PHR),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).RIGHT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).PBABIP),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).RIGHT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).CONTROL),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).RIGHT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).AVK),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).RIGHT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).POWER),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).RIGHT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).BABIP),1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(tournament.getCardStat(T(com.felarca.ootp.domain.CardStatSet.Handed).RIGHT, T(com.felarca.ootp.domain.CardStatSet.Aggregate).AVG, T(com.felarca.ootp.domain.CardStatSet.Stat).EYE),1,2)}">WHIP</td>
+		</tr>
+	</table>
+
 	<table>
 		<tr>
 			<td style="vertical-align: top">
@@ -22,7 +58,7 @@
 				</div>
 			</td>
 			<td style="vertical-align: top">
-				<div th:replace="fragments/draftpitchingline :: draftpitchingline(hitters=${pitchers},lessThan=${lessThen},greaterThan=${greaterThen})"></div>
+				<div th:replace="fragments/draftpitchingline :: draftpitchingline(hitters=${pitchers},lessThan=${lessThen},greaterThan=${greaterThen}, tournament=${tournament})"></div>
 			</td>
 		</tr>
 	</table>

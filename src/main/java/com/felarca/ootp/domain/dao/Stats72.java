@@ -202,6 +202,8 @@ public class Stats72 {
 	@Column
 	private Double innings;	
 
+	@Column(name="SF")
+	public BigInteger sf;
 
 
 /*

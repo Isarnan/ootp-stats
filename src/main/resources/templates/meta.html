@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="utf-8" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	crossorigin="anonymous">
 
-<title th:text="${meta.tournamentType} + ' Meta'"></title>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<title th:text="${meta.tournamentType} + ' Meta'"></title>
 </head>
+
 <body>
 	<h2 th:text="${meta.tournamentType} + ' Meta'">App Title</h2>
 	<div th:replace="fragments/header :: header">Default Text</div>
@@ -18,7 +20,9 @@
 					<div th:replace="fragments/record :: recordheader"></div>
 					<tbody>
 						<span th:each="record : ${meta.hackerRecords}">
-							<div th:replace="fragments/record :: recordline(record=${record}, timeframe=${record.era.name}, team=${record.team})"></div>
+							<div
+								th:replace="fragments/record :: recordline(record=${record}, timeframe=${record.era.name}, team=${record.team})">
+							</div>
 						</span>
 					</tbody>
 				</table>
@@ -31,9 +35,10 @@
 						<tr>
 							<th>Time</th>
 							<th>PA</th>
-							<th>PIPA</th>
-							<th>OBP</th>
-							<th>OPS</th>
+							<th>K%</th>
+							<th>BB%</th>
+							<th>HR%</th>
+							<th>Babip</th>
 							<th>SB</th>
 							<th>IP</th>
 							<th>R/G</th>
@@ -45,11 +50,15 @@
 						<tr th:each="hitter : ${meta.metaResults}">
 							<td th:text="${hitter.pos}">POS</td>
 							<td th:text="${hitter.pa}">PA</td>
-							<td th:text="${#numbers.formatDecimal(hitter.pipa,1,3)}">Pipa</td>
-							<td th:text="${#numbers.formatDecimal(hitter.obp,0,3)}">OBP</td>
-							<td th:text="${#numbers.formatDecimal(hitter.ops,0,3)}">OPS</td>
-							<td><span th:text="${#numbers.formatDecimal(hitter.getNetSbP600(),2,2)}" th:classappend="${hitter.getNetSbP600 > 10 } ? text-success : text-muted"></span>(<span
-								th:text="${#numbers.formatDecimal(hitter.getSbPercent(),2,2)}" th:classappend="${hitter.getSbPercent > 74 } ? text-success : text-danger"></span>)</td>
+							<td th:text="${#numbers.formatDecimal(hitter.StrikeoutRate,0,2)}">Pipa</td>
+							<td th:text="${#numbers.formatDecimal(hitter.WalkRate,0,2)}">OBP</td>
+							<td th:text="${#numbers.formatDecimal(hitter.HomerunRate,0,2)}">OPS</td>
+							<td th:text="${#numbers.formatDecimal(hitter.Babip,0,3)}">OPS</td>
+							<td><span th:text="${#numbers.formatDecimal(hitter.getNetSbP600(),2,2)}"
+									th:classappend="${hitter.getNetSbP600 > 10 } ? text-success : text-muted"></span>(<span
+									th:text="${#numbers.formatDecimal(hitter.getSbPercent(),2,2)}"
+									th:classappend="${hitter.getSbPercent > 74 } ? text-success : text-danger"></span>)
+							</td>
 							<td th:text="${#numbers.formatDecimal(hitter.innings,1,1)}">IP</td>
 							<td th:text="${#numbers.formatDecimal(hitter.getRunsPerGame,1,3)}">R/G</td>
 							<td th:text="${#numbers.formatDecimal(hitter.era,1,3)}">ERA</td>
@@ -58,6 +67,42 @@
 					</tbody>
 				</table>
 			</td>
+	</table>
+	<h2 th:text="Average">Average Card</h2>
+	<table class="table table-hover">
+		<tr>
+			<th>Handed</th>
+			<th>Stuff</th>
+			<th>pHR</th>
+			<th>pBabip</th>
+			<th>Control</th>
+			<th>AVK</th>
+			<th>Power</th>
+			<th>Babip</th>
+			<th>Eye</th>			
+		</tr>
+		<tr>
+			<td>vL</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsLeft().stuff,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsLeft().phr,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsLeft().pbabip,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsLeft().control,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsLeft().avk,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsLeft().power,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsLeft().babip,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsLeft().eye,1,2)}">WHIP</td>
+		</tr>
+		<tr>
+			<td>vR</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsRight().stuff,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsRight().phr,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsRight().pbabip,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsRight().control,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsRight().avk,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsRight().power,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsRight().babip,1,2)}">WHIP</td>
+			<td th:text="${#numbers.formatDecimal(metacard.getAvgVsRight().eye,1,2)}">WHIP</td>
+		</tr>
 	</table>
 	<h2 th:text="Top">Top</h2>
 	<table>
@@ -71,30 +116,44 @@
 			<span th:if="${meta.getDisplayR1()}">
 				<th>R1</th>
 			</span>
+			<span th:if="${meta.getDisplayLaunch()}">
 			<th>Launch</th>
+			</span>
 			<th>All Time</th>
 		</tr>
 		<tr>
 			<span th:if="${meta.getDisplayR3()}">
 				<td>
-					<div th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordR3(30)},limit=20,time=R3)"></div>
-			</td>
+					<div
+						th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordR3(30)},limit=20,time=R3)">
+					</div>
+				</td>
 			</span>
 			<span th:if="${meta.getDisplayR2()}">
 				<td>
-					<div th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordR2(30)},limit=20,time=R2)"></div>
-			</td>
+					<div
+						th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordR2(30)},limit=20,time=R2)">
+					</div>
+				</td>
 			</span>
 			<span th:if="${meta.getDisplayR1()}">
 				<td>
-					<div th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordR1(30)},limit=20,time=R1)"></div>
+					<div
+						th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordR1(30)},limit=20,time=R1)">
+					</div>
+				</td>
+			</span>
+			<span th:if="${meta.getDisplayLaunch()}">
+			<td>
+				<div
+					th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordLaunch(30)},limit=20,time=Launch)">
+				</div>
 			</td>
 			</span>
 			<td>
-				<div th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordLaunch(30)},limit=20,time=Launch)"></div>
-			</td>
-			<td>
-				<div th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordOverall(30)},limit=20,time=alltime)"></div>
+				<div
+					th:replace="fragments/record :: toprecordlist(recordlist=${meta.getRecordOverall(30)},limit=20,time=alltime)">
+				</div>
 			</td>
 		</tr>
 	</table>
@@ -107,15 +166,24 @@
 					<div th:replace="fragments/record :: recordheader"></div>
 					<tbody>
 						<span th:each="record : ${meta.hackerDaily}">
-							<div th:replace="fragments/record :: recordline(record=${record}, timeframe=${record.era.name}, team=${record.team})"></div>
+							<div
+								th:replace="fragments/record :: recordline(record=${record}, timeframe=${record.era.name}, team=${record.team})">
+							</div>
 						</span>
 					</tbody>
 				</table>
 			</td>
 		</tr>
-	</table>	
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	</table>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
 </body>
+
 </html>

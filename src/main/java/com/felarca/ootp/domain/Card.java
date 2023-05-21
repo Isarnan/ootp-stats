@@ -1,10 +1,7 @@
 package com.felarca.ootp.domain;
 
-import java.math.BigInteger;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
 
@@ -121,9 +118,21 @@ public class Card {
 	@Getter
 	@Setter
 	private long overall;
-
+	@Setter
+	private long Throws;
 
 	// End of DB Columns
+
+	public enum Stat {
+		EYEVL,
+		EYEVR,
+		POWERVL,
+		POWERVR;
+	}
+
+
+
+
 	public Integer getVra(){
 		return (int)KsvR + (int)BABIPvR;
 	}
@@ -151,6 +160,16 @@ public class Card {
 
         }
     }
+
+	public CardStatSet.Handed getThrows(){
+		switch((int)this.Throws){
+			case 1:
+				return CardStatSet.Handed.RIGHT;
+			default: 
+				return CardStatSet.Handed.LEFT;
+		}
+
+	}
 
     public long getSplits(){
         return (stuffvl + controlvl + phrvl + pbabipvl) - (stuffvr + controlvr + phrvr + pbabipvr);

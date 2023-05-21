@@ -1,6 +1,5 @@
 package com.felarca.ootp.Controllers;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -14,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.felarca.ootp.Repositories.CardsRepository;
-import com.felarca.ootp.Repositories.Stats57Repository;
+import com.felarca.ootp.Repositories.Stats72Repository;
+import com.felarca.ootp.domain.CardStatSet;
 import com.felarca.ootp.domain.Era;
-import com.felarca.ootp.domain.Hitter;
 import com.felarca.ootp.domain.Meta;
-import com.felarca.ootp.domain.TierPosition;
 import com.felarca.ootp.domain.Tournament;
+import com.felarca.ootp.domain.TournamentSet;
+import com.felarca.ootp.domain.results.CardTournamentResult;
 
 import lombok.extern.java.Log;
 
@@ -30,7 +30,9 @@ public class DraftController {
     @Autowired
     CardsRepository cardsRepo;
     @Autowired
-    Stats57Repository stats57Repo;
+    Stats72Repository stats72Repo;
+    @Autowired
+    TournamentSet ts;
 
     @RequestMapping("/draft/{round}")
     public String tierpos(Model model, @PathVariable String round, @RequestParam(required = false) Integer ip,
@@ -40,35 +42,36 @@ public class DraftController {
 
         Meta meta = new Meta(tournamenttype);
         meta.setRound(round);
+        Tournament t = ts.getTournamentByDbName(tournamenttype);
+        Era era;
+        if (time == null) {            
+            era = t.getDefaultEra();
+        } else {
+            era = meta.getEraByName(time);
+        }
+        log.info(t.getDbName() + ": " + time + ": + era.getStart()");
 
-
-        Tournament tournie = meta.getTournamentByName(tournamenttype);
-        if (time == null)
-            time = tournie.getDefaultEra();
-        Era era = meta.getEraByName(time);
-        List<Hitter> list = stats57Repo.getHittersList(tournie.getDbName(), era.getEnd(), era.getStart());
-        ;
+        List<CardTournamentResult> list = stats72Repo.getResultList(t.getDbName(), era.getEnd(), era.getStart());
         if (ip != null) {
-            Predicate<Hitter> byIp = hitter -> hitter.getInnings().intValue() > ip.intValue();
+            Predicate<CardTournamentResult> byIp = hitter -> hitter.getInnings().intValue() > ip.intValue();
             list = list.stream().filter(byIp).collect(Collectors.toList());
         } else {
-            Predicate<Hitter> byIp = hitter -> hitter.getInnings().intValue() > 30;
+            Predicate<CardTournamentResult> byIp = hitter -> hitter.getInnings().intValue() > 1;
             list = list.stream().filter(byIp).collect(Collectors.toList());
         }
         if (pig != null) {
-            Predicate<Hitter> byPig = hitter -> Double.valueOf(hitter.getPig()) > pig.intValue();
+            Predicate<CardTournamentResult> byPig = hitter -> Double.valueOf(hitter.getPig()) > pig.intValue();
             list = list.stream().filter(byPig).collect(Collectors.toList());
         } else {
-            Predicate<Hitter> byPig = hitter -> Double.valueOf(hitter.getPig()) > 1;
+            Predicate<CardTournamentResult> byPig = hitter -> Double.valueOf(hitter.getPig()) > 1;
             list = list.stream().filter(byPig).collect(Collectors.toList());
         }
 
-        List<Hitter> list2 = stats57Repo.getHittersList(tournie.getDbName(), era.getEnd(), era.getStart());
-        ;
+        List<CardTournamentResult> list2 = stats72Repo.getResultList(t.getDbName(), era.getEnd(), era.getStart());
         Integer pa = 100;
-        Predicate<Hitter> byPa = hitter -> hitter.getPa().intValue() > pa.intValue();
+        Predicate<CardTournamentResult> byPa = hitter -> hitter.getPa().intValue() > pa.intValue();
         list2 = list2.stream().filter(byPa).collect(Collectors.toList());
-        list2.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getOps).reversed()));
+        list2.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getOps).reversed()));
 
         int greaterThen = 0;
         int lessThen = 0;
@@ -100,10 +103,14 @@ public class DraftController {
 
         }
 
-
         // Sorting
+        list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getEra)));
 
-        list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getEra)));
+        //Need to get rid of this
+        CardStatSet css = ts.getCardStatSet("perfectdraft", CardStatSet.Handed.RIGHT, CardStatSet.Aggregate.AVG);
+        
+        log.info("List2: " + list2.size());
+        model.addAttribute("tournament", t);
         model.addAttribute("meta", meta);
         model.addAttribute("pitchers", list);
         model.addAttribute("hitters", list2);

@@ -3,12 +3,14 @@ package com.felarca.ootp.domain.results;
 import java.math.BigInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.felarca.ootp.domain.LinearWeights;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import com.felarca.ootp.domain.LinearWeights;
 
 
 @Log
@@ -150,6 +152,14 @@ public class CardTournamentResult {
 	@Getter
 	@Setter
 	private BigInteger p_runs;
+	@NonNull
+	@Getter
+	@Setter
+	private BigInteger sf;
+	@NonNull
+	@Getter
+	@Setter
+	private BigInteger so;
 
 // End of contructor
 
@@ -233,12 +243,11 @@ public class CardTournamentResult {
 	}
 	public double getBabip() {
 		//MIssing SF from denominator
-		return (this.singles.doubleValue() + this.doubles.doubleValue() + this.triples.doubleValue())/(this.ab.doubleValue() - this.k.doubleValue() - this.hr.doubleValue());		
+		return (this.singles.doubleValue() + this.doubles.doubleValue() + this.triples.doubleValue())/(this.ab.doubleValue() - this.k.doubleValue() - this.hr.doubleValue() + this.getSf().doubleValue());		
 	}
 	public double getPBabip() {
-		//MIssing SF from denominator, need pa or ab for pitchers		
-		//return (this.p_singles.doubleValue() + this.p_doubles.doubleValue() + this.p_triples.doubleValue())/(this.p.doubleValue() - this.k.doubleValue() - this.hr.doubleValue());
-		return 0.0;
+		return (this.p_singles.doubleValue() + this.p_doubles.doubleValue() + this.p_triples.doubleValue())/(this.ab.doubleValue() - this.k.doubleValue() - this.hr.doubleValue());
+		//return 0.0;
 	}
 	public double getRunsPerGame(){
 		// log.info("Runs: " + this.p_runs + "GS: " + this.p_gamesstarted + "ER: " + this.er);
@@ -257,4 +266,14 @@ public class CardTournamentResult {
 		return numerator / denominator;
 	}
 
+	public double getStrikeoutRate(){
+		return 100* (this.so.doubleValue() / this.pa.doubleValue());
+	}
+
+	public double getWalkRate(){
+		return 100 * (this.bb.doubleValue() / this.pa.doubleValue());
+	}
+	public double getHomerunRate(){
+		return 100 * (this.hr.doubleValue() / this.pa.doubleValue());
+	}
 }
