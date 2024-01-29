@@ -5,7 +5,9 @@
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
+		<link rel="stylesheet" type="text/css" th:href="@{/css/search.css}" />
 	<title th:text="'Draft: ' + ${meta.round}"></title>
 </head>
 
@@ -13,7 +15,7 @@
 	<h2 th:text="${meta.round}">App Title</h2>
 	<div th:replace="fragments/header :: header">Default Text</div>
 	</table>
-
+	  
 	<table class="table table-hover">
 		<tr>
 			<th>Handed</th>
@@ -54,7 +56,7 @@
 		<tr>
 			<td style="vertical-align: top">
 				<div
-					th:replace="fragments/drafthittingline :: drafthittingline(hitters=${hitters},lessThan=${lessThen},greaterThan=${greaterThen})">
+					th:replace="fragments/drafthittingline :: drafthittingline(hitters=${hitters},lessThan=${lessThen},greaterThan=${greaterThen}, tournament=${tournament})">
 				</div>
 			</td>
 			<td style="vertical-align: top">
@@ -63,7 +65,7 @@
 		</tr>
 	</table>
 
-
+	<script src="/js/search.js"></script>
 
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

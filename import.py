@@ -138,10 +138,10 @@ def load(game,file):
         if 'GRE' in df.columns:
             df.rename(columns = {'GRE':'tournament_type'}, inplace = True)
             df['tournament_type'] = 'Gold32'
-        # Daily Open Live
+        # Open Live
         if 'WE' in df.columns:
             df.rename(columns = {'WE':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DailyLive'
+            df['tournament_type'] = 'LiveOpen'
         # Daily live Gold
         if 'INT' in df.columns:
             df.rename(columns = {'INT':'tournament_type'}, inplace = True)

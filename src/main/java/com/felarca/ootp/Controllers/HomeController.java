@@ -19,14 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.felarca.ootp.Repositories.CardsRepository;
-import com.felarca.ootp.Repositories.GoldHackerHittingRepository;
-import com.felarca.ootp.Repositories.GoldHackerPitchingRepository;
-import com.felarca.ootp.Repositories.GoldHittingRepository;
-import com.felarca.ootp.Repositories.GoldPitchingRepository;
-import com.felarca.ootp.Repositories.HackerHittingRepository;
-import com.felarca.ootp.Repositories.HackerPitchingRepository;
-import com.felarca.ootp.Repositories.HittingRepository;
-import com.felarca.ootp.Repositories.PitchingRepository;
 import com.felarca.ootp.Repositories.SkipRepository;
 import com.felarca.ootp.Repositories.Stats2Repository;
 import com.felarca.ootp.Repositories.Stats57Repository;
@@ -53,22 +45,22 @@ import lombok.extern.java.Log;
 public class HomeController {
 	@Autowired
 	SkipRepository skipRepo;
-	@Autowired
-	HittingRepository hittingRepo;
-	@Autowired
-	HackerHittingRepository hackerHittingRepo;
-	@Autowired
-	PitchingRepository pitchingRepo;
-	@Autowired
-	HackerPitchingRepository hackerPitchingRepo;
-	@Autowired
-	GoldHittingRepository goldHittingRepo;
-	@Autowired
-	GoldHackerHittingRepository goldHackerHittingRepo;
-	@Autowired
-	GoldPitchingRepository goldPitchingRepo;
-	@Autowired
-	GoldHackerPitchingRepository goldHackerPitchingRepo;
+	// @Autowired
+	// HittingRepository hittingRepo;
+	// @Autowired
+	// HackerHittingRepository hackerHittingRepo;
+	// @Autowired
+	// PitchingRepository pitchingRepo;
+	// @Autowired
+	// HackerPitchingRepository hackerPitchingRepo;
+	// @Autowired
+	// GoldHittingRepository goldHittingRepo;
+	// @Autowired
+	// GoldHackerHittingRepository goldHackerHittingRepo;
+	// @Autowired
+	// GoldPitchingRepository goldPitchingRepo;
+	// @Autowired
+	// GoldHackerPitchingRepository goldHackerPitchingRepo;
 	@Autowired
 	Stats57Repository stats57Repo;
 	@Autowired
@@ -93,32 +85,33 @@ public class HomeController {
 
 	@RequestMapping("/team/{tournamenttype}/pitchers")
 	public String hackerPitchers(Model model, @PathVariable String tournamenttype,
-			@RequestParam(required = false) String strIp,
+			@RequestParam(required = false) Integer ip,
 			@RequestParam(required = false) String time, @RequestParam(required = false) String team) {
 		Meta meta = new Meta(tournamenttype);
-		Tournament tournie = meta.getTournamentByName(tournamenttype);
-		Era era = meta.getEraByName(time);
-		log.info("Era: " + era.getName() + " Tournament: " + tournamenttype + " DbName: " + tournie.getDbName()
-				+ " Start: " + era.getStart() + " end: " + era.getEnd());
+		Tournament t = tournamentSet.getTournamentByUrlSegment(tournamenttype);
+		Era era;
+		if(time == null){
+			era = t.getDefaultEra();
+		} else {
+			era = meta.getEraByName(time);
+		}
 
-		// if (time == null)
-		// time = tournie.getDefaultEra();
-
-		List<Hitter> list = stats57Repo.getTeamHittersList(tournie.getDbName(), team, era.getEnd(), era.getStart());
-
-		long ip = 30;
-		if (strIp != null)
-			ip = (long) Long.parseLong(strIp);
+		List<CardTournamentResult> list = stats72Repo.getTeamResultList(t.getDbName(), team, era.getEnd(), era.getStart());
 		// Filtering
-		Predicate<Hitter> byIp = hitter -> hitter.getInnings().intValue() > 2;
-		list = list.stream().filter(byIp).collect(Collectors.toList());
+		if (ip != null){
+			Predicate<CardTournamentResult> byIp = hitter -> hitter.getInnings().intValue() > ip.intValue();
+			list = list.stream().filter(byIp).collect(Collectors.toList());
+		} else {
+			Predicate<CardTournamentResult> byIp = hitter -> hitter.getInnings().intValue() > 10;
+			list = list.stream().filter(byIp).collect(Collectors.toList());
+		}
 		// Sorting
-		list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getEra)));
+		list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getEra)));
 		model.addAttribute("meta", meta);
 		model.addAttribute("pitchers", list);
 		model.addAttribute("owned", stats2Repo);
 		model.addAttribute("cards", cardsRepo);
-		if (tournie.getDisplayName().equals("PerfectDraft")) {
+		if (t.getDisplayName().equals("PerfectDraft")) {
 			return "draftpitchers";
 		} else {
 			return "pitchers";
@@ -219,6 +212,13 @@ public class HomeController {
 
 		Meta meta = new Meta(tournamenttype);
 		String dbType = meta.getDBTypeByURL(tournamenttype);
+		Tournament t = tournamentSet.getTournamentByUrlSegment(tournamenttype);
+		Era era;
+		if (time == null) {
+			era = t.getDefaultEra();
+	   } else {
+		   era = meta.getEraByName(time);
+	   }
 
 		if (time == null && (dbType.equals("Gold32") || dbType.equals("Bronze16") || dbType.equals("Iron16")
 				|| dbType.equals("DailyLiveGold")))
@@ -227,19 +227,8 @@ public class HomeController {
 			time = "alltime";
 		else
 			time = "alltime";
-
-		List<CardTournamentResult> list;
-
-		if (time != null && time.equals("R2"))
-			list = stats72Repo.getResultList(dbType, Meta.ENDOFTIME, Meta.RELEASE2);
-		else if (time.equals("R1"))
-			list = stats72Repo.getResultList(dbType, Meta.RELEASE2, Meta.RELEASE1);
-		else if (time.equals("14Day"))
-			list = stats72Repo.getResultList(dbType, Meta.ENDOFTIME, LocalDateTime.now().minusDays(14));
-		else if (time.equals("30Day"))
-			list = stats72Repo.getResultList(dbType, Meta.ENDOFTIME, LocalDateTime.now().minusDays(30));
-		else
-			list = stats72Repo.getResultList(dbType, Meta.ENDOFTIME, Meta.LAUNCH);
+    
+		List<CardTournamentResult> list = stats72Repo.getResultList(dbType, era.getEnd(), era.getStart());;
 
 		if (pa != null) {
 			Predicate<CardTournamentResult> byPa = hitter -> hitter.getPa().intValue() > pa.intValue();
@@ -251,8 +240,20 @@ public class HomeController {
 
 		if (sort == null || sort.equals("ops"))
 			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getOps).reversed()));
+		else if (sort.equals("K"))
+			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getStrikeoutRate).reversed()));
 		else
 			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getObp).reversed()));
+
+
+		for (CardTournamentResult ctr : list) {
+			Card c = cardsRepo.getCard(ctr.getCid());
+			ctr.setExpectedBBRate(t.getExpectedWalks100(c));		
+			ctr.setExpectedHomerunRate(t.getExpectedHomeruns100(c));
+			ctr.setExpectedKRate(t.getExpectedKs100(c));
+			ctr.setExpectedOPS(t.expectedOPS(c));
+		}
+
 
 		model.addAttribute("meta", meta);
 		model.addAttribute("hitters", list);

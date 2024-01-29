@@ -1,0 +1,45 @@
+table {
+  width:100%;
+  border:1px solid rgba(0,0,0,0.15);
+}
+table tr td {
+  border:1px solid #CCC;
+  text-align:center;
+}
+
+#results { text-align: center; }
+#filter-preview, .text-left { text-align:left; }
+#caseinsensitive, .inline { display:inline-block; margin:3px; text-align:left;  }
+.input { display:inline-block; width:70%; }
+input {
+  height:25px;
+  width:100%;
+  padding:5px;
+  vertical-align:middle;
+  border-radius:15px;
+}
+
+.hide td {
+  background-color:rgb(255,0,0);
+  /* Uncomment below to make rows hide. */
+  display: none;
+}
+
+.or, .and {
+  display:inline-block;
+  vertical-align:center;
+  padding:3px;
+  text-align:center;
+  margin-right:3px;
+  border-radius:5px;
+}
+
+.or {
+  background-color: rgb(198, 248, 255);
+  border:1px solid rgb(119, 172, 178);
+}
+
+.and {
+  background-color: rgb(255, 240, 191);
+  border:1px solid rgb(234, 216, 77);
+}

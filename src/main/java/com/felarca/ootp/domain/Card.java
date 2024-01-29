@@ -120,6 +120,8 @@ public class Card {
 	private long overall;
 	@Setter
 	private long Throws;
+	@Setter
+	private long Bats;
 
 	// End of DB Columns
 
@@ -170,9 +172,31 @@ public class Card {
 		}
 
 	}
+	public CardStatSet.Handed getBats(){
+		switch((int)this.Bats){
+			case 1:
+				return CardStatSet.Handed.RIGHT;
+			case 2:
+				return CardStatSet.Handed.LEFT;
+			case 3:
+				return CardStatSet.Handed.SWITCH;
+			default: 
+				return CardStatSet.Handed.LEFT;
+		}
+
+	}
 
     public long getSplits(){
         return (stuffvl + controlvl + phrvl + pbabipvl) - (stuffvr + controlvr + phrvr + pbabipvr);
     }
 
+	public long getBattingSplits(){
+        return (KsvL + EyevL+ PowervL + BABIPvL) - (KsvR + EyevR + PowervR + BABIPvR);
+    }
+	public double getEye(){
+		return (this.EyevL + this.EyevR) /2;
+	}
+	public double getPower(){
+		return (this.PowervL + this.PowervR) /2;
+	}
 }

@@ -171,6 +171,22 @@ public class CardTournamentResult {
 	private double slug;
 	@Setter
 	private double ops;
+
+	@Setter
+	@Getter
+	private double expectedBBRate = 0;
+
+	@Setter
+	@Getter
+	private double expectedHomerunRate = 0;
+
+	@Setter
+	@Getter
+	private double expectedKRate = 0;
+
+	@Setter
+	@Getter
+	private double expectedOPS = 0;
 	
 	public Double getEra() {
 		if(innings != 0 )return (er.doubleValue()/innings) * 9;
@@ -275,5 +291,12 @@ public class CardTournamentResult {
 	}
 	public double getHomerunRate(){
 		return 100 * (this.hr.doubleValue() / this.pa.doubleValue());
+	}
+
+	public double getFip(double fipConstant){
+		return ((13.0*this.p_homeruns.doubleValue())+(3.0*(this.p_bb.doubleValue()+this.p_hp.doubleValue()))-(2*this.so.doubleValue()))/this.innings + fipConstant;
+	}
+	public double getRawFip(){
+		return ((13.0*this.p_homeruns.doubleValue())+(3.0*(this.p_bb.doubleValue()+this.p_hp.doubleValue()))-(2*this.so.doubleValue()))/this.innings;
 	}
 }

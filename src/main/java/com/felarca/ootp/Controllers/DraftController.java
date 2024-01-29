@@ -44,7 +44,7 @@ public class DraftController {
         meta.setRound(round);
         Tournament t = ts.getTournamentByDbName(tournamenttype);
         Era era;
-        if (time == null) {            
+        if (time == null) {
             era = t.getDefaultEra();
         } else {
             era = meta.getEraByName(time);
@@ -102,14 +102,16 @@ public class DraftController {
                 break;
 
         }
-
         // Sorting
-        list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getEra)));
+        // list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getEra)));
+        // list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getFip).reversed()));
+        list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getRawFip)));
 
-        //Need to get rid of this
+        // Need to get rid of this
         CardStatSet css = ts.getCardStatSet("perfectdraft", CardStatSet.Handed.RIGHT, CardStatSet.Aggregate.AVG);
-        
+
         log.info("List2: " + list2.size());
+        log.info("poly2: " + t.getWalkFunction());
         model.addAttribute("tournament", t);
         model.addAttribute("meta", meta);
         model.addAttribute("pitchers", list);

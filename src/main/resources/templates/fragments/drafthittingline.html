@@ -5,14 +5,29 @@
 
 <body>
 	<div th:fragment="drafthittingline">
-		<table class="table table-hover">
+		<table id="searchable-table" class="table table-hover">
 			<thead>
-				<tr>
-					<th>Card</th>
+					<tr class="avoid">
+					  <th>Search:</th>
+					  <th colspan="5">
+						<input id="search-input" type="text" placeholder="Search here..."/>
+					  </th>
+					</tr>
+					<tr class="avoid">
+						<td id="filter-preview" colspan="4"></td>
+						<td>Case Insensitive:</td>
+					  <td class="text-left"><input id="caseinsensitive" type="checkbox" checked="checked"/></td>
+					</tr>
+					<tr class="avoid">
+					<td id="results"colspan=6></td>
+					</tr>
+				  
+				<tr class="avoid">
+					<th>Card</th> 
 					<th>Badges</th>
 					<th>OVR</th>
 					<th>PA</th>
-					<th>OBP</th>
+					<th>xOPS</th>
 					<th>OPS</th>
 				</tr>
 			</thead>
@@ -22,6 +37,24 @@
 						<tr th:if="${card.overall < lessThan and card.overall >= greaterThan}">
 							<td>
 								<span th:text="${card.fn}" />&nbsp<span th:text="${card.ln}" />
+								<span th:text="${card.bats}" class="badge badge-pill badge-dark" />
+
+								<span th:if="${card.battingSplits <= 20 and card.battingSplits >= -20}">
+									<span class="badge rounded-pill bg-success text-light">N</span>
+								</span>
+								<span th:if="${card.battingSplits > 20}">
+									<span class="badge badge-secondary">vL
+										<span class="badge badge-light">
+											<span th:text="${card.battingSplits}" />
+										</span></span>
+								</span>
+								<span th:if="${card.battingSplits &lt; -20}">
+									<span class="badge badge-secondary">vR
+										<span class="badge badge-light">
+											<span th:text="${T(java.lang.Math).abs(card.battingSplits)}" />
+										</span></span>
+								</span>
+
 								<br />
 								<span th:if="${card.ratingC > 0}">
 									<span class="badge badge-primary">
@@ -154,7 +187,7 @@
 							</td>
 							<td th:text="${#numbers.formatDecimal(card.overall,1,0)}">Ovr</td>
 							<td th:text="${hitter.pa}">PA</td>
-							<td th:text="${#numbers.formatDecimal(hitter.obp,0,3)}">OBP</td>
+							<td th:text="${#numbers.formatDecimal(tournament.expectedOPS(card.eye),0,3)}">OBP</td>
 							<td th:text="${#numbers.formatDecimal(hitter.ops,0,3)}">OPS</td>
 						</tr>
 					</div>
