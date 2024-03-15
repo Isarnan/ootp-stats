@@ -1,0 +1,141 @@
+Date : 2024-03-08 17:10:34
+Directory : c:\Users\dan\Code\ootp-stats
+Total : 76 files,  7101 codes, 636 comments, 1020 blanks, all 8757 lines
+
+Languages
++-----------------+------------+------------+------------+------------+------------+
+| language        | files      | code       | comment    | blank      | total      |
++-----------------+------------+------------+------------+------------+------------+
+| Java            |         43 |      4,013 |        497 |        788 |      5,298 |
+| HTML            |         23 |      2,447 |          9 |        136 |      2,592 |
+| Python          |          1 |        243 |         38 |         23 |        304 |
+| JavaScript      |          1 |        121 |          6 |         10 |        137 |
+| Batch           |          1 |         96 |         51 |         36 |        183 |
+| XML             |          2 |         94 |          0 |          4 |         98 |
+| CSS             |          1 |         39 |          1 |          6 |         46 |
+| YAML            |          1 |         35 |         30 |         12 |         77 |
+| Java Properties |          2 |         12 |          4 |          4 |         20 |
+| Markdown        |          1 |          1 |          0 |          1 |          2 |
++-----------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                    | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                       |         76 |      7,101 |        636 |      1,020 |      8,757 |
+| . (Files)                                                                                               |          4 |        427 |         89 |         63 |        579 |
+| .github                                                                                                 |          1 |         35 |         30 |         12 |         77 |
+| .github\workflows                                                                                       |          1 |         35 |         30 |         12 |         77 |
+| .mvn                                                                                                    |          2 |         78 |         31 |         12 |        121 |
+| .mvn\wrapper                                                                                            |          2 |         78 |         31 |         12 |        121 |
+| src                                                                                                     |         69 |      6,561 |        486 |        933 |      7,980 |
+| src\main                                                                                                |         68 |      6,552 |        486 |        928 |      7,966 |
+| src\main\java                                                                                           |         42 |      3,935 |        466 |        773 |      5,174 |
+| src\main\java\META-INF                                                                                  |          1 |          7 |          0 |          1 |          8 |
+| src\main\java\com                                                                                       |         41 |      3,928 |        466 |        772 |      5,166 |
+| src\main\java\com\felarca                                                                               |         41 |      3,928 |        466 |        772 |      5,166 |
+| src\main\java\com\felarca\ootp                                                                          |         41 |      3,928 |        466 |        772 |      5,166 |
+| src\main\java\com\felarca\ootp (Files)                                                                  |          2 |         56 |          6 |         16 |         78 |
+| src\main\java\com\felarca\ootp\Controllers                                                              |          6 |      1,128 |        107 |        162 |      1,397 |
+| src\main\java\com\felarca\ootp\Repositories                                                             |          5 |        233 |         45 |         75 |        353 |
+| src\main\java\com\felarca\ootp\domain                                                                   |         28 |      2,511 |        308 |        519 |      3,338 |
+| src\main\java\com\felarca\ootp\domain (Files)                                                           |         24 |      1,894 |        175 |        396 |      2,465 |
+| src\main\java\com\felarca\ootp\domain\dao                                                               |          2 |        269 |        122 |         77 |        468 |
+| src\main\java\com\felarca\ootp\domain\results                                                           |          2 |        348 |         11 |         46 |        405 |
+| src\main\resources                                                                                      |         26 |      2,617 |         20 |        155 |      2,792 |
+| src\main\resources (Files)                                                                              |          1 |         10 |          4 |          3 |         17 |
+| src\main\resources\static                                                                               |          2 |        160 |          7 |         16 |        183 |
+| src\main\resources\static\css                                                                           |          1 |         39 |          1 |          6 |         46 |
+| src\main\resources\static\js                                                                            |          1 |        121 |          6 |         10 |        137 |
+| src\main\resources\templates                                                                            |         23 |      2,447 |          9 |        136 |      2,592 |
+| src\main\resources\templates (Files)                                                                    |         13 |      1,585 |          0 |        101 |      1,686 |
+| src\main\resources\templates\fragments                                                                  |         10 |        862 |          9 |         35 |        906 |
+| src\test                                                                                                |          1 |          9 |          0 |          5 |         14 |
+| src\test\java                                                                                           |          1 |          9 |          0 |          5 |         14 |
+| src\test\java\com                                                                                       |          1 |          9 |          0 |          5 |         14 |
+| src\test\java\com\felarca                                                                               |          1 |          9 |          0 |          5 |         14 |
+| src\test\java\com\felarca\ootp                                                                          |          1 |          9 |          0 |          5 |         14 |
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+
+| filename                                                                                                | language        | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+
+| c:\Users\dan\Code\ootp-stats\.github\workflows\codeql.yml                                               | YAML            |         35 |         30 |         12 |         77 |
+| c:\Users\dan\Code\ootp-stats\.mvn\wrapper\MavenWrapperDownloader.java                                   | Java            |         76 |         31 |         11 |        118 |
+| c:\Users\dan\Code\ootp-stats\.mvn\wrapper\maven-wrapper.properties                                      | Java Properties |          2 |          0 |          1 |          3 |
+| c:\Users\dan\Code\ootp-stats\README.md                                                                  | Markdown        |          1 |          0 |          1 |          2 |
+| c:\Users\dan\Code\ootp-stats\import.py                                                                  | Python          |        243 |         38 |         23 |        304 |
+| c:\Users\dan\Code\ootp-stats\mvnw.cmd                                                                   | Batch           |         96 |         51 |         36 |        183 |
+| c:\Users\dan\Code\ootp-stats\pom.xml                                                                    | XML             |         87 |          0 |          3 |         90 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\META-INF\persistence.xml                                     | XML             |          7 |          0 |          1 |          8 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Controllers\CardController.java             | Java            |         30 |          2 |         10 |         42 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Controllers\DraftController.java            | Java            |        106 |          5 |         16 |        127 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Controllers\HomeController.java             | Java            |        549 |         51 |         69 |        669 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Controllers\ModelController.java            | Java            |        277 |         45 |         40 |        362 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Controllers\ProjectionController.java       | Java            |        136 |          4 |         18 |        158 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Controllers\TournamentController.java       | Java            |         30 |          0 |          9 |         39 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\OotpApplication.java                        | Java            |         44 |          6 |         13 |         63 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Repositories\CardsRepository.java           | Java            |         98 |         11 |         29 |        138 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Repositories\SkipRepository.java            | Java            |          6 |          0 |          4 |         10 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Repositories\Stats2Repository.java          | Java            |         10 |          0 |          3 |         13 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Repositories\Stats57Repository.java         | Java            |         64 |         27 |         25 |        116 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\Repositories\Stats72Repository.java         | Java            |         55 |          7 |         14 |         76 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\SqlFunctionsMetadataBuilderContributor.java | Java            |         12 |          0 |          3 |         15 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\BeanUtil.java                        | Java            |         12 |          0 |          4 |         16 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Card.java                            | Java            |        198 |          1 |         26 |        225 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\CardStatSet.java                     | Java            |         72 |          0 |         22 |         94 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\CardType.java                        | Java            |         51 |          1 |          8 |         60 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Era.java                             | Java            |         35 |          0 |         11 |         46 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\EraSet.java                          | Java            |         22 |          0 |          8 |         30 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Hitter.java                          | Java            |        237 |          9 |         12 |        258 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Hitting.java                         | Java            |         87 |         18 |          6 |        111 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\LinearWeights.java                   | Java            |          9 |          0 |          2 |         11 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Meta.java                            | Java            |        195 |          9 |         40 |        244 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\MetaCard.java                        | Java            |         23 |         68 |         12 |        103 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\OotpModel.java                       | Java            |        336 |         16 |         68 |        420 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\OotpModelSet.java                    | Java            |        120 |          3 |         18 |        141 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Pitching.java                        | Java            |         87 |         12 |          7 |        106 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Player.java                          | Java            |         65 |          2 |         18 |         85 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Projection.java                      | Java            |         18 |          3 |          9 |         30 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Record.java                          | Java            |         45 |          0 |          9 |         54 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Restriction.java                     | Java            |         31 |         25 |         14 |         70 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Skip.java                            | Java            |         32 |          0 |         10 |         42 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Stats2.java                          | Java            |         14 |          4 |          5 |         23 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Stats57.java                         | Java            |        134 |          4 |         64 |        202 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\StatsLine.java                       | Java            |         23 |          0 |          7 |         30 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\TierPosition.java                    | Java            |         19 |          0 |          5 |         24 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\Tournament.java                      | Java            |         29 |          0 |         11 |         40 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\dao\Cards.java                       | Java            |        129 |          0 |          7 |        136 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\dao\Stats72.java                     | Java            |        140 |        122 |         70 |        332 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\results\CardTournamentResult.java    | Java            |        325 |         11 |         37 |        373 |
+| c:\Users\dan\Code\ootp-stats\src\main\java\com\felarca\ootp\domain\results\RawPoint.java                | Java            |         23 |          0 |          9 |         32 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\application.properties                                  | Java Properties |         10 |          4 |          3 |         17 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\static\css\search.css                                   | CSS             |         39 |          1 |          6 |         46 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\static\js\search.js                                     | JavaScript      |        121 |          6 |         10 |        137 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\draft.html                                    | HTML            |         73 |          0 |          9 |         82 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\drafthitters.html                             | HTML            |         42 |          0 |          0 |         42 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\draftpitchers.html                            | HTML            |         42 |          0 |          0 |         42 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\ColorStat.html                      | HTML            |         26 |          0 |          3 |         29 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\cards.html                          | HTML            |        178 |          8 |          7 |        193 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\drafthittingline.html               | HTML            |        192 |          1 |          8 |        201 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\draftpitchingline.html              | HTML            |        139 |          0 |          9 |        148 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\footer.html                         | HTML            |         10 |          0 |          0 |         10 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\header.html                         | HTML            |         82 |          0 |          1 |         83 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\playerhittingline.html              | HTML            |         81 |          0 |          3 |         84 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\playerpitchingline.html             | HTML            |         58 |          0 |          0 |         58 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\positionProjections.html            | HTML            |         31 |          0 |          4 |         35 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\fragments\record.html                         | HTML            |         65 |          0 |          0 |         65 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\graphs.html                                   | HTML            |        455 |          0 |         41 |        496 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\hitters.html                                  | HTML            |        234 |          0 |          4 |        238 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\index.html                                    | HTML            |         30 |          0 |          1 |         31 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\meta.html                                     | HTML            |        185 |          0 |          4 |        189 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\models.html                                   | HTML            |         65 |          0 |          5 |         70 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\pitchers.html                                 | HTML            |        150 |          0 |          5 |        155 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\player.html                                   | HTML            |         80 |          0 |         11 |         91 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\projections.html                              | HTML            |        125 |          0 |          8 |        133 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\tierpos.html                                  | HTML            |         51 |          0 |          7 |         58 |
+| c:\Users\dan\Code\ootp-stats\src\main\resources\templates\tournaments.html                              | HTML            |         53 |          0 |          6 |         59 |
+| c:\Users\dan\Code\ootp-stats\src\test\java\com\felarca\ootp\OotpApplicationTests.java                   | Java            |          9 |          0 |          5 |         14 |
+| Total                                                                                                   |                 |      7,101 |        636 |      1,020 |      8,757 |
++---------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+

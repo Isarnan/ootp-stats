@@ -17,8 +17,8 @@ import com.felarca.ootp.Repositories.Stats72Repository;
 import com.felarca.ootp.domain.CardStatSet;
 import com.felarca.ootp.domain.Era;
 import com.felarca.ootp.domain.Meta;
-import com.felarca.ootp.domain.Tournament;
-import com.felarca.ootp.domain.TournamentSet;
+import com.felarca.ootp.domain.OotpModel;
+import com.felarca.ootp.domain.OotpModelSet;
 import com.felarca.ootp.domain.results.CardTournamentResult;
 
 import lombok.extern.java.Log;
@@ -32,7 +32,7 @@ public class DraftController {
     @Autowired
     Stats72Repository stats72Repo;
     @Autowired
-    TournamentSet ts;
+    OotpModelSet ts;
 
     @RequestMapping("/draft/{round}")
     public String tierpos(Model model, @PathVariable String round, @RequestParam(required = false) Integer ip,
@@ -42,7 +42,7 @@ public class DraftController {
 
         Meta meta = new Meta(tournamenttype);
         meta.setRound(round);
-        Tournament t = ts.getTournamentByDbName(tournamenttype);
+        OotpModel t = ts.getTournamentByDbName(tournamenttype);
         Era era;
         if (time == null) {
             era = t.getDefaultEra();

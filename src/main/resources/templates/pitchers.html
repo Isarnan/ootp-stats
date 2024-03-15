@@ -25,6 +25,13 @@
 				<th>WHIP</th>
 				<th>PPIPA</th>
 				<th>PIG</th>
+				<th>BB</th>
+				<th>K</th>
+				<th>HR</th>
+				<th>Babip</th>
+				<th>OBP</th>
+				<th>Slg</th>
+				<th>OPS</th>
 			</tr>
 		</thead>
 		<a class="btn btn-primary btn-sm"
@@ -60,8 +67,10 @@
 							</div>
 						</td>
 						<td>
-							<span th:text="${cards.type(pitcher.cid)}" />,
+							<span th:text="${card.type}" />,
 							<span th:text="${cards.name(pitcher.cid)}" />
+							<span th:if="${cards.owned(pitcher.cid) > 0}"><span
+								class="badge badge-primary">Owned</span></span>
 						</td>
 						<td>
 							<span th:if="${card.stamina > 50 }">
@@ -107,7 +116,7 @@
 							<span th:if="${card.splits &lt; -20 and card.handed == 'LHP'}">
 								<span class="badge rounded-pill bg-danger text-light">R</span>
 							</span>
-							<span th:if="${owned.owned(pitcher.cid)!=null}"><span
+							<span th:if="${cards.owned(pitcher.cid) > 0}"><span
 									class="badge badge-primary">Owned</span></span>
 						</td>
 						<td th:text="${#numbers.formatDecimal(pitcher.ovr,1,0)}">OVR</td>
@@ -116,6 +125,13 @@
 						<td th:text="${#numbers.formatDecimal(pitcher.whip,1,3)}">WHIP</td>
 						<td th:text="${#numbers.formatDecimal(pitcher.ppipa,1,3)}">ERA</td>
 						<td th:text="${#numbers.formatDecimal(pitcher.pig,1,3)}">ERA</td>
+						<td><span th:text="${#numbers.formatDecimal(pitcher.pWalkRate,0,3)}" />/<span th:text="${#numbers.formatDecimal(pitcher.expectedPWalkRate,0,3)}" /></td>
+						<td><span th:text="${#numbers.formatDecimal(pitcher.pKRate,0,3)}" />/<span th:text="${#numbers.formatDecimal(pitcher.expectedPKRate,0,3)}" /></td>
+						<td><span th:text="${#numbers.formatDecimal(pitcher.pHomerunRate,0,3)}" />/<span th:text="${#numbers.formatDecimal(pitcher.expectedPHomerunRate,0,3)}" /></td>
+						<td><span th:text="${#numbers.formatDecimal(pitcher.pBabip,0,3)}" />/<span th:text="${#numbers.formatDecimal(pitcher.expectedPBabip,0,3)}" /></td>
+						<td><span th:text="${#numbers.formatDecimal(pitcher.pObp,0,3)}" />/<span th:text="${#numbers.formatDecimal(pitcher.expectedPObp,0,3)}" /></td>
+						<td><span th:text="${#numbers.formatDecimal(pitcher.pSlg,0,3)}" />/<span th:text="${#numbers.formatDecimal(pitcher.expectedPSlg,0,3)}" /></td>
+						<td><span th:text="${#numbers.formatDecimal(pitcher.pOps,1,3)}" />/<span th:text="${#numbers.formatDecimal(pitcher.expectedOPSa,1,3)}" /></td>
 					</div>
 				</div>
 			</tr>

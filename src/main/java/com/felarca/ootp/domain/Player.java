@@ -74,6 +74,7 @@ public class Player {
 		log.finest("PT:" + hitter.getCid() + ", PA: " + hitter.getPa() + ", IP: " + hitter.getIp());
 	}
 	
+	@Deprecated
 	public void addStats(String type, String team, String time, Hitter stats) {
 		StatsLine line = new StatsLine(type, team, time, stats);
 		log.info(line.toString());

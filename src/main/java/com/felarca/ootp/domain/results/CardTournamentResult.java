@@ -178,7 +178,15 @@ public class CardTournamentResult {
 
 	@Setter
 	@Getter
+	private double expectedPWalkRate = 0;
+
+	@Setter
+	@Getter
 	private double expectedHomerunRate = 0;
+
+	@Setter
+	@Getter
+	private double expectedPHomerunRate = 0;
 
 	@Setter
 	@Getter
@@ -186,8 +194,29 @@ public class CardTournamentResult {
 
 	@Setter
 	@Getter
+	private double expectedPKRate = 0;
+
+	@Setter
+	@Getter
+	private double expectedPBabip = 0;
+
+	@Setter
+	@Getter
 	private double expectedOPS = 0;
+
+	@Setter
+	@Getter
+	private double expectedOPSa = 0;
 	
+	@Setter
+	@Getter
+	private double expectedPObp = 0;
+
+	@Setter
+	@Getter
+	private double expectedPSlg = 0;
+
+
 	public Double getEra() {
 		if(innings != 0 )return (er.doubleValue()/innings) * 9;
 		else return 0.0;
@@ -259,10 +288,10 @@ public class CardTournamentResult {
 	}
 	public double getBabip() {
 		//MIssing SF from denominator
-		return (this.singles.doubleValue() + this.doubles.doubleValue() + this.triples.doubleValue())/(this.ab.doubleValue() - this.k.doubleValue() - this.hr.doubleValue() + this.getSf().doubleValue());		
+		return (this.singles.doubleValue() + this.doubles.doubleValue() + this.triples.doubleValue())/(this.ab.doubleValue() - this.so.doubleValue() - this.hr.doubleValue() + this.getSf().doubleValue());		
 	}
 	public double getPBabip() {
-		return (this.p_singles.doubleValue() + this.p_doubles.doubleValue() + this.p_triples.doubleValue())/(this.ab.doubleValue() - this.k.doubleValue() - this.hr.doubleValue());
+		return (this.p_singles.doubleValue() + this.p_doubles.doubleValue() + this.p_triples.doubleValue())/(this.getBattersFaced() - this.p_bb.doubleValue() - this.p_homeruns.doubleValue() - this.k.doubleValue());
 		//return 0.0;
 	}
 	public double getRunsPerGame(){
@@ -285,18 +314,59 @@ public class CardTournamentResult {
 	public double getStrikeoutRate(){
 		return 100* (this.so.doubleValue() / this.pa.doubleValue());
 	}
+	public double getPKRate(){
+		return (this.k.doubleValue() / this.getBattersFaced());
+	}
 
 	public double getWalkRate(){
 		return 100 * (this.bb.doubleValue() / this.pa.doubleValue());
 	}
-	public double getHomerunRate(){
-		return 100 * (this.hr.doubleValue() / this.pa.doubleValue());
+	public double getPWalkRate(){
+		return (this.p_bb.doubleValue() / this.getBattersFaced());
 	}
+
+	public double getHomerunRate(){
+		return (this.hr.doubleValue() / this.pa.doubleValue());
+	}
+	public double getPHomerunRate(){
+		return (this.p_homeruns.doubleValue() / this.getBattersFaced());
+	}
+
+
+
 
 	public double getFip(double fipConstant){
 		return ((13.0*this.p_homeruns.doubleValue())+(3.0*(this.p_bb.doubleValue()+this.p_hp.doubleValue()))-(2*this.so.doubleValue()))/this.innings + fipConstant;
 	}
 	public double getRawFip(){
 		return ((13.0*this.p_homeruns.doubleValue())+(3.0*(this.p_bb.doubleValue()+this.p_hp.doubleValue()))-(2*this.so.doubleValue()))/this.innings;
+	}
+	public int getBattersFaced(){
+		int outs = this.getP_gb().intValue() + this.getP_fb().intValue() + this.getK().intValue();
+		int onBase = this.getP_singles().intValue() + this.getP_doubles().intValue() + this.getP_triples().intValue() + this.getP_homeruns().intValue() + this.getP_bb().intValue();
+		return outs + onBase;
+	}
+
+	public double getPAb(){
+		//This isnt right
+		int outs = this.getP_gb().intValue() + this.getP_fb().intValue() + this.getK().intValue();
+		int hits = this.getP_singles().intValue() + this.getP_doubles().intValue() + this.getP_triples().intValue() + this.getP_homeruns().intValue();
+
+		return outs + hits;
+
+	}
+
+	public double getPObp() {
+		this.obp = (this.p_singles.doubleValue() + this.p_doubles.doubleValue() + this.p_triples.doubleValue() + this.p_homeruns.doubleValue() + this.p_bb.doubleValue() + this.p_ibb.doubleValue() + this.p_hp.doubleValue()) / this.getBattersFaced();
+		return this.obp;
+	}
+	public double getPSlg() {
+		this.slug = (this.p_singles.doubleValue() + this.p_doubles.doubleValue()*2 + this.p_triples.doubleValue()*3 + this.p_homeruns.doubleValue()*4 ) / this.getBattersFaced();
+		//this.slug = ( this.p_homeruns.doubleValue()*4 ) / this.getBattersFaced();
+		return this.slug;
+	}
+	public double getPOps() {
+		this.ops = (this.getPSlg() + this.getPObp());
+		return this.ops;
 	}
 }

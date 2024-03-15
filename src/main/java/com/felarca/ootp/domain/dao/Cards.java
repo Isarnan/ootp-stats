@@ -1,7 +1,11 @@
-package com.felarca.ootp.domain;
+package com.felarca.ootp.domain.dao;
 
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import lombok.Data;
 
 
@@ -9,33 +13,18 @@ import lombok.Data;
 @Entity
 @Table(name="`cards`")
 public class Cards {
-	/*
-	@Id
-	@Column(name="CardID")
-	private Integer cid;
-
-	@Lob
-	@Column(name="Bats")
-	private String bats;
-
-	@Lob
-	@Column(name="tier")
-	private BigInteger tier;
-	
-	@Lob
-	@Column(name="Position")
-	private BigInteger position;
-	*/
-
 	private long index;
-
-	private String CardTitle;
+	@Column(name="cardtitle")
+	private String cardTitle;
 
 	@Id
 	private long CardID;
 	private long Overall;
-	private long CardType;
-	private long CardSubType;
+
+	@Column(name="cardtype")
+	private long cardType;
+	@Column(name="cardsubtype")
+	private long cardSubType;
 	private String Peak;
 	private String Team;
 	private String ln;
@@ -117,7 +106,8 @@ public class Cards {
 	private long OFRange;
 	private long OFError;
 	private long OFArm;
-	private long PosRatingP;
+	@Column(name="posratingp")
+	private long ratingP;
 	private long ratingC;
 	private long rating1B;
 	private long rating2B;
@@ -141,5 +131,6 @@ public class Cards {
 	private long tier;
 	private long MissionValue;
 	private long limit;
+	private long owned;
 	private double Unnamed111;
 }

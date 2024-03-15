@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.felarca.ootp.Repositories.CardsRepository;
 import com.felarca.ootp.Repositories.SkipRepository;
-import com.felarca.ootp.Repositories.Stats2Repository;
 import com.felarca.ootp.Repositories.Stats57Repository;
 import com.felarca.ootp.Repositories.Stats72Repository;
 import com.felarca.ootp.domain.Card;
@@ -30,11 +29,11 @@ import com.felarca.ootp.domain.EraSet;
 import com.felarca.ootp.domain.Hitter;
 import com.felarca.ootp.domain.Meta;
 import com.felarca.ootp.domain.MetaCard;
+import com.felarca.ootp.domain.OotpModel;
+import com.felarca.ootp.domain.OotpModelSet;
 import com.felarca.ootp.domain.Player;
 import com.felarca.ootp.domain.Record;
 import com.felarca.ootp.domain.Skip;
-import com.felarca.ootp.domain.Tournament;
-import com.felarca.ootp.domain.TournamentSet;
 import com.felarca.ootp.domain.results.CardTournamentResult;
 
 import lombok.extern.java.Log;
@@ -45,34 +44,18 @@ import lombok.extern.java.Log;
 public class HomeController {
 	@Autowired
 	SkipRepository skipRepo;
-	// @Autowired
-	// HittingRepository hittingRepo;
-	// @Autowired
-	// HackerHittingRepository hackerHittingRepo;
-	// @Autowired
-	// PitchingRepository pitchingRepo;
-	// @Autowired
-	// HackerPitchingRepository hackerPitchingRepo;
-	// @Autowired
-	// GoldHittingRepository goldHittingRepo;
-	// @Autowired
-	// GoldHackerHittingRepository goldHackerHittingRepo;
-	// @Autowired
-	// GoldPitchingRepository goldPitchingRepo;
-	// @Autowired
-	// GoldHackerPitchingRepository goldHackerPitchingRepo;
 	@Autowired
 	Stats57Repository stats57Repo;
 	@Autowired
 	Stats72Repository stats72Repo;
-	@Autowired
-	Stats2Repository stats2Repo;
+	//@Autowired
+	//Stats2Repository stats2Repo;
 	@Autowired
 	CardsRepository cardsRepo;
 	@Autowired
 	EraSet eraSet;
 	@Autowired
-	TournamentSet tournamentSet;
+	OotpModelSet tournamentSet;
 
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -88,17 +71,18 @@ public class HomeController {
 			@RequestParam(required = false) Integer ip,
 			@RequestParam(required = false) String time, @RequestParam(required = false) String team) {
 		Meta meta = new Meta(tournamenttype);
-		Tournament t = tournamentSet.getTournamentByUrlSegment(tournamenttype);
+		OotpModel t = tournamentSet.getTournamentByUrlSegment(tournamenttype);
 		Era era;
-		if(time == null){
+		if (time == null) {
 			era = t.getDefaultEra();
 		} else {
 			era = meta.getEraByName(time);
 		}
 
-		List<CardTournamentResult> list = stats72Repo.getTeamResultList(t.getDbName(), team, era.getEnd(), era.getStart());
+		List<CardTournamentResult> list = stats72Repo.getTeamResultList(t.getDbName(), team, era.getEnd(),
+				era.getStart());
 		// Filtering
-		if (ip != null){
+		if (ip != null) {
 			Predicate<CardTournamentResult> byIp = hitter -> hitter.getInnings().intValue() > ip.intValue();
 			list = list.stream().filter(byIp).collect(Collectors.toList());
 		} else {
@@ -109,7 +93,7 @@ public class HomeController {
 		list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getEra)));
 		model.addAttribute("meta", meta);
 		model.addAttribute("pitchers", list);
-		model.addAttribute("owned", stats2Repo);
+		//model.addAttribute("owned", stats2Repo);
 		model.addAttribute("cards", cardsRepo);
 		if (t.getDisplayName().equals("PerfectDraft")) {
 			return "draftpitchers";
@@ -195,7 +179,7 @@ public class HomeController {
 
 		model.addAttribute("metaHitter", metaHitter);
 		model.addAttribute("hitters", list);
-		model.addAttribute("owned", stats2Repo);
+		//model.addAttribute("owned", stats2Repo);
 		model.addAttribute("cards", cardsRepo);
 		if (tournamenttype.equals("PerfectDraft")) {
 			return "drafthitters";
@@ -208,17 +192,18 @@ public class HomeController {
 	public String bronzeHitter(Model model, @PathVariable String tournamenttype,
 			@RequestParam(required = false) String sort,
 			@RequestParam(required = false) String filter, @RequestParam(required = false) Integer pa,
-			@RequestParam(required = false) String strPipa, @RequestParam(required = false) String time) {
+			@RequestParam(required = false) String strPipa, @RequestParam(required = false) String time,
+			@RequestParam(required = false) String pos) {
 
 		Meta meta = new Meta(tournamenttype);
 		String dbType = meta.getDBTypeByURL(tournamenttype);
-		Tournament t = tournamentSet.getTournamentByUrlSegment(tournamenttype);
+		OotpModel t = tournamentSet.getTournamentByUrlSegment(tournamenttype);
 		Era era;
 		if (time == null) {
 			era = t.getDefaultEra();
-	   } else {
-		   era = meta.getEraByName(time);
-	   }
+		} else {
+			era = meta.getEraByName(time);
+		}
 
 		if (time == null && (dbType.equals("Gold32") || dbType.equals("Bronze16") || dbType.equals("Iron16")
 				|| dbType.equals("DailyLiveGold")))
@@ -227,8 +212,87 @@ public class HomeController {
 			time = "alltime";
 		else
 			time = "alltime";
-    
-		List<CardTournamentResult> list = stats72Repo.getResultList(dbType, era.getEnd(), era.getStart());;
+
+		List<CardTournamentResult> list = stats72Repo.getResultList(dbType, era.getEnd(), era.getStart());
+
+		if (pos != null) {
+			List<CardTournamentResult> filteredList = new ArrayList<>();
+			switch (pos) {
+				case "c":
+					for (CardTournamentResult ctr : list) {
+						Card c = cardsRepo.getCard(ctr.getCid());
+						if (c.getRatingC() > 0) {
+							filteredList.add(ctr);
+						}
+					}
+					break;
+				case "1b":
+					for (CardTournamentResult ctr : list) {
+						Card c = cardsRepo.getCard(ctr.getCid());
+						if (c.getRating1B() > 0) {
+							filteredList.add(ctr);
+						}
+					}
+					break;
+				case "2b":
+					for (CardTournamentResult ctr : list) {
+						Card c = cardsRepo.getCard(ctr.getCid());
+						if (c.getRating2B() > 0) {
+							filteredList.add(ctr);
+						}
+					}
+					break;
+				case "3b":
+					for (CardTournamentResult ctr : list) {
+						Card c = cardsRepo.getCard(ctr.getCid());
+						if (c.getRating3B() > 0) {
+							filteredList.add(ctr);
+						}
+					}
+					break;
+				case "ss":
+					for (CardTournamentResult ctr : list) {
+						Card c = cardsRepo.getCard(ctr.getCid());
+						if (c.getRatingSS() > 0) {
+							filteredList.add(ctr);
+						}
+					}
+					break;
+				case "lf":
+					for (CardTournamentResult ctr : list) {
+						Card c = cardsRepo.getCard(ctr.getCid());
+						if (c.getRatingLF() > 0) {
+							filteredList.add(ctr);
+						}
+					}
+					break;
+				case "cf":
+					for (CardTournamentResult ctr : list) {
+						Card c = cardsRepo.getCard(ctr.getCid());
+						if (c.getRatingCF() > 0) {
+							filteredList.add(ctr);
+						}
+					}
+					break;
+				case "rf":
+					for (CardTournamentResult ctr : list) {
+						Card c = cardsRepo.getCard(ctr.getCid());
+						if (c.getRatingRF() > 0) {
+							filteredList.add(ctr);
+						}
+					}
+					break;
+			}
+			list = filteredList;
+		}
+
+		for (CardTournamentResult ctr : list) {
+			Card c = cardsRepo.getCard(ctr.getCid());
+			ctr.setExpectedBBRate(t.getExpectedWalks(c));
+			ctr.setExpectedHomerunRate(t.getExpectedHomeruns(c));
+			ctr.setExpectedKRate(t.getExpectedSOs(c));
+			ctr.setExpectedOPS(t.expectedOPS(c));
+		}
 
 		if (pa != null) {
 			Predicate<CardTournamentResult> byPa = hitter -> hitter.getPa().intValue() > pa.intValue();
@@ -242,22 +306,14 @@ public class HomeController {
 			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getOps).reversed()));
 		else if (sort.equals("K"))
 			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getStrikeoutRate).reversed()));
+		else if (sort.equals("xops"))
+			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getExpectedOPS).reversed()));
 		else
 			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getObp).reversed()));
 
-
-		for (CardTournamentResult ctr : list) {
-			Card c = cardsRepo.getCard(ctr.getCid());
-			ctr.setExpectedBBRate(t.getExpectedWalks100(c));		
-			ctr.setExpectedHomerunRate(t.getExpectedHomeruns100(c));
-			ctr.setExpectedKRate(t.getExpectedKs100(c));
-			ctr.setExpectedOPS(t.expectedOPS(c));
-		}
-
-
 		model.addAttribute("meta", meta);
 		model.addAttribute("hitters", list);
-		model.addAttribute("owned", stats2Repo);
+		//model.addAttribute("owned", stats2Repo);
 		model.addAttribute("cards", cardsRepo);
 		log.info(tournamenttype);
 		log.info("Size: " + list.size());
@@ -270,44 +326,71 @@ public class HomeController {
 	}
 
 	@RequestMapping("/{tournamenttype}/pitchers")
-	public String universalPitchers(Model model, @PathVariable String tournamenttype, @RequestParam(required = false) Integer ip, @RequestParam(required = false) Integer pig,
+	public String universalPitchers(Model model, @PathVariable String tournamenttype,
+			@RequestParam(required = false) String sort,
+			@RequestParam(required = false) Integer ip, @RequestParam(required = false) Integer pig,
 			@RequestParam(required = false) String filter, @RequestParam(required = false) String time) {
-		
+
 		Meta meta = new Meta(tournamenttype);
-		Tournament t = tournamentSet.getTournamentByUrlSegment(tournamenttype);
+		OotpModel t = tournamentSet.getTournamentByUrlSegment(tournamenttype);
 		Era era;
 		if (time == null) {
- 			era = t.getDefaultEra();
+			era = t.getDefaultEra();
 		} else {
 			era = meta.getEraByName(time);
 		}
-		
+
 		String dbType = meta.getDBTypeByURL(tournamenttype);
 
+		List<CardTournamentResult> list = stats72Repo.getResultList(dbType, era.getEnd(), era.getStart());
+		;
 
-		List<CardTournamentResult> list = stats72Repo.getResultList(dbType, era.getEnd(), era.getStart());;
-
-		if(ip != null){			
+		if (ip != null) {
 			Predicate<CardTournamentResult> byIp = hitter -> hitter.getInnings().intValue() > ip.intValue();
 			list = list.stream().filter(byIp).collect(Collectors.toList());
 		} else {
 			Predicate<CardTournamentResult> byIp = hitter -> hitter.getInnings().intValue() > 30;
 			list = list.stream().filter(byIp).collect(Collectors.toList());
 		}
-		if(pig != null){			
+		if (pig != null) {
 			Predicate<CardTournamentResult> byPig = hitter -> Double.valueOf(hitter.getPig()) > pig.intValue();
 			list = list.stream().filter(byPig).collect(Collectors.toList());
 		} else {
 			Predicate<CardTournamentResult> byPig = hitter -> Double.valueOf(hitter.getPig()) > 1;
 			list = list.stream().filter(byPig).collect(Collectors.toList());
 		}
-		
+
+		for (CardTournamentResult ctr : list) {
+			Card c = cardsRepo.getCard(ctr.getCid());
+			ctr.setExpectedPWalkRate(t.getExpectedPWalkRate(c));
+			ctr.setExpectedPHomerunRate(t.getExpectedPHomerunRate(c));
+			ctr.setExpectedPBabip(t.getExpectedPBabip(c));
+			ctr.setExpectedPKRate(t.getExpectedPKRate(c));
+			ctr.setExpectedPObp(t.getExpectedPObp(c));
+			ctr.setExpectedPSlg(t.getExpectedPSlg(c));
+			ctr.setExpectedOPSa(t.expectedOPSa(c));
+			log.info("o2B: " + (ctr.getP_doubles().doubleValue() / ctr.getBattersFaced()) * 100 + " e2B: "
+					+ t.getExpectedPDoubles100(c));
+			log.info("o3B: " + (ctr.getP_triples().doubleValue() / ctr.getBattersFaced()) * 100 + " e3B: "
+					+ t.getExpectedPTriples100(c));
+			log.info("o2B: " + (ctr.getP_homeruns().doubleValue() / ctr.getBattersFaced()) * 100 + " eHR: "
+					+ t.getExpectedPHomeruns100(c));
+		}
+
 		// Sorting
 		list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getEra)));
+
+		if (sort == null || sort.equals("opsa"))
+			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getPOps)));
+		else if (sort.equals("xopsa"))
+			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getExpectedOPSa)));
+		else
+			list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getEra).reversed()));
+
 		// list.sort(Comparator.nullsFirst(Comparator.comparing(Hitter::getInnings)));
 		model.addAttribute("meta", meta);
 		model.addAttribute("pitchers", list);
-		model.addAttribute("owned", stats2Repo);
+		//model.addAttribute("owned", stats2Repo);
 		model.addAttribute("cards", cardsRepo);
 		if (dbType.equals("PerfectDraft")) {
 			return "draftpitchers";
@@ -446,7 +529,7 @@ public class HomeController {
 		Player player = new Player();
 		Meta meta = new Meta("TEST");
 		Hitter hitter;
-		for (Tournament tournament : meta.getTournies()) {
+		for (OotpModel tournament : meta.getTournies()) {
 			for (Era era : meta.getEras()) {
 				hitter = stats57Repo.getTeamHitter(cid, tournament.getDbName(), Meta.myTeam, era.getEnd(),
 						era.getStart());
@@ -493,7 +576,7 @@ public class HomeController {
 			@RequestParam(required = true) String type) {
 		Player player = new Player();
 		Meta meta = new Meta("TEST");
-		Tournament tournie = meta.getTournamentByName(type);
+		OotpModel tournie = meta.getTournamentByName(type);
 		Hitter hitter;
 		/*
 		 * List<Integer> slices = new ArrayList<Integer>() {
@@ -558,7 +641,7 @@ public class HomeController {
 			@RequestParam(required = true) String type) {
 		Player player = new Player();
 		Meta meta = new Meta(type);
-		Tournament tournie = meta.getTournamentByName(type);
+		OotpModel tournie = meta.getTournamentByName(type);
 		Era era = meta.getEraByName(time);
 
 		Predicate<Hitter> byIp50 = hitter -> hitter.getInnings().intValue() > 50;

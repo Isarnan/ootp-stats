@@ -101,7 +101,7 @@ def load(game,file):
             df['tournament_type'] = 'Silver'
         if 'Role' in df.columns:
             df.rename(columns = {'Role':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DailyBronzeFloorCap'
+            df['tournament_type'] = 'Perfecto'
         if 'Loc. Pop.' in df.columns:
             df.rename(columns = {'Loc. Pop.':'tournament_type'}, inplace = True)
             df['tournament_type'] = 'DeadballToBoomCap'
@@ -160,7 +160,7 @@ def load(game,file):
             df['tournament_type'] = 'Silver'
         if 'Role' in df.columns:
             df.rename(columns = {'Role':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DailyBronzeFloorCap'
+            df['tournament_type'] = 'Perfecto'
 
 
   if columns == 78:

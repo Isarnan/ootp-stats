@@ -72,7 +72,7 @@ public class Meta {
 
 	@Setter
 	@Getter
-	private List<Tournament> tournies = new ArrayList<Tournament>();
+	private List<OotpModel> tournies = new ArrayList<OotpModel>();
 
 	@Getter
 	@Setter
@@ -103,15 +103,17 @@ public class Meta {
 		this.eras.add(new Era("Launch", "content", Meta.LAUNCH, Meta.RELEASE1));
 		this.eras.add(new Era("AllTime", "time", Meta.LAUNCH, Meta.ENDOFTIME));
 
-		this.tournies.add(new Tournament("Iron", "Iron16", "14Day","iron"));
-		this.tournies.add(new Tournament("Bronze", "Bronze16", "14Day","bronze"));
-		this.tournies.add(new Tournament("Gold", "Gold32", "14Day", "gold"));
-		this.tournies.add(new Tournament("PerfectTeam", "PerfectTeam", "Alltime","perfectteam"));
-		this.tournies.add(new Tournament("PerfectDraft", "PerfectDraft", "Alltime","perfectdraft"));
-		this.tournies.add(new Tournament("Daily Live", "DailyLive", "Alltime", "dailylive"));
-		this.tournies.add(new Tournament("Daily Live Gold", "DailyLiveGold", "Alltime", "dailylivegold"));
-		this.tournies.add(new Tournament("Daily Bronze Floor Cap", "DailyBronzeFloorCap", "Alltime", "dailybronzefloorcap"));
+		this.tournies.add(new OotpModel("Iron", "Iron16", "14Day","iron"));
+		this.tournies.add(new OotpModel("Bronze", "Bronze16", "14Day","bronze"));
+		this.tournies.add(new OotpModel("Gold", "Gold32", "14Day", "gold"));
+		this.tournies.add(new OotpModel("PerfectTeam", "PerfectTeam", "Alltime","perfectteam"));
+		this.tournies.add(new OotpModel("PerfectDraft", "PerfectDraft", "Alltime","perfectdraft"));
+		this.tournies.add(new OotpModel("Daily Live Gold", "DailyLiveGold", "Alltime", "dailylivegold"));
+		this.tournies.add(new OotpModel("Daily Bronze Floor Cap", "DailyBronzeFloorCap", "Alltime", "dailybronzefloorcap"));
+		this.tournies.add(new OotpModel("Open Tournaments", "Open", "Alltime", "open"));
 
+		this.tournies.add(new OotpModel("Perfecto", "Perfecto", "Alltime", "perfecto"));
+		this.tournies.add(new OotpModel("Live Open", "LiveOpen", "Alltime", "liveopen"));
 	}
 
 	@Getter
@@ -210,9 +212,9 @@ public class Meta {
 		return null;
 	}
 
-	public Tournament getTournamentByName(String name) {
+	public OotpModel getTournamentByName(String name) {
 		log.finest("tournies: " + this.tournies.size());
-		for (Tournament temp : this.tournies) {
+		for (OotpModel temp : this.tournies) {
 			log.finest("name: " + name + " temp: " + temp.getDisplayName());
 			if (temp.getDisplayName().equals(name) || temp.getDisplayName().toLowerCase().equals(name)) {
 				return temp;
@@ -222,7 +224,7 @@ public class Meta {
 	}
 
 	public String getDBTypeByURL(String urlSegment) {
-		for (Tournament temp : this.tournies) {
+		for (OotpModel temp : this.tournies) {
 			if (temp.getUrlSegment().equals(urlSegment)) {
 				return temp.getDbName();
 			}
@@ -231,7 +233,7 @@ public class Meta {
 	}
 	public Era getDefaultTime() {
 		String urlSegment = this.tournamentType;
-		for (Tournament temp : this.tournies) {
+		for (OotpModel temp : this.tournies) {
 			if (temp.getUrlSegment().equals(urlSegment)) {
 				return temp.getDefaultEra();
 			}

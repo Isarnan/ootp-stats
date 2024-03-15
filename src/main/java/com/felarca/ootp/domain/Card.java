@@ -122,6 +122,21 @@ public class Card {
 	private long Throws;
 	@Setter
 	private long Bats;
+	@Setter
+	private long cardType;
+	@Setter
+	private long cardSubType;
+
+	private String CardTitle = "Jim Unknown";
+
+	@Getter
+	@Setter
+	private long ratingP = 75;
+
+	@Getter
+	@Setter
+	private long owned;
+
 
 	// End of DB Columns
 
@@ -132,7 +147,10 @@ public class Card {
 		POWERVR;
 	}
 
-
+	public void setCardTitle(String title){
+		log.info("title: " + title);
+		this.CardTitle = title;
+	}
 
 
 	public Integer getVra(){
@@ -198,5 +216,9 @@ public class Card {
 	}
 	public double getPower(){
 		return (this.PowervL + this.PowervR) /2;
+	}
+
+	public String getType(){
+		return com.felarca.ootp.domain.CardType.getCardType(this.cardType, this.cardSubType);
 	}
 }

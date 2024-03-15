@@ -14,45 +14,48 @@ import lombok.extern.java.Log;
 
 @Log
 @Component
-public class TournamentSet {
+public class OotpModelSet {
     @Autowired
 	Stats72Repository stats72Repo;
 
     @Autowired
 	CardsRepository cardsRepo;
     
-    HashMap<String,Tournament> map = new HashMap<>();
+    HashMap<String,OotpModel> map = new HashMap<>();
 
-    public TournamentSet(){
-        this.map.put("iron", new Tournament("Iron", "Iron16", "14Day","iron"));
-		this.map.put("bronze", new Tournament("Bronze", "Bronze16", "14Day","bronze"));
-		this.map.put("gold", new Tournament("Gold", "Gold32", "14Day", "gold"));
-		this.map.put("perfectteam", new Tournament("PerfectTeam", "PerfectTeam", "AllTime","perfectteam"));
-		this.map.put("perfectdraft", new Tournament("PerfectDraft", "PerfectDraft", "AllTime","perfectdraft"));
-		this.map.put("dailylive", new Tournament("Daily Live", "DailyLive", "AllTime", "dailylive"));
-		this.map.put("dailylivegold", new Tournament("Daily Live Gold", "DailyLiveGold", "AllTime", "dailylivegold"));
-		this.map.put("dailybronzefloorcap", new Tournament("Daily Bronze Floor Cap", "DailyBronzeFloorCap", "AllTime", "dailybronzefloorcap"));
+    public OotpModelSet(){
+        this.map.put("iron", new OotpModel("Iron", "Iron16", "14Day","iron"));
+		this.map.put("bronze", new OotpModel("Bronze", "Bronze16", "14Day","bronze"));
+		this.map.put("gold", new OotpModel("Gold", "Gold32", "14Day", "gold"));
+		this.map.put("perfectteam", new OotpModel("PerfectTeam", "PerfectTeam", "AllTime","perfectteam"));
+		this.map.put("perfectdraft", new OotpModel("PerfectDraft", "PerfectDraft", "AllTime","perfectdraft"));
+		this.map.put("dailylivegold", new OotpModel("Daily Live Gold", "DailyLiveGold", "AllTime", "dailylivegold"));
+		this.map.put("dailybronzefloorcap", new OotpModel("Daily Bronze Floor Cap", "DailyBronzeFloorCap", "AllTime", "dailybronzefloorcap"));
+		this.map.put("open", new OotpModel("Open", "Open", "AllTime", "open"));
+
+		this.map.put("perfecto", new OotpModel("Perfecto", "Perfecto", "AllTime", "perfecto"));		
+		this.map.put("liveopen", new OotpModel("Live Open", "LiveOpen", "AllTime", "liveopen"));
     }
 
-    public void addTournament(Tournament tournament){
+    public void addTournament(OotpModel tournament){
         map.put(tournament.getUrlSegment(), tournament);
     }
 
-    public Tournament getTournamentByUrlSegment(String urlSegment){
+    public OotpModel getTournamentByUrlSegment(String urlSegment){
         return map.get(urlSegment);
     }
-	public Tournament getTournamentByName(String name) {
-		for (HashMap.Entry<String, Tournament> mapElement : map.entrySet() ) {
-            Tournament t = mapElement.getValue();
+	public OotpModel getTournamentByName(String name) {
+		for (HashMap.Entry<String, OotpModel> mapElement : map.entrySet() ) {
+            OotpModel t = mapElement.getValue();
 			if (t.getDisplayName().equals(name) || t.getDisplayName().toLowerCase().equals(name)) {
 				return t;
 			}
 		}
 		return null;
 	}
-	public Tournament getTournamentByDbName(String name) {
-		for (HashMap.Entry<String, Tournament> mapElement : map.entrySet() ) {
-            Tournament t = mapElement.getValue();
+	public OotpModel getTournamentByDbName(String name) {
+		for (HashMap.Entry<String, OotpModel> mapElement : map.entrySet() ) {
+            OotpModel t = mapElement.getValue();
 			if (t.getDbName().equals(name) || t.getDbName().toLowerCase().equals(name)) {
 				return t;
 			}
@@ -63,7 +66,7 @@ public class TournamentSet {
 
 
     public CardStatSet getCardStatSet(String type, CardStatSet.Handed h, CardStatSet.Aggregate a){
-        Tournament t = map.get(type);
+        OotpModel t = map.get(type);
         CardStatSet css = t.getCardStatSet(h, a);
         if( css == null ){
 			List<CardTournamentResult> results = stats72Repo.getResultList(t.getDbName(), t.getDefaultEra().getEnd(), t.getDefaultEra().getStart());

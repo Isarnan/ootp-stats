@@ -12,9 +12,6 @@
 
 <body>
 	<h2 th:text="#{app.title}">App Title</h2>
-	<div th:replace="fragments/header :: header">Default Text</div>
-	</table>
-
 
 	<script type="text/javascript" th:inline="javascript">
 		google.charts.load('current', { 'packages': ['corechart'] });
@@ -25,99 +22,187 @@
 			var eye_data = /*[[${eyeData}]]*/'noValue';
 			var eyeData = new google.visualization.DataTable();
 			eyeData.addColumn('number', 'Eye');
-			eyeData.addColumn('number', 'BB');
+			eyeData.addColumn('number', 'BB1');
+			eyeData.addColumn('number', 'BB2');
+			eyeData.addColumn('number', 'BB3');
+			eyeData.addColumn('number', 'BB4');
 			Object.keys(eye_data).forEach(function (key) {
-				eyeData.addRow([parseFloat(key), eye_data[key]]);
+				eyeData.addRow([parseFloat(key), eye_data[key], eye_data[key], eye_data[key], eye_data[key]]);
 			});
 			var eyeOptions = {
 				title: 'Eye vs. BB comparison',
 				hAxis: { title: 'Eye', minValue: 0, maxValue: 120 },
 				vAxis: { title: 'BB1', minValue: 0, maxValue: 35 },
+				legend: { position: "right", maxWidth: "2000" },
 				trendlines: {
-            		0: {
-              			type: 'linear',
-              			showR2: true,
-              			visibleInLegend: true
-            		}
+					0: {
+						type: 'polynomial',
+						degree: 1,
+						showR2: true,
+						visibleInLegend: true
+					},
+					1: {
+						type: 'polynomial',
+						degree: 2,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
+					}
 				}
 			};
 
 			var eyeChart = new google.visualization.ScatterChart(document.getElementById('eye_div'));
 
 			eyeChart.draw(eyeData, eyeOptions);
-			// *********************START K*************************************************
-			var k_data = /*[[${kData}]]*/'noValue';
-			var kData = new google.visualization.DataTable();
-			kData.addColumn('number', 'AvK');
-			kData.addColumn('number', 'K');
-			Object.keys(k_data).forEach(function (key) {
-				kData.addRow([parseFloat(key), k_data[key]]);
+
+			// ******************START POWER**********************************
+			var hr_data = /*[[${hrData}]]*/'noValue';
+			var hrData = new google.visualization.DataTable();
+			hrData.addColumn('number', 'Power');
+			hrData.addColumn('number', 'HR1');
+			hrData.addColumn('number', 'HR2');
+			hrData.addColumn('number', 'HR3');
+			hrData.addColumn('number', 'HR4');
+
+			Object.keys(hr_data).forEach(function (key) {
+				hrData.addRow([parseFloat(key), hr_data[key], hr_data[key], hr_data[key], hr_data[key]]);
 			});
-			var kOptions = {
-				title: 'AvK vs. K comparison',
-				hAxis: { title: 'AvK', minValue: 0, maxValue: 120 },
-				vAxis: { title: 'K', minValue: 0, maxValue: 35 },
-				legend: 'none',
+			var hrOptions = {
+				title: 'Power vs. HR comparison',
+				hAxis: { title: 'Power', minValue: 0, maxValue: 120 },
+				vAxis: { title: 'HR', minValue: 0, maxValue: 10 },
 				trendlines: {
 					0: {
 						type: 'polynomial',
 						degree: 1,
-						visibleInLegend: true,
+						showR2: true,
+						visibleInLegend: true
+					},
+					1: {
+						type: 'polynomial',
+						degree: 2,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
 					}
 				}
 			};
 
-			var kChart = new google.visualization.ScatterChart(document.getElementById('k_div'));
+			var hrChart = new google.visualization.ScatterChart(document.getElementById('hr_div'));
 
-			kChart.draw(kData, kOptions);
-			//*************************************Start Power**************************************************
-			var real_data = /*[[${chartData}]]*/'noValue';
+			hrChart.draw(hrData, hrOptions);
 
-			//var start_data = google.visualization.arrayToDataTable(d);
-			var data = new google.visualization.DataTable();
-			data.addColumn('number', 'Power');
-			data.addColumn('number', 'Homeruns');
-			Object.keys(real_data).forEach(function (key) {
-				data.addRow([parseFloat(key), real_data[key]]);
+
+			// *********************START SO*************************************************
+			var so_data = /*[[${soData}]]*/'noValue';
+			var soData = new google.visualization.DataTable();
+			soData.addColumn('number', 'AvK');
+			soData.addColumn('number', 'K1');
+			soData.addColumn('number', 'K2');
+			soData.addColumn('number', 'K3');
+			soData.addColumn('number', 'K4');
+			Object.keys(so_data).forEach(function (key) {
+				soData.addRow([parseFloat(key), so_data[key], so_data[key], so_data[key], so_data[key]]);
 			});
-			var options = {
-				title: 'Power vs. HomeRuns comparison',
-				hAxis: { title: 'Power', minValue: 0, maxValue: 120 },
-				vAxis: { title: 'Homeruns', minValue: 0, maxValue: 35 },
-				legend: 'none',
+			var soOptions = {
+				title: 'AvK vs. K comparison',
+				hAxis: { title: 'AvK', minValue: 0, maxValue: 120 },
+				vAxis: { title: 'K', minValue: 10, maxValue: 50 },
 				trendlines: {
 					0: {
 						type: 'polynomial',
+						degree: 1,
+						showR2: true,
+						visibleInLegend: true
+					},
+					1: {
+						type: 'polynomial',
 						degree: 2,
-						visibleInLegend: true,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
 					}
 				}
 			};
 
-			var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+			var soChart = new google.visualization.ScatterChart(document.getElementById('so_div'));
 
-			chart.draw(data, options);
+			soChart.draw(soData, soOptions);
 
 			//*************************************Start Babip**************************************************
 			var babip_data = /*[[${babipData}]]*/'noValue';
 
 			//var start_data = google.visualization.arrayToDataTable(d);
 			var babipData = new google.visualization.DataTable();
-			babipData.addColumn('number', 'Power');
-			babipData.addColumn('number', 'Homeruns');
+			babipData.addColumn('number', 'Babip');
+			babipData.addColumn('number', 'Babip1');
+			babipData.addColumn('number', 'Babip2');
+			babipData.addColumn('number', 'Babip3');
+			babipData.addColumn('number', 'Babip4');
 			Object.keys(babip_data).forEach(function (key) {
-				babipData.addRow([parseFloat(key), babip_data[key]]);
+				babipData.addRow([parseFloat(key), babip_data[key], babip_data[key], babip_data[key], babip_data[key]]);
 			});
 			var babipOptions = {
 				title: 'Card babip vs. Obs Babip comparison',
-				hAxis: { title: 'Card', minValue: 0, maxValue: 120 },
-				vAxis: { title: 'Observed', minValue: 0.1, maxValue: 0.5 },
-				legend: 'none',
+				hAxis: { title: 'Babip', minValue: 0, maxValue: 120 },
+				vAxis: { title: 'Hits', minValue: 0.1, maxValue: 0.5 },
 				trendlines: {
 					0: {
 						type: 'polynomial',
+						degree: 1,
+						showR2: true,
+						visibleInLegend: true
+					},
+					1: {
+						type: 'polynomial',
 						degree: 2,
-						visibleInLegend: true,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
 					}
 				}
 			};
@@ -132,20 +217,41 @@
 			//var start_data = google.visualization.arrayToDataTable(d);
 			var doubleData = new google.visualization.DataTable();
 			doubleData.addColumn('number', 'Gap');
-			doubleData.addColumn('number', 'Doubles');
+			doubleData.addColumn('number', 'Doubles1');
+			doubleData.addColumn('number', 'Doubles2');
+			doubleData.addColumn('number', 'Doubles3');
+			doubleData.addColumn('number', 'Doubles4');
 			Object.keys(double_data).forEach(function (key) {
-				doubleData.addRow([parseFloat(key), double_data[key]]);
+				doubleData.addRow([parseFloat(key), double_data[key], double_data[key], double_data[key], double_data[key]]);
 			});
 			var doubleOptions = {
 				title: 'Card Gap vs. Doubles comparison',
-				hAxis: { title: 'Gao', minValue: 0, maxValue: 120 },
-				vAxis: { title: 'Doubles', minValue: 0.1, maxValue: 0.5 },
-				legend: 'none',
+				hAxis: { title: 'Gap', minValue: 0, maxValue: 120 },
+				vAxis: { title: 'Doubles', minValue: 0.1, maxValue: 1.0 },
 				trendlines: {
 					0: {
 						type: 'polynomial',
 						degree: 1,
+						showR2: true,
 						visibleInLegend: true,
+					},
+					1: {
+						type: 'polynomial',
+						degree: 2,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
 					}
 				}
 			};
@@ -154,41 +260,227 @@
 
 			doubleChart.draw(doubleData, doubleOptions);
 
-			//*************************************Start Triples**************************************************
-			var triple_data = /*[[${tripleData}]]*/'noValue';
+			//*************************************Control**************************************************
+			var control_data = /*[[${controlData}]]*/'noValue';
 
 			//var start_data = google.visualization.arrayToDataTable(d);
-			var tripleData = new google.visualization.DataTable();
-			tripleData.addColumn('number', 'Nothing');
-			tripleData.addColumn('number', 'Triples');
-			Object.keys(triple_data).forEach(function (key) {
-				tripleData.addRow([parseFloat(key), triple_data[key]]);
+			var controlData = new google.visualization.DataTable();
+			controlData.addColumn('number', 'Gap');
+			controlData.addColumn('number', 'Control1');
+			controlData.addColumn('number', 'Control2');
+			controlData.addColumn('number', 'Control3');
+			controlData.addColumn('number', 'Control4');
+			Object.keys(control_data).forEach(function (key) {
+				controlData.addRow([parseFloat(key), control_data[key], control_data[key], control_data[key], control_data[key]]);
 			});
-			var tripleOptions = {
-				title: 'Gap vs. triples comparison',
-				hAxis: { title: 'Gao', minValue: 0, maxValue: 120 },
-				vAxis: { title: 'Triple', minValue: 0.1, maxValue: 0.5 },
-				legend: 'none',
+			var controlOptions = {
+				title: 'Card Control vs. Walks comparison',
+				hAxis: { title: 'Control', minValue: 0, maxValue: 120 },
+				vAxis: { title: 'Walks', minValue: 0, maxValue: 0.3 },
 				trendlines: {
 					0: {
 						type: 'polynomial',
 						degree: 1,
+						showR2: true,
 						visibleInLegend: true,
+					},
+					1: {
+						type: 'polynomial',
+						degree: 2,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
 					}
 				}
 			};
 
-			var tripleChart = new google.visualization.ScatterChart(document.getElementById('triple_div'));
+			var controlChart = new google.visualization.ScatterChart(document.getElementById('control_div'));
 
-			tripleChart.draw(tripleData, tripleOptions);
+			controlChart.draw(controlData, controlOptions);
+
+			//*************************************pHomerun**************************************************
+			var phomerun_data = /*[[${pHomerunData}]]*/'noValue';
+
+			var pHomerunData = new google.visualization.DataTable();
+			pHomerunData.addColumn('number', 'pHr');
+			pHomerunData.addColumn('number', 'Homerun1');
+			pHomerunData.addColumn('number', 'Homerun2');
+			pHomerunData.addColumn('number', 'Homerun3');
+			pHomerunData.addColumn('number', 'Homerun4');
+			Object.keys(phomerun_data).forEach(function (key) {
+				pHomerunData.addRow([parseFloat(key), phomerun_data[key], phomerun_data[key], phomerun_data[key], phomerun_data[key]]);
+			});
+			var pHomerunOptions = {
+				title: 'Card pHr vs. Homerun comparison',
+				hAxis: { title: 'pHr', minValue: 0, maxValue: 120 },
+				vAxis: { title: 'Homerun', minValue: 0, maxValue: 0.2 },
+				trendlines: {
+					0: {
+						type: 'polynomial',
+						degree: 1,
+						showR2: true,
+						visibleInLegend: true,
+					},
+					1: {
+						type: 'polynomial',
+						degree: 2,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
+					}
+				}
+			};
+
+			var pHomerunChart = new google.visualization.ScatterChart(document.getElementById('phomerun_div'));
+
+			pHomerunChart.draw(pHomerunData, pHomerunOptions);
+
+			//*************************************Stuff**************************************************
+			var k_data = /*[[${kData}]]*/'noValue';
+
+			var kData = new google.visualization.DataTable();
+			kData.addColumn('number', 'Stuff');
+			kData.addColumn('number', 'K1');
+			kData.addColumn('number', 'K2');
+			kData.addColumn('number', 'K3');
+			kData.addColumn('number', 'K4');
+			Object.keys(k_data).forEach(function (key) {
+				kData.addRow([parseFloat(key), k_data[key], k_data[key], k_data[key], k_data[key]]);
+			});
+			var kOptions = {
+				title: 'Card Stuff vs. K comparison',
+				hAxis: { title: 'Stuff', minValue: 0, maxValue: 120 },
+				vAxis: { title: 'K', minValue: 0, maxValue: 0.2 },
+				trendlines: {
+					0: {
+						type: 'polynomial',
+						degree: 1,
+						showR2: true,
+						visibleInLegend: true,
+					},
+					1: {
+						type: 'polynomial',
+						degree: 2,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
+					}
+				}
+			};
+
+			var kChart = new google.visualization.ScatterChart(document.getElementById('stuff_div'));
+			kChart.draw(kData, kOptions);
+
+			//*************************************pBabip**************************************************
+			var pbabip_data = /*[[${pBabipData}]]*/'noValue';
+
+			var pBabipData = new google.visualization.DataTable();
+			pBabipData.addColumn('number', 'pBabip');
+			pBabipData.addColumn('number', 'Hit1');
+			pBabipData.addColumn('number', 'Hit2');
+			pBabipData.addColumn('number', 'Hit3');
+			pBabipData.addColumn('number', 'Hit4');
+			Object.keys(pbabip_data).forEach(function (key) {
+				pBabipData.addRow([parseFloat(key), pbabip_data[key], pbabip_data[key], pbabip_data[key], pbabip_data[key]]);
+			});
+			var pBabipOptions = {
+				title: 'Card pBabip vs. Hits comparison',
+				hAxis: { title: 'pBabip', minValue: 0, maxValue: 120 },
+				vAxis: { title: 'Hits', minValue: 0, maxValue: 0.2 },
+				trendlines: {
+					0: {
+						type: 'polynomial',
+						degree: 1,
+						showR2: true,
+						visibleInLegend: true,
+					},
+					1: {
+						type: 'polynomial',
+						degree: 2,
+						showR2: true,
+						visibleInLegend: true
+					},
+					2: {
+						type: 'polynomial',
+						degree: 3,
+						showR2: true,
+						visibleInLegend: true
+					},
+					3: {
+						type: 'polynomial',
+						degree: 4,
+						showR2: true,
+						visibleInLegend: true
+					}
+				}
+			};
+
+			var pBabipChart = new google.visualization.ScatterChart(document.getElementById('pbabip_div'));
+			pBabipChart.draw(pBabipData, pBabipOptions);
+
 		}
 	</script>
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Stat</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Qualified Hitters in Model</td>
+				<td th:text="${tournament.hittingModelSize}">PA</td>
+			</tr>
+			<tr>
+				<td>Qualified Pitchers in Model</td>
+				<td th:text="${tournament.pitchingModelSize}">PA</td>
+			</tr>
+		</tbody>
+	</table>
 	<div id="eye_div" style="width: 1500px; height: 500px;"></div>
-	<div id="k_div" style="width: 1500px; height: 500px;"></div>
-	<div id="chart_div" style="width: 1500px; height: 500px;"></div>
+	<div id="hr_div" style="width: 1500px; height: 500px;"></div>
+	<div id="so_div" style="width: 1500px; height: 500px;"></div>
 	<div id="babip_div" style="width: 1500px; height: 500px;"></div>
 	<div id="double_div" style="width: 1500px; height: 500px;"></div>
-	<div id="triple_div" style="width: 1500px; height: 500px;"></div>
+	<div id="control_div" style="width: 1500px; height: 500px;"></div>
+	<div id="phomerun_div" style="width: 1500px; height: 500px;"></div>
+	<div id="stuff_div" style="width: 1500px; height: 500px;"></div>
+	<div id="pbabip_div" style="width: 1500px; height: 500px;"></div>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

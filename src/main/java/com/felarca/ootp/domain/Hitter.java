@@ -3,13 +3,12 @@ package com.felarca.ootp.domain;
 import java.math.BigInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.felarca.ootp.Repositories.Stats2Repository;
 
 
 @Log

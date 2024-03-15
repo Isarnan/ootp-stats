@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+  <div th:fragment="positionProjections">
+    <table class="table">
+      <tr>
+        <td>
+          Selected Tournament: <span th:text="${tournament?.tournamentShortName}" /><br />
+          Selected Model: <span th:text="${model?.modelShortName}" />
+        </td>
+        <td class="text-right">
+          <span th:if="${tournament != null && model != null}">
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=p)} " th:target="_blank">Pitchers</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName})}" th:target="_blank">Hitters</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=c)}" th:target="_blank">C</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=1b)}" th:target="_blank">1B</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=2b)}" th:target="_blank">2B</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=3b)}" th:target="_blank">3B</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=ss)}" th:target="_blank">SS</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=lf)}" th:target="_blank">LF</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=cf)}" th:target="_blank">CF</a>
+            <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=rf)}" th:target="_blank">RF</a>
+          </span>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</body>
+
+</html>

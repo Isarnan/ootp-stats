@@ -67,11 +67,11 @@
 							<td><a th:href="@{/player/{id}(id=${hitter.cid})}">view</a></td>
 						</div>
 						<td>
-							<span th:text="${cards.type(hitter.cid)}" />,
+							<span th:text="${card.type}" />,
 							<span th:text="${cards.name(hitter.cid)}" />
 							<br />
 							<span th:text="${cards.bats(hitter.cid)}" class="badge badge-pill badge-dark" />
-							<span th:if="${owned.owned(hitter.cid)!=null}"><span
+							<span th:if="${cards.owned(hitter.cid) > 0}"><span
 									class="badge badge-primary">Owned</span></span>
 						</td>
 						<td>

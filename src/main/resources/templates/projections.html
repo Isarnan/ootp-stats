@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+	<title>Projections</title>
+</head>
+
+<body>
+	<div th:replace="fragments/positionProjections :: positionProjections">Default Text</div>
+	<div th:each="message : ${messages}">
+		<span th:text="${message}" />
+	</div>
+	<table class="table table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Card</th>
+				<th scope="col">Overall</th>
+				<th scope="col" colspan="1" class="text-center">Pitching</th>
+				<th scope="col" colspan="1" class="text-center">Hitting</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th></th>
+				<th>oOPS/xOPS</th>
+				<th>oOPS/xOPS</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="projection, iStat : ${projections}">
+				<div th:with="card=${projection.card}">
+					<td>
+						<span th:text="${card.type}" />,
+						<span th:text="${card.fn}" />&nbsp<span th:text="${card.ln}" />(<span
+							th:text="${iStat.count}" />)
+						<span th:if="${card.owned > 0}"><span
+								class="badge badge-primary">Owned</span></span>
+						<br />
+						<span th:if="${card.ratingC > 0}">
+							<span class="badge badge-primary">
+								C <span class="badge badge-light"><span th:text="${card.ratingC}" /></span>								
+							</span>
+						</span>
+						<span th:if="${card.rating1B > 0}">
+							<span class="badge badge-primary">
+								1B <span class="badge badge-light"><span th:text="${card.rating1B}" /></span>								
+							</span>
+						</span>
+						<span th:if="${card.rating2B > 0}">
+							<span class="badge badge-primary">
+								2B <span class="badge badge-light"><span th:text="${card.rating2B}" /></span>								
+							</span>
+						</span>
+						<span th:if="${card.rating3B > 0}">
+							<span class="badge badge-primary">
+								3B <span class="badge badge-light"><span th:text="${card.rating3B}" /></span>								
+							</span>
+						</span>
+						<span th:if="${card.ratingSS > 0}">
+							<span class="badge badge-primary">
+								SS <span class="badge badge-light"><span th:text="${card.ratingSS}" /></span>	
+							</span>
+						</span>
+						<span th:if="${card.ratingLF > 0}">
+							<span class="badge badge-primary">
+								LF <span class="badge badge-light"><span th:text="${card.ratingLF}" /></span>				
+							</span>
+						</span>
+						<span th:if="${card.ratingCF > 0}">
+							<span class="badge badge-primary">
+								CF <span class="badge badge-light"><span th:text="${card.ratingCF}" /></span>								
+							</span>
+						</span>
+						<span th:if="${card.ratingRF > 0}">
+							<span class="badge badge-primary">
+								RF <span class="badge badge-light"><span th:text="${card.ratingRF}" /></span>
+							</span>
+						</span>
+					</td>
+					<td>
+						<span th:text="${card.Overall}" />
+					</td>
+					<td class="text-center">
+						P oOPS/<span th:text="${#numbers.formatDecimal(model.expectedOPSa(card), 1, 3)}" />
+						<br />
+						<span th:text="${card.throws}" class="badge badge-pill badge-dark" />
+						<span th:if="${card.stamina > 50 }">
+							<span class="badge rounded-pill bg-success text-light">
+								Stam
+								<span class="badge badge-light">
+									<span th:text="${card.stamina}" />
+								</span>
+							</span>
+						</span>
+						<span th:if="${card.stamina <= 50 }">
+							<span class="badge rounded-pill bg-primary text-light">
+								Stam
+								<span class="badge badge-light">
+									<span th:text="${card.stamina}" />
+								</span>
+							</span>
+						</span>
+					</td>
+					<td class="text-center">
+						H oOPS/<span th:text="${#numbers.formatDecimal(model.expectedOPS(card), 1, 3)}" />
+						<br />
+						<span th:text="${card.bats}" class="badge badge-pill badge-dark" />
+					</td>
+				</div>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<div th:replace=" fragments/footer :: footer">Default Text</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>

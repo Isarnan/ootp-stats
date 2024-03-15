@@ -21,6 +21,7 @@ public class EraSet {
 		this.eras.put("AllTime", new Era("AllTime", "time", Meta.LAUNCH, Meta.ENDOFTIME));
     }
 
+	@Deprecated
     public Era getEraByName(String name){
         return eras.get(name);
     }
