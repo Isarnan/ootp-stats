@@ -80,7 +80,7 @@
 			});
 			var hrOptions = {
 				title: 'Power vs. HR comparison',
-				hAxis: { title: 'Power', minValue: 0, maxValue: 120 },
+				hAxis: { title: 'Power', minValue: 0, maxValue: 200 },
 				vAxis: { title: 'HR', minValue: 0, maxValue: 10 },
 				trendlines: {
 					0: {
@@ -269,7 +269,7 @@
 			controlData.addColumn('number', 'Control1');
 			controlData.addColumn('number', 'Control2');
 			controlData.addColumn('number', 'Control3');
-			controlData.addColumn('number', 'Control4');
+			controlData.addColumn('number', 'Control8');
 			Object.keys(control_data).forEach(function (key) {
 				controlData.addRow([parseFloat(key), control_data[key], control_data[key], control_data[key], control_data[key]]);
 			});
@@ -298,7 +298,7 @@
 					},
 					3: {
 						type: 'polynomial',
-						degree: 4,
+						degree: 8,
 						showR2: true,
 						visibleInLegend: true
 					}
@@ -418,8 +418,8 @@
 			});
 			var pBabipOptions = {
 				title: 'Card pBabip vs. Hits comparison',
-				hAxis: { title: 'pBabip', minValue: 0, maxValue: 120 },
-				vAxis: { title: 'Hits', minValue: 0, maxValue: 0.2 },
+				hAxis: { title: 'pBabip', minValue: 0, maxValue: 140 },
+				vAxis: { title: 'Hits', minValue: 0.25, maxValue: 0.35 },
 				trendlines: {
 					0: {
 						type: 'polynomial',
@@ -472,15 +472,26 @@
 			</tr>
 		</tbody>
 	</table>
+
+	Eye:<span th:text="${tournament.eyeDegree}" /><br />
 	<div id="eye_div" style="width: 1500px; height: 500px;"></div>
+	Power:<span th:text="${tournament.powerDegree}" /><br />
 	<div id="hr_div" style="width: 1500px; height: 500px;"></div>
+	AvK:<span th:text="${tournament.avkDegree}" /><br />
 	<div id="so_div" style="width: 1500px; height: 500px;"></div>
+	Babip:<span th:text="${tournament.babipDegree}" /><br />
 	<div id="babip_div" style="width: 1500px; height: 500px;"></div>
+	Doubles:<span th:text="${tournament.doubleDegree}" /><br />
 	<div id="double_div" style="width: 1500px; height: 500px;"></div>
+	Control:<span th:text="${tournament.controlDegree}" /><br />
 	<div id="control_div" style="width: 1500px; height: 500px;"></div>
+	pHomerun:<span th:text="${tournament.pHRDegree}" /><br />
 	<div id="phomerun_div" style="width: 1500px; height: 500px;"></div>
+	Stuff:<span th:text="${tournament.stuffDegree}" /><br />
 	<div id="stuff_div" style="width: 1500px; height: 500px;"></div>
+	pBabip:<span th:text="${tournament.pBabipDegree}" /><br />
 	<div id="pbabip_div" style="width: 1500px; height: 500px;"></div>
+	pDoubles:<span th:text="${tournament.pDoubleDegree}" /><br />
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

@@ -7,7 +7,22 @@
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-	<title>Projections</title>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+
+	<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+
+	<title th:text="${#request.getParameter('pos')}" th:unless="${#request.getParameter('pos') == null}">
+	</title>
 </head>
 
 <body>
@@ -15,7 +30,7 @@
 	<div th:each="message : ${messages}">
 		<span th:text="${message}" />
 	</div>
-	<table class="table table-striped">
+	<table id="projections-table" class="table table-striped">
 		<thead class="thead-dark">
 			<tr>
 				<th scope="col">Card</th>
@@ -34,58 +49,90 @@
 			<tr th:each="projection, iStat : ${projections}">
 				<div th:with="card=${projection.card}">
 					<td>
-						<span th:text="${card.type}" />,
-						<span th:text="${card.fn}" />&nbsp<span th:text="${card.ln}" />(<span
-							th:text="${iStat.count}" />)
-						<span th:if="${card.owned > 0}"><span
-								class="badge badge-primary">Owned</span></span>
+						<span th:text="${card.cardTitle}" />(<span th:text="${iStat.count}" />)
+						<span th:if="${card.owned > 0}"><span class="badge badge-primary">Owned</span></span>
 						<br />
-						<span th:if="${card.ratingC > 0}">
+						<span th:if="${card.pitcherRole > 0 &&  card.control > 70 }"><span
+								class="badge badge-success">Control<span class="badge badge-light"
+									th:text="${card.control}" /></span></span>
+						<span th:if="${card.pitcherRole > 0 && card.control <= 70 && card.control >= 50 }"><span
+								class="badge badge-warning">Control<span class="badge badge-light"
+									th:text="${card.control}" /></span></span>
+						<span th:if="${card.pitcherRole > 0 && card.control < 50 }"><span
+								class="badge badge-danger">Control<span class="badge badge-light"
+									th:text="${card.control}" /></span></span>
+						<span th:if="${card.ratingC > 0 || card.LearnC == 1}">
 							<span class="badge badge-primary">
-								C <span class="badge badge-light"><span th:text="${card.ratingC}" /></span>								
+								C <span class="badge"
+									th:classappend="${card.ratingC > 0} ? badge-light : badge-dark">F:<span
+										th:text="${card.catcherFrame}" /></span>
 							</span>
 						</span>
-						<span th:if="${card.rating1B > 0}">
+						<span th:if="${card.rating1B > 0 || card.Learn1B == 1}">
 							<span class="badge badge-primary">
-								1B <span class="badge badge-light"><span th:text="${card.rating1B}" /></span>								
+								1B <span class="badge"
+									th:classappend="${card.rating1B > 0} ? badge-light : badge-dark"><span
+										th:text="${card.rating1B}" /></span>
 							</span>
 						</span>
-						<span th:if="${card.rating2B > 0}">
+						<span th:if="${card.rating2B > 0 || card.Learn2B == 1}">
 							<span class="badge badge-primary">
-								2B <span class="badge badge-light"><span th:text="${card.rating2B}" /></span>								
+								2B <span class="badge"
+									th:classappend="${card.rating2B > 0} ? badge-light : badge-dark">R:<span
+										th:text="${card.ifr}" /></span>
 							</span>
 						</span>
-						<span th:if="${card.rating3B > 0}">
+						<span th:if="${card.rating3B > 0 || card.Learn3B == 1}">
 							<span class="badge badge-primary">
-								3B <span class="badge badge-light"><span th:text="${card.rating3B}" /></span>								
+								3B <span class="badge"
+									th:classappend="${card.rating3B > 0} ? badge-light : badge-dark"><span
+										th:text="${card.rating3B}" /></span>
 							</span>
 						</span>
-						<span th:if="${card.ratingSS > 0}">
+						<span th:if="${card.ratingSS > 0 || card.LearnSS == 1}">
 							<span class="badge badge-primary">
-								SS <span class="badge badge-light"><span th:text="${card.ratingSS}" /></span>	
+								SS <span class="badge"
+									th:classappend="${card.ratingSS > 0} ? badge-light : badge-dark">R:<span
+										th:text="${card.ifr}" /></span>
 							</span>
 						</span>
-						<span th:if="${card.ratingLF > 0}">
+						<span th:if="${card.ratingLF > 0 || card.LearnLF == 1}">
 							<span class="badge badge-primary">
-								LF <span class="badge badge-light"><span th:text="${card.ratingLF}" /></span>				
+								LF <span class="badge"
+									th:classappend="${card.ratingLF > 0} ? badge-light : badge-dark">R:<span
+										th:text="${card.ofRange}" /></span>
 							</span>
 						</span>
-						<span th:if="${card.ratingCF > 0}">
+						<span th:if="${card.ratingCF > 0 || card.LearnCF == 1}">
 							<span class="badge badge-primary">
-								CF <span class="badge badge-light"><span th:text="${card.ratingCF}" /></span>								
+								CF <span class="badge"
+									th:classappend="${card.ratingCF > 0} ? badge-light : badge-dark">R:<span
+										th:text="${card.ofRange}" /></span>
 							</span>
 						</span>
-						<span th:if="${card.ratingRF > 0}">
+						<span th:if="${card.ratingRF > 0 || card.LearnRF == 1}">
 							<span class="badge badge-primary">
-								RF <span class="badge badge-light"><span th:text="${card.ratingRF}" /></span>
+								RF <span class="badge"
+									th:classappend="${card.ratingRF > 0} ? badge-light : badge-dark">R:<span
+										th:text="${card.ofRange}" /></span>
 							</span>
 						</span>
+						<br />
+						<span class="badge badge-primary">L10:<span class="badge badge-light" th:text="${card.last10Price}" /></span></span>
+						<span th:if="${card.ccSellOrderLow > 0}"><span class="badge badge-warning">CC:<span class="badge badge-success" th:text="${card.ccSellOrderLow}" /></span></span>
+
 					</td>
 					<td>
 						<span th:text="${card.Overall}" />
 					</td>
 					<td class="text-center">
-						P oOPS/<span th:text="${#numbers.formatDecimal(model.expectedOPSa(card), 1, 3)}" />
+						P oOPS/<span th:text="${#numbers.formatDecimal(projection.pExpectedOPS,  1, 3)}" />
+						<span class="badge rounded-pill badge-danger text-light">
+							CC
+							<span class="badge badge-light">
+								<span th:text="${#numbers.formatDecimal(projection.pCombExpectedOPS, 1, 3)}" />
+							</span>
+						</span>
 						<br />
 						<span th:text="${card.throws}" class="badge badge-pill badge-dark" />
 						<span th:if="${card.stamina > 50 }">
@@ -104,9 +151,45 @@
 								</span>
 							</span>
 						</span>
+						<br />
+						<span class="badge badge-primary">
+							SP <span class="badge"
+								th:classappend="badge-light"><span th:text="${#numbers.formatDecimal(projection.spExpectedOPS,  1, 3)}" />
+							</span>
+						</span>
+						
+
 					</td>
 					<td class="text-center">
-						H oOPS/<span th:text="${#numbers.formatDecimal(model.expectedOPS(card), 1, 3)}" />
+						H oOPS/<span th:text="${#numbers.formatDecimal(projection.hExpectedOPS, 1, 3)}" /><br />
+						cc: <span th:text="${#numbers.formatDecimal(projection.combExpectedOPS, 1, 3)}" /><br />
+						<span class="badge rounded-pill bg-primary text-light">
+							vL
+							<span class="badge badge-light"><span
+									th:text="${#numbers.formatDecimal(projection.hExpectedOPSvL, 1, 3)}" />
+							</span>
+						</span>
+
+						<span class="badge rounded-pill bg-primary text-light">
+							vR
+							<span class="badge badge-light">
+								<span
+									th:text="${#numbers.formatDecimal(projection.hExpectedOPSvR, 1, 3)}" />
+							</span>
+						</span><br />
+						<span class="badge rounded-pill badge-danger text-light">
+							vL
+							<span class="badge badge-light"><span
+									th:text="${#numbers.formatDecimal(projection.combExpectedOPSvL, 1, 3)}" />
+							</span>
+						</span>
+
+						<span class="badge rounded-pill badge-danger text-light">
+							vR
+							<span class="badge badge-light">
+								<span th:text="${#numbers.formatDecimal(projection.combExpectedOPSvR, 1, 3)}" />
+							</span>
+						</span>
 						<br />
 						<span th:text="${card.bats}" class="badge badge-pill badge-dark" />
 					</td>
@@ -119,15 +202,6 @@
 
 	<div th:replace=" fragments/footer :: footer">Default Text</div>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-		crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-		crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-		crossorigin="anonymous"></script>
 </body>
 
 </html>

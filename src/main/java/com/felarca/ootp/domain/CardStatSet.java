@@ -64,6 +64,24 @@ public class CardStatSet {
         }
     }
 
+    public enum DefensiveStat {
+        CATCHERBLOCKING, CATCHERFRAMING, CATCHERARM, INFIELDRANGE, INFIELDERROR, INFIELDARM, TURNDOUBLEPLAY, OUTFIELDRANGE, OUTFIELDERROR, OUTFIELDARM;
+
+        public static final int size;
+        static {
+            size = values().length;
+        }
+    }
+
+    public enum Position {
+        UNUSED, PITCHER, CATCHER, FIRSTBASE, SECONDBASE, THIRDBASE, SHORTSTOP, LEFTFIELD, CENTERFIELD, RIGHTFIELD, DESIGNATEDHITTER, STARTINGPITCHER, RELIEFPITCHER;
+
+        public static final int size;
+        static {
+            size = values().length;
+        }
+    }
+
     public double getStat(CardStatSet.Stat stat){
         switch(stat){
             case AVK:

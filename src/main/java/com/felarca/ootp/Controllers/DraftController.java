@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.felarca.ootp.Repositories.CardsRepository;
 import com.felarca.ootp.Repositories.Stats72Repository;
-import com.felarca.ootp.domain.CardStatSet;
-import com.felarca.ootp.domain.Era;
 import com.felarca.ootp.domain.Meta;
 import com.felarca.ootp.domain.OotpModel;
-import com.felarca.ootp.domain.OotpModelSet;
+import com.felarca.ootp.domain.Release;
 import com.felarca.ootp.domain.results.CardTournamentResult;
 
 import lombok.extern.java.Log;
@@ -31,8 +29,7 @@ public class DraftController {
     CardsRepository cardsRepo;
     @Autowired
     Stats72Repository stats72Repo;
-    @Autowired
-    OotpModelSet ts;
+
 
     @RequestMapping("/draft/{round}")
     public String tierpos(Model model, @PathVariable String round, @RequestParam(required = false) Integer ip,
@@ -42,10 +39,11 @@ public class DraftController {
 
         Meta meta = new Meta(tournamenttype);
         meta.setRound(round);
-        OotpModel t = ts.getTournamentByDbName(tournamenttype);
-        Era era;
+        // TODO This is wrong.  Models could have many DBNames.
+        OotpModel t = OotpModel.getTournamentByDbName(tournamenttype);
+        Release era;
         if (time == null) {
-            era = t.getDefaultEra();
+            era = t.getDefaultRelease();
         } else {
             era = meta.getEraByName(time);
         }
@@ -108,7 +106,7 @@ public class DraftController {
         list.sort(Comparator.nullsFirst(Comparator.comparing(CardTournamentResult::getRawFip)));
 
         // Need to get rid of this
-        CardStatSet css = ts.getCardStatSet("perfectdraft", CardStatSet.Handed.RIGHT, CardStatSet.Aggregate.AVG);
+        //CardStatSet css = ts.getCardStatSet("perfectdraft", CardStatSet.Handed.RIGHT, CardStatSet.Aggregate.AVG);
 
         log.info("List2: " + list2.size());
         log.info("poly2: " + t.getWalkFunction());

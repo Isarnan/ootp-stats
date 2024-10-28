@@ -6,59 +6,75 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.felarca.ootp.domain.CardStatSet;
+
 import lombok.Data;
+import lombok.extern.java.Log;
 
-
+@Log
 @Data
 @Entity
 @Table(name="`cards`")
 public class Cards {
-	private long index;
+	//private long index;
 	@Column(name="cardtitle")
 	private String cardTitle;
 
 	@Id
-	private long CardID;
-	private long Overall;
+	@Column(name="cardID")
+	private long cardID;
+	@Column(name="Overall")
+	private long overall;
 
 	@Column(name="cardtype")
 	private long cardType;
 	@Column(name="cardsubtype")
 	private long cardSubType;
+	@Column(name="year")
+	private long year;
 	private String Peak;
 	private String Team;
 	private String ln;
 	private String fn;
-	private String NickName;
-	private long UniformNumber;
+	@Column(name="nickname")
+	private String nickName;
+	@Column(name="uniformnumber")
+	private long uniformNumber;
 	private long DayOB;
 	private long MonthOB;
 	private long YearOB;
 	private long Bats;
 	private long Throws;
 	private long Position;
-	private long PitcherRole;
+	@Column(name="pitcherrole")
+	private long pitcherRole;
 	private long Contact;
 	private long Gap;
 	private long Power;
 	private long Eye;
-	private long AvoidKs;
+	@Column(name="avoidks")
+	private long avoidK;
 	private long BABIP;
 	private long ContactvL;
 	private long GapvL;
 	private long PowervL;
 	private long EyevL;
-	private long KsvL;
+	@Column(name="KsvL")
+	private long avoidKvL;
 	private long BABIPvL;
 	private long ContactvR;
 	private long GapvR;
 	private long PowervR;
 	private long EyevR;
-	private long KsvR;
+	@Column(name="avoidkvr")
+	private long avoidKvR;
 	private long BABIPvR;
-	private long GBHitterType;
-	private long FBHitterType;
-	private long BattedBallType;
+	@Column(name="gbhittertype")
+	private long gBHitterType;
+	@Column(name="fbhittertype")
+	private long fBHitterType;
+	@Column(name="battedballtype")
+	private long battedBallType;
 	private long Speed;
 	private long Stealing;
 	private long Baserunning;
@@ -66,7 +82,8 @@ public class Cards {
 	private long Buntforhit;
 	private long Stuff;
 	private long Movement;
-	private long Control;
+	@Column(name="control")
+	private long control;
 	private long pHR;
 	private long pBABIP;
 	private long StuffvL;
@@ -95,15 +112,23 @@ public class Cards {
 	private long Hold;
 	private long GB;
 	private String Velocity;
-	private long ArmSlot;
+	@Column(name="armslot")
+	private long armSlot;
 	private long Height;
 	private long ifr;
-	private long InfieldError;
-	private long InfieldArm;
+	@Column(name="infielderror")
+	private long infieldError;
+	@Column(name="infieldarm")
+	private long infieldArm;
 	private long DP;
-	private long CatcherAbil;
-	private long CatcherArm;
-	private long OFRange;
+	@Column(name="catcherabil")
+	private long catcherAbil;
+	@Column(name="catcherframe")
+	private long catcherFrame;
+	@Column(name="catcherarm")
+	private long catcherArm;
+	@Column(name="ofrange")
+	private long ofRange;
 	private long OFError;
 	private long OFArm;
 	@Column(name="posratingp")
@@ -124,13 +149,106 @@ public class Cards {
 	private long LearnLF;
 	private long LearnCF;
 	private long LearnRF;
-	private long BuyOrderHigh;
-	private long SellOrderLow;
-	private long Last10Price;
+	@Column(name="buyorderhigh")
+	private long buyOrderHigh;
+	@Column(name="sellorderlow")
+	private long sellOrderLow;
+	@Column(name="last10price")
+	private long last10Price;
+	@Column(name="`buyorderhigh(cc)`")
+	private long ccBuyOrderHigh;
+	@Column(name="`sellorderlow(cc)`")
+	private long ccSellOrderLow;
+	@Column(name="`last10price(cc)`")
+	private long ccLast10Price;
 	private long era;
 	private long tier;
-	private long MissionValue;
+	@Column(name="missionvalue")
+	private long missionValue;
 	private long limit;
 	private long owned;
-	private double Unnamed111;
+	//private double Unnamed111;
+
+
+		public enum Stat {
+		EYEVL,
+		EYEVR,
+		POWERVL,
+		POWERVR;
+	}
+
+	public void setCardTitle(String title){
+		log.info("title: " + title);
+		this.cardTitle = title;
+	}
+
+
+	public Integer getVra(){
+		return (int)avoidKvR + (int)BABIPvR;
+	}
+	
+	public Integer getVrp(){
+		return (int)EyevR + (int)PowervR;
+	}
+
+	public Integer getVla(){
+		return (int)avoidKvL + (int)BABIPvL;
+	}
+
+	public Integer getVlp(){
+		return (int)EyevL + (int)PowervL;
+	}
+
+    public String getHanded(){
+        switch((int)this.Throws){
+            case 1:
+                return "RHP";
+            case 2:
+                return "LHP";
+            default:
+                return "WTF";
+
+        }
+    }
+
+	public CardStatSet.Handed getThrows(){
+		switch((int)this.Throws){
+			case 1:
+				return CardStatSet.Handed.RIGHT;
+			default: 
+				return CardStatSet.Handed.LEFT;
+		}
+
+	}
+	public CardStatSet.Handed getBats(){
+		switch((int)this.Bats){
+			case 1:
+				return CardStatSet.Handed.RIGHT;
+			case 2:
+				return CardStatSet.Handed.LEFT;
+			case 3:
+				return CardStatSet.Handed.SWITCH;
+			default: 
+				return CardStatSet.Handed.LEFT;
+		}
+
+	}
+
+    public long getSplits(){
+        return (StuffvL + ControlvL + pHRvL + pBABIPvL) - (StuffvR + ControlvR + pHRvR + pBABIPvR);
+    }
+
+	public long getBattingSplits(){
+        return (avoidKvL + EyevL+ PowervL + BABIPvL) - (avoidKvR + EyevR + PowervR + BABIPvR);
+    }
+	public double getEye(){
+		return (this.EyevL + this.EyevR) /2;
+	}
+	public double getPower(){
+		return (this.PowervL + this.PowervR) /2;
+	}
+
+	public String getType(){
+		return com.felarca.ootp.domain.CardType.toString(this.cardType, this.cardSubType);
+	}
 }

@@ -2,7 +2,6 @@ package com.felarca.ootp.domain;
 
 import java.math.BigInteger;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,7 @@ public class Record {
 	private BigInteger runsAllowed;
 	@Setter
 	@Getter
-	private Era era;
+	private Release era;
 
 	public Double getPct() {
 		if (losses.doubleValue() != 0.0)

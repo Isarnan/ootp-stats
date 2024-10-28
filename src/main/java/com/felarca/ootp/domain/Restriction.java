@@ -29,6 +29,8 @@ public class Restriction {
     @Getter
     int lastYear;
     
+    @Setter
+    @Getter
     ArrayList<CardType> types = new ArrayList<>();
     // Date? of card release
 

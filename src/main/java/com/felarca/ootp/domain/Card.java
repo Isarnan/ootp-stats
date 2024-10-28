@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
 
+@Deprecated
 @Log
 @AllArgsConstructor
 public class Card {    	
@@ -111,7 +112,7 @@ public class Card {
 	private long EyevR;
 	@Getter
 	@Setter
-	private long KsvR;
+	private long aKvR;
 	@Getter
 	@Setter
 	private long BABIPvR;
@@ -122,8 +123,10 @@ public class Card {
 	private long Throws;
 	@Setter
 	private long Bats;
+	@Getter
 	@Setter
 	private long cardType;
+	@Getter
 	@Setter
 	private long cardSubType;
 
@@ -154,7 +157,7 @@ public class Card {
 
 
 	public Integer getVra(){
-		return (int)KsvR + (int)BABIPvR;
+		return (int)aKvR + (int)BABIPvR;
 	}
 	
 	public Integer getVrp(){
@@ -209,7 +212,7 @@ public class Card {
     }
 
 	public long getBattingSplits(){
-        return (KsvL + EyevL+ PowervL + BABIPvL) - (KsvR + EyevR + PowervR + BABIPvR);
+        return (KsvL + EyevL+ PowervL + BABIPvL) - (aKvR + EyevR + PowervR + BABIPvR);
     }
 	public double getEye(){
 		return (this.EyevL + this.EyevR) /2;
@@ -219,6 +222,6 @@ public class Card {
 	}
 
 	public String getType(){
-		return com.felarca.ootp.domain.CardType.getCardType(this.cardType, this.cardSubType);
+		return com.felarca.ootp.domain.CardType.toString(this.cardType, this.cardSubType);
 	}
 }

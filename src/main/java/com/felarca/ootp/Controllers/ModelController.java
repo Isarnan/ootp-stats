@@ -22,9 +22,9 @@ import com.felarca.ootp.Repositories.CardsRepository;
 import com.felarca.ootp.Repositories.Stats72Repository;
 import com.felarca.ootp.domain.Card;
 import com.felarca.ootp.domain.CardStatSet;
-import com.felarca.ootp.domain.Era;
 import com.felarca.ootp.domain.OotpModel;
 import com.felarca.ootp.domain.OotpModelSet;
+import com.felarca.ootp.domain.Release;
 import com.felarca.ootp.domain.Tournament;
 import com.felarca.ootp.domain.results.CardTournamentResult;
 import com.felarca.ootp.domain.results.RawPoint;
@@ -60,7 +60,7 @@ public class ModelController {
             return "index";
         }
 
-        Era era = t.getDefaultEra();
+        Release era = t.getDefaultRelease();
         ;
         if (era == null) {
             messages.add("Era is null.");
@@ -77,6 +77,11 @@ public class ModelController {
         int hitsInPlay = 0, leagueTriples = 0, leagueDoubles = 0;
         for (CardTournamentResult ctr : list) {
             Card c = cardsRepo.getCard(ctr.getCid());
+            if(c == null){
+                messages.add("c is nuull.  cid: " + ctr.getCid());
+                model.addAttribute("messages", messages);
+                return "index";
+            }
             if (c.getThrows() == CardStatSet.Handed.RIGHT) {
                 rPitches += ctr.getP_pitches().intValue();
             } else {
@@ -85,6 +90,11 @@ public class ModelController {
         }
         for (CardTournamentResult ctr : list) {
             Card c = cardsRepo.getCard(ctr.getCid());
+            if(c == null){
+                messages.add("c is nuull.  cid: " + ctr.getCid());
+                model.addAttribute("messages", messages);
+                return "index";
+            }
             switch (c.getBats()) {
                 case LEFT:
                     lBatters += ctr.getPa().intValue();
@@ -151,7 +161,7 @@ public class ModelController {
         log.info("Lines of eye: " + eyeData.size());
 
         model.addAttribute("eyeData", eyeData);
-        PolynomialFunction poly = getFunction(obs, 2);
+        PolynomialFunction poly = getFunction(obs, t.getEyeDegree());
         t.setWalkFunction(poly);
 
         /*
@@ -169,7 +179,7 @@ public class ModelController {
         }
         log.info("Lines of hr: " + hrData.size());
         model.addAttribute("hrData", hrData);
-        poly = getFunction(obs, 3);
+        poly = getFunction(obs, t.getPowerDegree());
         t.setHomerunFunction(poly);
 
         /*
@@ -180,7 +190,7 @@ public class ModelController {
         Map<Double, Double> soData = new TreeMap<>();
         for (CardTournamentResult ctr : list) {
             Card c = cardsRepo.getCard(ctr.getCid());
-            Double effectiveAvK = t.getEffectiveStat((double) c.getKsvL(), (double) c.getKsvR());
+            Double effectiveAvK = t.getEffectiveStat((double) c.getKsvL(), (double) c.getAKvR());
             Double kPer100 = (ctr.getSo().doubleValue() / ctr.getPa().doubleValue()) * 100.0;
             soData.put(effectiveAvK, kPer100);
             WeightedObservedPoint point = new WeightedObservedPoint(1.0, effectiveAvK, kPer100);
@@ -189,7 +199,7 @@ public class ModelController {
         log.info("Lines of k: " + soData.size());
 
         model.addAttribute("soData", soData);
-        poly = getFunction(obs, 4);
+        poly = getFunction(obs, t.getAvkDegree());
         t.setKFunction(poly);
         /*
          * BABIP
@@ -212,7 +222,7 @@ public class ModelController {
         log.info("Lines of babip: " + babipData.size());
 
         model.addAttribute("babipData", babipData);
-        poly = getFunction(obs, 2);
+        poly = getFunction(obs, t.getBabipDegree());
         t.setBabipFunction(poly);
 
         /*
@@ -233,7 +243,7 @@ public class ModelController {
             gapData.put(effectiveGap, doubleRate);
         }
         model.addAttribute("doubleData", gapData);
-        poly = getFunction(obs, 2);
+        poly = getFunction(obs, t.getDoubleDegree());
         t.setDoubleFunction(poly);
 
         /*
@@ -286,17 +296,18 @@ public class ModelController {
 
         }
         model.addAttribute("controlData", controlData);
+        log.info("Lines of Control: " + controlData.size());
         model.addAttribute("pHomerunData", pHomerunData);
         model.addAttribute("kData", kData);
         model.addAttribute("pBabipData", pBabipData);
 
-        poly = getFunction(obsControl, 4);
+        poly = getFunction(obsControl, t.getControlDegree());
         t.setPWalkFunction(poly);
-        poly = getFunction(obsPHomerun, 4);
+        poly = getFunction(obsPHomerun, t.getPHRDegree());
         t.setPHomerunFunction(poly);
-        poly = getFunction(obsK, 3);
+        poly = getFunction(obsK, t.getStuffDegree());
         t.setPKFunction(poly);
-        poly = getFunction(obsPBabip, 1);
+        poly = getFunction(obsPBabip, t.getPBabipDegree());
         t.setPBabipFunction(poly);
 
         model.addAttribute("tournament", t);

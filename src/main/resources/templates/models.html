@@ -17,42 +17,71 @@
 			<tr>
 				<th scope="col">Model Short Name</th>
 				<th scope="col">Size</th>
+				<th>Config</th>
 				<th scope="col" colspan="1" class="text-left">Datasets</th>
 				<th scope="col" colspan="1" class="text-left">Era</th>
 				<th scope="col" colspan="1" class="text-left">Stuff</th>
-			</tr>			
+			</tr>
 		</thead>
 		<tbody>
-		<div th:each="element : ${T(com.felarca.ootp.domain.OotpModel).models}">
-			<div th:with="oModel=${element.value}, str=${element.key}">
-				<tr>
-					<td><span th:text="${oModel.modelShortName}" /><br />
-						PA Filter: <span th:text="${oModel.paFilter}" /><br />
-						BF Filter: <span th:text="${oModel.bfFilter}" /><br />
-					</td>
-					<td>
-						Hitters in model: <span th:text="${oModel.hittingModelSize}" /><br />
-						Pitchers in model: <span th:text="${oModel.pitchingModelSize}" /><br />
-						Pitches Left: <span th:text="${oModel.lPitches}" /> Right: <span th:text="${oModel.rPitches}" /><br />
-						PA Left: <span th:text="${oModel.lBatters}" /> Right: <span th:text="${oModel.rBatters}" /> Switch: <span th:text="${oModel.sBatters}" /><br />
-					</td>
-					<td>
-						<div th:each="string : ${oModel.datasets}">
-							<span th:text="${string}" /><br />
-						</div>
-					</td>
-					<td>
-						<div th:with="era=${oModel.defaultEra}">
-							<span th:text="${era.start}" /> - <span th:text="${era.end}" />
-						</div>
-					</td>
-					<td>
-						<a class="btn btn-primary btn-sm" th:href="@{/model/{id}(id = ${str}, time=R3)}" th:target="_blank">Calculate</a>
-						<a class="btn btn-primary btn-sm" th:href="@{/tournament(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${oModel?.modelShortName}, time=R3)}">Pick a tournament</a>
-					</td>
-				</tr>
+			<div th:each="element : ${T(com.felarca.ootp.domain.OotpModel).models}">
+				<div th:with="oModel=${element.value}, str=${element.key}">
+					<tr>
+						<td><span th:text="${oModel.modelShortName}" /><br />
+							PA Filter: <span th:text="${oModel.paFilter}" /><br />
+							BF Filter: <span th:text="${oModel.bfFilter}" /><br />
+							Release: <span th:text="${oModel.defaultRelease.name}" /><br />
+						</td>
+						<td>
+							Hitters in model: <span th:text="${oModel.hittingModelSize}" /><br />
+							Pitchers in model: <span th:text="${oModel.pitchingModelSize}" /><br />
+							Pitches Left: <span th:text="${#numbers.formatPercent(oModel.getLeftPitchesPercentage, 0, 0)}" /> Right: <span
+								th:text="${#numbers.formatPercent(oModel.getRightPitchesPercentage, 0, 0)}" /><br />
+							PA Left: <span th:text="${#numbers.formatPercent(oModel.getLeftBatterPercentage, 0, 0)}" /> Right: <span th:text="${#numbers.formatPercent(oModel.getRightBatterPercentage, 0, 0)}" />
+							Switch: <span th:text="${#numbers.formatPercent(oModel.getSwitchBatterPercentage, 0, 0)}" /><br />
+						</td>
+						<td>
+							<div class="container">
+								<div class="row">
+									<div class="col-xs-6">
+										Eye:<span th:text="${oModel.eyeDegree}" /><br />
+										Power:<span th:text="${oModel.powerDegree}" /><br />
+										AvK:<span th:text="${oModel.avkDegree}" /><br />
+										Babip:<span th:text="${oModel.babipDegree}" /><br />
+										Doubles:<span th:text="${oModel.doubleDegree}" /><br />
+									</div>
+									<div class="col-xs-6">
+										Control:<span th:text="${oModel.controlDegree}" /><br />
+										pHomerun:<span th:text="${oModel.pHRDegree}" /><br />
+										Stuff:<span th:text="${oModel.stuffDegree}" /><br />
+										pBabip:<span th:text="${oModel.pBabipDegree}" /><br />
+										pDoubles:<span th:text="${oModel.pDoubleDegree}" /><br />
+									</div>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div th:each="string : ${oModel.datasets}">
+								<a th:href="@{/dataset/{ds}(ds = ${string})}"><span th:text="${string}" /></a>
+							</div>
+						</td>
+						<td>
+							<div th:with="rel=${oModel.defaultRelease}">
+								<span th:text="${rel.start}" /> - <span th:text="${rel.end}" />
+							</div>
+							<span th:text="${oModel.year}" /><br />
+							<span th:text="${oModel.ballpark.ballpark}" />
+						</td>
+						<td>
+							<a class="btn btn-primary btn-sm" th:href="@{/model/{id}(id = ${str}, time=R3)}"
+								th:target="_blank">Calculate</a>
+							<a class="btn btn-primary btn-sm"
+								th:href="@{/tournament(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${oModel?.modelShortName}, time=R3)}">Pick
+								a tournament</a>
+						</td>
+					</tr>
+				</div>
 			</div>
-		</div>
 		</tbody>
 	</table>
 

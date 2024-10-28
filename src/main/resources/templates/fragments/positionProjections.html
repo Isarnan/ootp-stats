@@ -6,11 +6,75 @@
 
 <body>
   <div th:fragment="positionProjections">
-    <table class="table">
+    <table>
       <tr>
         <td>
-          Selected Tournament: <span th:text="${tournament?.tournamentShortName}" /><br />
-          Selected Model: <span th:text="${model?.modelShortName}" />
+          <table border="1">
+            <tr>
+              <td>Name</td>
+              <td>Year</td>
+              <td>HR</td>
+              <td>Walks</td>
+              <td>Strikeouts</td>
+              <td>Babip</td>
+            </tr>
+            <tr>
+            <td><span th:text="${tournament?.tournamentShortName}" /></td>
+            <td><span th:text="${tournament?.yearPlayed?.year}" /></td>
+            <td><span th:text="${tournament?.yearPlayed?.homeruns}" /></td>
+            <td><span th:text="${tournament?.yearPlayed?.walks}" /></td>
+            <td><span th:text="${tournament?.yearPlayed?.strikeOuts}" /></td>
+            <td><span th:text="${#numbers.formatDecimal(tournament?.yearPlayed?.babip, 1, 3)}"/></td>
+          </tr>
+          <tr>   
+            <td><span th:text="${model?.modelShortName}" /></td>
+            <td><span th:text="${model?.statYear?.year}" /></td>
+            <td><span th:text="${model?.statYear?.homeruns}" /></td>
+            <td><span th:text="${model?.statYear?.walks}" /></td>
+            <td><span th:text="${model?.statYear?.strikeOuts}" /></td>
+            <td><span th:text="${#numbers.formatDecimal(model?.statYear?.babip, 1, 3)}" /></td>
+            </tr>
+            <tr>   
+              <td>Adjustment</td>
+              <td></td>
+              <td><span th:text="${#numbers.formatDecimal(adj?.homerunAdjustment, 1, 3)}" /></td>
+              <td><span th:text="${#numbers.formatDecimal(adj?.walkAdjustment, 1, 3)}" /></td>
+              <td><span th:text="${#numbers.formatDecimal(adj?.strikeoutAdjustment, 1, 3)}" /></td>
+              <td><span th:text="${#numbers.formatDecimal(adj?.babipAdjustment, 1, 3)}" /></td>
+              </tr>
+          </table>
+        </td>
+        <td>
+          <table border="1">
+            <tr>
+              <td>Name</td>
+              <td>L Avg</td>
+              <td>R Avg</td>
+              <td>L Hr</td>
+              <td>R Hr</td>
+            </tr>
+            <tr>
+            <td><span th:text="${tournament?.ballpark?.ballpark}" /></td>
+            <td><span th:text="${tournament?.ballpark?.avgLHB}" /></td>
+            <td><span th:text="${tournament?.ballpark?.avgRHB}" /></td>
+            <td><span th:text="${tournament?.ballpark?.hrLHB}" /></td>
+            <td><span th:text="${tournament?.ballpark?.hrRHB}" /></td>
+          </tr>
+          <tr>   
+            <td><span th:text="${model?.ballpark?.ballpark}" /></td>
+            <td><span th:text="${model?.ballpark?.avgLHB}" /></td>
+            <td><span th:text="${model?.ballpark?.avgRHB}" /></td>
+            <td><span th:text="${model?.ballpark?.hrLHB}" /></td>
+            <td><span th:text="${model?.ballpark?.hrRHB}" /></td>
+            </tr>
+            <tr>   
+              <td>Adjustment</td>
+              <td><span th:text="${#numbers.formatDecimal(adj?.avgLHB, 1, 3)}" /></td>
+              <td><span th:text="${#numbers.formatDecimal(adj?.avgRHB, 1, 3)}" /></td>
+              <td><span th:text="${#numbers.formatDecimal(adj?.hrLHB, 1, 3)}" /></td>
+              <td><span th:text="${#numbers.formatDecimal(adj?.hrRHB, 1, 3)}" /></td>
+              </tr>
+          </table>
         </td>
         <td class="text-right">
           <span th:if="${tournament != null && model != null}">
@@ -24,11 +88,12 @@
             <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=lf)}" th:target="_blank">LF</a>
             <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=cf)}" th:target="_blank">CF</a>
             <a class="btn btn-primary btn-sm" th:href="@{/projections(tournamentShortName = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}, pos=rf)}" th:target="_blank">RF</a>
-          </span>
+          </span><br />
+              <a class="btn btn-primary btn-sm" th:href="@{/tournament/{tournament}/team(tournament = ${tournament?.tournamentShortName}, modelShortName = ${model?.modelShortName}) }" th:target="_blank">Team</a>
         </td>
       </tr>
-    </table>
 
+    </table>
   </div>
 </body>
 

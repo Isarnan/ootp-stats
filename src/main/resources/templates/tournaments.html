@@ -17,31 +17,43 @@
 			<tr>
 				<th scope="col">Short Name</th>
 				<th scope="col">Restriction</th>
+				<th scope="col">Types</th>
 				<th scope="col" colspan="1" class="text-left">Year Played</th>
 				<th scope="col" colspan="1" class="text-left">Ballpark</th>
 				<th>Actions</th>
-			</tr>			
+			</tr>
 		</thead>
 		<tbody>
-		<div th:each="element : ${T(com.felarca.ootp.domain.Tournament).tournaments}">
-			<div th:with="t=${element.value}, str=${element.key}">
-				<tr>
-					<td><span th:text="${t.tournamentShortName}" /></td>
-					<td>
+			<div th:each="element : ${T(com.felarca.ootp.domain.Tournament).tournaments}">
+				<div th:with="t=${element.value}, str=${element.key}">
+					<tr>
+						<td><span th:text="${t.tournamentShortName}" /></td>
 						<div th:with="restriction=${t.restriction}">
-							Card value between <span th:text="${restriction.valueFloor}" /> and <span th:text="${restriction.valueFloor}" /><br />
-							Cards from <span th:text="${restriction.firstYear}" /> to <span th:text="${restriction.lastYear}" />
-
+							<td>
+								Card value between <span th:text="${restriction.valueFloor}" /> and <span
+									th:text="${restriction.valueCeiling}" /><br />
+								Cards from <span th:text="${restriction.firstYear}" /> to <span
+									th:text="${restriction.lastYear}" />
+							</td>
+							<td>
+								<span th:if="${restriction.types != null}">
+									<div th:each="type : ${restriction.types}">
+										<span th:text="${type.cardDisplay}" />
+									</div>
+								</span>
+							</td>
 						</div>
-					</td>
-					<td><span th:text="${t.yearPlayed}" /></td>
-					<td><span th:text="${t.ballpark}" /></td>
-					<td>
-						<a class="btn btn-primary btn-sm" th:href="@{/model(tournamentShortName = ${t?.tournamentShortName}, modelShortName = ${model?.modelShortName}, time=R3)}">Pick a model</a>
-					</td>
-				</tr>
+
+						<td><span th:text="${t.yearPlayed.year}" /></td>
+						<td><span th:text="${t.ballpark?.ballpark}" /></td>
+						<td>
+							<a class="btn btn-primary btn-sm"
+								th:href="@{/model(tournamentShortName = ${t?.tournamentShortName}, modelShortName = ${model?.modelShortName}, time=R3)}">Pick
+								a model</a>
+						</td>
+					</tr>
+				</div>
 			</div>
-		</div>
 		</tbody>
 	</table>
 

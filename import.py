@@ -12,7 +12,14 @@ from unicodedata import normalize
 from _decimal import Decimal
 from pathlib import Path
 
-sqlEngine = create_engine("mysql+pymysql://ootp:ootp2222@server/ootp", pool_recycle=3600)
+OOTP_DATABASE = os.environ.get('OOTP_DATABASE')
+OOTP_USERNAME = os.environ.get('OOTP_USERNAME')
+OOTP_PASSWORD = os.environ.get('OOTP_PASSWORD')
+
+connectionString = "mysql+pymysql://" + OOTP_USERNAME + ":" + OOTP_PASSWORD + "@" + OOTP_DATABASE + "/ootp?ssl_ca=DigiCertGlobalRootCA.crt.pem";
+print(f"{connectionString}")
+
+sqlEngine = create_engine(connectionString, pool_recycle=3600)
 
 def load(game,file):
   tableName = 'stats'
@@ -69,99 +76,48 @@ def load(game,file):
 
         if 'LEA' in df.columns:
             df.rename(columns = {'LEA':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'PerfectDraft'
+            df['tournament_type'] = 'LiveQuick'
         if 'LOY' in df.columns:
             df.rename(columns = {'LOY':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'PerfectTeam'        
+            df['tournament_type'] = 'StandardPerfectDraft'        
         if 'AD' in df.columns:
             df.rename(columns = {'AD':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Bronze16'
-        if 'GRE' in df.columns:
-            df.rename(columns = {'GRE':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Gold32'
-        # Daily Open Live
+            df['tournament_type'] = 'Bronze'
+        if 'FIN' in df.columns:
+            df.rename(columns = {'FIN':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'Gold'
         if 'WE' in df.columns:
             df.rename(columns = {'WE':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DailyLive'
-        # Daily live Gold
+            df['tournament_type'] = 'LiveSilver'
         if 'INT' in df.columns:
             df.rename(columns = {'INT':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DailyLiveGold'
-        # Daily Live Silver
+            df['tournament_type'] = 'LowDiamond'
         if 'Type' in df.columns:
             df.rename(columns = {'Type':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DailyLiveSilver'
-        # Sunday Live Cap
-        if 'Chem' in df.columns:
-            df.rename(columns = {'Chem':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'SundayLiveCap'
-                # Sunday Live Cap
+            df['tournament_type'] = 'Silver'
+        if 'Txn' in df.columns:
+            df.rename(columns = {'Txn':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'Diamond'
+        #Tm
         if 'Perf' in df.columns:
             df.rename(columns = {'Perf':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Silver'
+            df['tournament_type'] = 'Open'
         if 'Role' in df.columns:
             df.rename(columns = {'Role':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Perfecto'
-        if 'Loc. Pop.' in df.columns:
-            df.rename(columns = {'Loc. Pop.':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DeadballToBoomCap'
+            df['tournament_type'] = 'LiveGold'
+        #Chem        
+        if 'Prone' in df.columns:
+            df.rename(columns = {'Prone':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'LeaguevR'
+        #INJ
+        #INJ
+        if 'Left' in df.columns:
+            df.rename(columns = {'Left':'tournament_type'}, inplace = True)
+            df['tournament_type'] = 'LeaguevL'
 
 
-  if columns == 57:
-        df.rename(columns = {'1B':'singles'}, inplace = True)
-        df.rename(columns = {'2B':'doubles'}, inplace = True)
-        df.rename(columns = {'3B':'triples'}, inplace = True)
-        df.rename(columns = {'G.1':'p_games'}, inplace = True)
-        df.rename(columns = {'GS.1':'p_gamesstarted'}, inplace = True)
-        df.rename(columns = {'AB.1':'p_ab'}, inplace = True)
-        df.rename(columns = {'1B.1':'p_singles'}, inplace = True)
-        df.rename(columns = {'2B.1':'p_doubles'}, inplace = True)
-        df.rename(columns = {'3B.1':'p_triples'}, inplace = True)
-        df.rename(columns = {'HR.1':'p_homeruns'}, inplace = True)
-        df.rename(columns = {'R.1':'p_runs'}, inplace = True)
-        df.rename(columns = {'BB.1':'p_bb'}, inplace = True)
-        df.rename(columns = {'IBB.1':'p_ibb'}, inplace = True)
-        df.rename(columns = {'HP.1':'p_hp'}, inplace = True)
-        df.rename(columns = {'SB.1':'p_sb'}, inplace = True)
-        df.rename(columns = {'CS.1':'p_cs'}, inplace = True)
-        df.rename(columns = {'ORG':'TM'}, inplace = True)
 
-        if 'LEA' in df.columns:
-            df.rename(columns = {'LEA':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'PerfectDraft'
-        if 'LOY' in df.columns:
-            df.rename(columns = {'LOY':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'PerfectTeam'        
-        if 'AD' in df.columns:
-            df.rename(columns = {'AD':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Bronze16'
-        if 'GRE' in df.columns:
-            df.rename(columns = {'GRE':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Gold32'
-        # Open Live
-        if 'WE' in df.columns:
-            df.rename(columns = {'WE':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'LiveOpen'
-        # Daily live Gold
-        if 'INT' in df.columns:
-            df.rename(columns = {'INT':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DailyLiveGold'
-        # Daily Live Silver
-        if 'Type' in df.columns:
-            df.rename(columns = {'Type':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'DailyLiveSilver'
-        # Sunday Live Cap
-        if 'Chem' in df.columns:
-            df.rename(columns = {'Chem':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'SundayLiveCap'
-                # Sunday Live Cap
-        if 'Perf' in df.columns:
-            df.rename(columns = {'Perf':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Silver'
-        if 'Role' in df.columns:
-            df.rename(columns = {'Role':'tournament_type'}, inplace = True)
-            df['tournament_type'] = 'Perfecto'
-
+ 
 
   if columns == 78:
         del df['ID']
@@ -223,8 +179,8 @@ def load(game,file):
 
 # Open a file
 #path = "c:/Users/dan/Documents/Out of the Park Developments/OOTP Baseball 24/saved_games"
-#path = "c:\\Users\\Dan\\Documents\\Out of the Park Developments\\OOTP Baseball 24\\saved_games"
-path = "C:/OOTP/saved_games"
+path = "c:\\Users\\Dan\\Documents\\Out of the Park Developments\\OOTP Baseball 25\\saved_games"
+#path = "C:/OOTP/saved_games"
 pattern = "[0-9]*.html"
 
 #dirs = os.listdir( path )
@@ -255,11 +211,11 @@ for root, dirs, files in os.walk(path):
               connection.commit()
               load(game,fullPath)
 
-cardDBFile = "C:/OOTP/online_data/pt_card_list.csv"
-
+# cardDBFile = "C:/OOTP/online_data/pt_card_list.csv"
+cardDBFile = "c:\\Users\\dan\\Documents\\Out of the Park Developments\\OOTP Baseball 25\\online_data\\pt_card_list.csv"
 if os.path.isfile(cardDBFile):
       print("File exists")
-      cards = pd.read_csv(cardDBFile)
+      cards = pd.read_csv(cardDBFile, index_col=False)
       df = pd.DataFrame(data=cards)
       df.columns = df.columns.str.replace(' ', '')
       df.rename(columns = {'//CardTitle':'CardTitle'}, inplace = True)
@@ -277,9 +233,19 @@ if os.path.isfile(cardDBFile):
       df.rename(columns = {'PosRatingRF':'ratingRF'}, inplace = True)
       df.rename(columns = {'AvoidKvL':'KsvL'}, inplace = True)
       df.rename(columns = {'CardValue':'Overall'}, inplace = True)
+      #df.rename(columns = {'':'Blank'}, inplace = True)
+      df['date']= pd.to_datetime(df['date'])
+
       rows = len(df.index)
       columns = len(df.columns) 
-      print('Rows: '+ str(rows) + ' Column: ' + str(columns))
+      #df.index = df['CardID']
+      #print(df.index)
+      #df.index = df.index.astype('int64')
+      #df.rename_axis('index')
+      #print('Rows: '+ str(rows) + ' Column: ' + str(columns))
+      # iterating the columns
+      #for col in df.columns:
+        #print("A" + col)
       dbConnection = sqlEngine.connect()
       try:
         # need to rename cards to Cards, why?    
@@ -296,8 +262,21 @@ if os.path.isfile(cardDBFile):
       finally:
          dbConnection.close()
 
-#print(skipFrame)
-#for file in result:
-#           print(file)
-
-#print(result);
+ptLiveHitterDownload = "C:\\Users\\dan\\Downloads\\FantasyPros_2024_Projections_H.csv"
+ptliveHitterFile = "C:\\Users\\dan\\Code\\ootp-stats\\src\\main\\resources\\FantasyPros_2024_Projections_H.csv"
+if os.path.isfile(ptLiveHitterDownload):
+    print("Found new hitter download")
+    if os.path.isfile(ptliveHitterFile):
+            print("Old Hitter File exists")
+            os.remove(ptliveHitterFile)
+    os.rename(ptLiveHitterDownload, ptliveHitterFile)
+    
+ptLivePitcherDownload = "C:\\Users\\dan\\Downloads\\FantasyPros_2024_Projections_P.csv"
+ptlivePitcherFile = "C:\\Users\\dan\\Code\\ootp-stats\\src\\main\\resources\\FantasyPros_2024_Projections_P.csv"
+if os.path.isfile(ptLivePitcherDownload):
+    print("Found new pitcher download")
+    if os.path.isfile(ptlivePitcherFile):
+            print("Old Pitcher File exists")
+            os.remove(ptlivePitcherFile)
+    os.rename(ptLivePitcherDownload, ptlivePitcherFile)
+    

@@ -69,7 +69,7 @@ public class OotpModelSet {
         OotpModel t = map.get(type);
         CardStatSet css = t.getCardStatSet(h, a);
         if( css == null ){
-			List<CardTournamentResult> results = stats72Repo.getResultList(t.getDbName(), t.getDefaultEra().getEnd(), t.getDefaultEra().getStart());
+			List<CardTournamentResult> results = stats72Repo.getResultList(t.getDbName(), t.getDefaultRelease().getEnd(), t.getDefaultRelease().getStart());
 			double inningsCounter = 0;
 			double controlvlCounter = 0, controlvrCounter = 0;
 			double stuffvlCounter = 0, stuffvrCounter = 0;
@@ -102,7 +102,7 @@ public class OotpModelSet {
 					eyevlCounter = eyevlCounter + pa * card.getEyevL();
 					eyevrCounter = eyevrCounter + pa * card.getEyevR();
 					avkvlCounter = avkvlCounter + pa * card.getKsvL();
-					avkvrCounter = avkvrCounter + pa * card.getKsvR();
+					avkvrCounter = avkvrCounter + pa * card.getAKvR();
 					powervlCounter = powervlCounter + pa * card.getPowervL();
 					powervrCounter = powervrCounter + pa * card.getPowervR();
 					babipvlCounter = babipvlCounter + pa * card.getBABIPvL();

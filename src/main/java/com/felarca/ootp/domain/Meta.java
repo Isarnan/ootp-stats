@@ -5,6 +5,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.felarca.ootp.domain.dao.StatYear;
 import com.felarca.ootp.domain.results.CardTournamentResult;
 
 import lombok.Getter;
@@ -16,10 +17,11 @@ public class Meta {
 	// public final static Date ENDOFTIME =
 	// DatatypeConverter.parseDateTime("2041-05-31T10:00:00-05:00").getTime();
 	public final static LocalDateTime ENDOFTIME = LocalDateTime.of(2035, Month.JULY, 29, 19, 30, 40);
-	public final static LocalDateTime LAUNCH = LocalDateTime.of(2023, Month.MARCH, 24, 0, 30, 40);
-	public final static LocalDateTime RELEASE1 = LocalDateTime.of(2023, Month.MAY, 1, 10, 10, 10);
-	public final static LocalDateTime RELEASE2 = LocalDateTime.of(2023, Month.JULY, 31, 10, 30, 40);
-	public final static LocalDateTime RELEASE3 = LocalDateTime.of(2023, Month.AUGUST, 28, 12, 30, 40);
+	public final static LocalDateTime LAUNCH = LocalDateTime.of(2024, Month.MARCH, 15, 0, 30, 40);
+	public final static LocalDateTime RELEASE1 = LocalDateTime.of(2024, Month.APRIL, 1, 10, 10, 10);
+	public final static LocalDateTime RELEASE2 = LocalDateTime.of(2024, Month.MAY, 6, 10, 10, 10);
+	public final static LocalDateTime RELEASE3 = LocalDateTime.of(2024, Month.JUNE, 3, 10, 30, 40);
+	public final static LocalDateTime RELEASE4 = LocalDateTime.of(2024, Month.JULY, 1, 12, 30, 40);
 
 	// public final static Date LAUNCH =
 	// DatatypeConverter.parseDateTime("1776-06-04T00:00:00-05:00").getTime();
@@ -37,6 +39,7 @@ public class Meta {
 	public final static int BRONZE_IFR_GOODNESS = 70;
 	public final static int BRONZE_IFR_FINE = 50;
 
+	public static List<StatYear> statYears;
 
 	@Getter
 	@Setter
@@ -68,7 +71,7 @@ public class Meta {
 
 	@Setter
 	@Getter
-	private List<Era> eras = new ArrayList<Era>();
+	private List<Release> eras = new ArrayList<Release>();
 
 	@Setter
 	@Getter
@@ -94,14 +97,14 @@ public class Meta {
 		super();
 		this.tournamentType = tournamentType;
 
-		this.eras.add(new Era("7Day", "time", LocalDateTime.now().minusDays(7), Meta.ENDOFTIME));
-		this.eras.add(new Era("14Day", "time", LocalDateTime.now().minusDays(14), Meta.ENDOFTIME));
-		this.eras.add(new Era("30Day", "time", LocalDateTime.now().minusDays(30), Meta.ENDOFTIME));
-		this.eras.add(new Era("R3", "content", Meta.RELEASE3, Meta.ENDOFTIME));
-		this.eras.add(new Era("R2", "content", Meta.RELEASE2, Meta.RELEASE3));
-		this.eras.add(new Era("R1", "content", Meta.RELEASE1, Meta.RELEASE2));
-		this.eras.add(new Era("Launch", "content", Meta.LAUNCH, Meta.RELEASE1));
-		this.eras.add(new Era("AllTime", "time", Meta.LAUNCH, Meta.ENDOFTIME));
+		this.eras.add(new Release("7Day", "time", LocalDateTime.now().minusDays(7), Meta.ENDOFTIME));
+		this.eras.add(new Release("14Day", "time", LocalDateTime.now().minusDays(14), Meta.ENDOFTIME));
+		this.eras.add(new Release("30Day", "time", LocalDateTime.now().minusDays(30), Meta.ENDOFTIME));
+		this.eras.add(new Release("R3", "content", Meta.RELEASE3, Meta.ENDOFTIME));
+		this.eras.add(new Release("R2", "content", Meta.RELEASE2, Meta.RELEASE3));
+		this.eras.add(new Release("R1", "content", Meta.RELEASE1, Meta.RELEASE2));
+		this.eras.add(new Release("Launch", "content", Meta.LAUNCH, Meta.RELEASE1));
+		this.eras.add(new Release("AllTime", "time", Meta.LAUNCH, Meta.ENDOFTIME));
 
 		this.tournies.add(new OotpModel("Iron", "Iron16", "14Day","iron"));
 		this.tournies.add(new OotpModel("Bronze", "Bronze16", "14Day","bronze"));
@@ -202,8 +205,8 @@ public class Meta {
 	public String getUrlSegment(){
 		return this.tournamentType;
 	}
-	public Era getEraByName(String name) {
-		for (Era temp : this.eras) {
+	public Release getEraByName(String name) {
+		for (Release temp : this.eras) {
 			//log.info("name: " + name + " temp: " + temp.getName());
 			if (temp.getName().equals(name) || temp.getName().toLowerCase().equals(name.toLowerCase())) {
 				return temp;
@@ -231,13 +234,24 @@ public class Meta {
 		}
 		return null;
 	}
-	public Era getDefaultTime() {
+	public Release getDefaultTime() {
 		String urlSegment = this.tournamentType;
 		for (OotpModel temp : this.tournies) {
 			if (temp.getUrlSegment().equals(urlSegment)) {
-				return temp.getDefaultEra();
+				return temp.getDefaultRelease();
 			}
 		}
 		return null;
+	}
+
+	static public StatYear getStatYear(String year){
+		StatYear sy = new StatYear();
+		for( StatYear x : Meta.statYears){
+			if( x.getYear().equals(year)){
+				sy = x;
+				break;
+			}
+		}
+		return sy;
 	}
 }
