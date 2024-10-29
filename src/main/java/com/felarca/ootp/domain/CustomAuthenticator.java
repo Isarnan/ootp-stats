@@ -36,8 +36,8 @@ public class CustomAuthenticator extends Authenticator
             System.out.println("URL:" + u);
             System.out.println("Requester Type:" + rtype);
   
-            String username = "isarnan@felarca.com"; //hardcoded user
-            String password = "u$!mq%J*gc29"; //hardcoded pwd
+            String username = ""; //hardcoded user
+            String password = ""; //hardcoded pwd
   
             return new PasswordAuthentication(username, password.toCharArray());
   
